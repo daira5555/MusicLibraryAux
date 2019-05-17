@@ -13,4 +13,7 @@ public interface Logic {
 	public void insertNewArtist(String name) throws Exception;
 	public int artistExists(String name) throws Exception;
 	public int genreExists(String name) throws Exception;
+	public int userExists(String username) throws Exception;
+	public char getUserType(String username) throws Exception;
+	public String getPassword (String username) throws Exception;
 }

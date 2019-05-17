@@ -232,8 +232,8 @@ public class DataAccessImpl implements DataAccess{
 		ResultSet rs = null;
 		try {
 			if (userExists(username)!=0) {
-				connect();
 				if(getUserType(username) == 'C') {
+					connect();
 					String sql = "select password from clients where username = ?";
 					stmt = con.prepareStatement(sql);
 					stmt.setString(1, username);
@@ -242,6 +242,7 @@ public class DataAccessImpl implements DataAccess{
 						password = rs.getString(1);
 					}
 				}else if (getUserType(username) == 'A') {
+					connect();
 					String sql = "select password from admins where username = ?";
 					stmt = con.prepareStatement(sql);
 					stmt.setString(1, username);

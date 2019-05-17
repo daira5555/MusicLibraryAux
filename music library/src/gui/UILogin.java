@@ -83,6 +83,7 @@ public class UILogin extends JFrame implements ActionListener {
 		});
 		btnSignUp.setBounds(297, 245, 89, 23);
 		contentPane.add(btnSignUp);
+		btnSignUp.addActionListener(this);
 		
 		usernameField = new JTextField();
 		usernameField.setBounds(189, 84, 302, 23);
@@ -130,6 +131,10 @@ public class UILogin extends JFrame implements ActionListener {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+		}else if (e.getSource().equals(btnSignUp)) {
+			this.dispose();
+			UIRegister singUp = new UIRegister();
+			singUp.setVisible(true);
 		}
 		
 	}

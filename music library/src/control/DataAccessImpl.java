@@ -228,17 +228,32 @@ public class DataAccessImpl implements DataAccess{
 		return type;
 	}
 	public String getPassword (String username) throws ClassNotFoundException, SQLException, IOException{
+		String password = null;
+		ResultSet rs = null;
 		try {
 			if (userExists(username)!=0) {
+				connect();
 				if(getUserType(username) == 'C') {
-					connect();
+					String sql = "select password from clients where username = ?";
+					stmt = con.prepareStatement(sql);
+					stmt.setString(1, username);
+					rs = stmt.executeQuery();
+					if(rs.next()) {
+						password = rs.getString(1);
+					}
 				}else if (getUserType(username) == 'A') {
-					
+					String sql = "select password from admins where username = ?";
+					stmt = con.prepareStatement(sql);
+					stmt.setString(1, username);
+					rs = stmt.executeQuery();
+					if(rs.next()) {
+						password = rs.getString(1);
+					}
 				}
 			}
 		}finally {
 			disconnect();
 		}
-		return null;
+		return password;
 	}
 }

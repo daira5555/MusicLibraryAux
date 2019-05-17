@@ -1,14 +1,15 @@
 package model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class Vinyl {
 	private int vinylCode;
 	private String title;
-	private Genre genre;
-	private Artist artist;
+	private String genre;
+	private String artist;
 	private double price;
-	private Date publicationDate;
+	private LocalDate publicationDate;
 	private String description;
 	private boolean onSale;
 	private double salePercentage;
@@ -16,7 +17,7 @@ public class Vinyl {
 	private int amountSold;
 	private String cover;
 	
-	public Vinyl(int vinylCode, String title, Genre genre, Artist artist, double price, Date publicationDate,
+	public Vinyl(int vinylCode, String title, String genre, String artist, double price, LocalDate publicationDate,
 			String description, boolean onSale, double salePercentage, int stock, int amountSold, String cover) {
 		super();
 		this.vinylCode = vinylCode;
@@ -53,20 +54,20 @@ public class Vinyl {
 		this.title = title;
 	}
 
-	public Genre getGenre() {
+	public String getGenre() {
 		return genre;
 	}
 
-	public void setGenre(Genre genre) {
-		this.genre = genre;
+	public void setGenre(String string) {
+		this.genre = string;
 	}
 
-	public Artist getArtist() {
+	public String getArtist() {
 		return artist;
 	}
 
-	public void setArtist(Artist artist) {
-		this.artist = artist;
+	public void setArtist(String string) {
+		this.artist = string;
 	}
 
 	public double getPrice() {
@@ -77,11 +78,11 @@ public class Vinyl {
 		this.price = price;
 	}
 
-	public Date getPublicationDate() {
+	public LocalDate getPublicationDate() {
 		return publicationDate;
 	}
 
-	public void setPublicationDate(Date publicationDate) {
+	public void setPublicationDate(LocalDate publicationDate) {
 		this.publicationDate = publicationDate;
 	}
 
@@ -134,5 +135,11 @@ public class Vinyl {
 	}
 	
 	
-
+	public void toStringVinyl() {
+		System.out.println(title + " " + artist + " " + genre + " " + description + " " + price + " " + salePercentage + " " + onSale + " "+ publicationDate);
+		
+	}
+	
+	
+	
 }

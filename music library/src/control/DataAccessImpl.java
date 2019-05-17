@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import model.Vinyl;
+
 public class DataAccessImpl implements DataAccess{
 	private Connection con;
 	private PreparedStatement stmt;
@@ -110,22 +112,21 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
-	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate, String description, boolean onsale, double salepercentage, int stock, String cover) throws ClassNotFoundException, SQLException, IOException{
+	public void insertNewVinyl(Vinyl v) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
 			String sql = "insert into vinyls (title,artiscode,genrecode,price,publicationdate,description,onsale,salepercentage,stock,amountsold,cover) values (?,?,?,?,?,?,?,?,?,0,?)";
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, title);
-			stmt.setInt(2, artistcode);
-			stmt.setInt(3, genrecode);
-			stmt.setDouble(4, price);
-			stmt.setDate(5, publicationdate);
-			stmt.setString(6, description);
-			stmt.setBoolean(7, onsale);
-			stmt.setDouble(8, salepercentage);
-			stmt.setInt(9, stock);
-			stmt.setString(10, cover);
+			stmt.setString(1, v.getTitle() );
+			stmt.setInt(2, v.getArtist());
+			stmt.setInt(3, v.getGenre());
+			stmt.setDouble(4, v.getPrice());
+			stmt.setDate(5, v.getPublicationDate());
+			stmt.setString(6, v.getDescription());
+			stmt.setBoolean(7, v.isOnSale());
+			stmt.setDouble(8, v.getSalePercentage());
+			stmt.setInt(9, v.getStock());
+			stmt.setString(10, v.getCover());
 			stmt.executeUpdate();
 		}finally {
 			disconnect();

@@ -2,6 +2,8 @@ package control;
 
 import java.sql.Date;
 
+import model.Vinyl;
+
 public class LogicImpl implements Logic {
 
 	
@@ -29,9 +31,8 @@ public void modifyClientData(String username, String password, String name, Stri
 
 
 
-public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate,
-		String description, boolean onsale, double salepercentage, int stock, String cover) throws Exception {
-	 dataAccess.insertNewVinyl(title, artistcode, genrecode, price, publicationdate, description, onsale, salepercentage, stock, cover);
+public void insertNewVinyl(Vinyl v) throws Exception {
+	 dataAccess.insertNewVinyl(v);
 	
 }
 

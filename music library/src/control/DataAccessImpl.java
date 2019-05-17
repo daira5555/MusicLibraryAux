@@ -55,6 +55,8 @@ public class DataAccessImpl implements DataAccess{
 			con.close();
 	}
 	/**
+	 * This method is to add to the clients table in the database
+	 * @param username The username of the user you want to register
 	 * 
 	 */
 	public void userType (String username) throws ClassNotFoundException, SQLException, IOException{
@@ -69,7 +71,15 @@ public class DataAccessImpl implements DataAccess{
 		}
 	}
 	/**
-	 * 
+	 * This method is to add the new client to the clients table in the database
+	 * @param username The username of the client
+	 * @param password The client's password
+	 * @param name The client's name
+	 * @param surname The client's surname
+	 * @param email The client's email
+	 * @param phonenumber The client's phone number
+	 * @param address The addres of the client
+	 * @param accountnumber The account number of the client
 	 */
 	public void registerClient (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws ClassNotFoundException, SQLException, IOException{
 		try {
@@ -91,7 +101,17 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method is to modify the data of the client (this doesn't apply to the username)
+	 * @param username The client username
+	 * @param password The client password
+	 * @param name The client's name
+	 * @param surname The client's surname
+	 * @param email The client's email
+	 * @param phonenumber The client's phone number
+	 * @param address The client's address
+	 * @param accountnumber The client's account number
+	 */
 	public void modifyClientData (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -110,7 +130,19 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method is to insert a new vinyl into the database (is meant to be used only by administrators)
+	 * @param title The vinyl title
+	 * @param artistcode The code of the vinyl artist
+	 * @param genrecode The code of the vinyl genre
+	 * @param price The price of the vinyl
+	 * @param publicationdate The publication date of the vinyl
+	 * @param description The vinyl description
+	 * @param onsale If the vinyl is on sale or not
+	 * @param salepercentage The percentage of the discount of the vinyl (Ex:8%)
+	 * @param stock The amount of vinyls we have
+	 * @param cover The cover relative route
+	 */
 	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate, String description, boolean onsale, double salepercentage, int stock, String cover) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -131,7 +163,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method is to add a new artist in the database
+	 * @param name The name of the artist
+	 */
 	public void insertNewArtist(String name) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -143,7 +178,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method is to add a new genre in the database
+	 * @param name The name of the genre
+	 */
 	public void insertNewGenre(String name) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -155,7 +193,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method is to check if the artist already exists in the database
+	 * @param name The name of the artist we want to check
+	 */
 	public int artistExists(String name) throws ClassNotFoundException, SQLException, IOException{
 		int cont = 0;
 		ResultSet rs = null;
@@ -173,7 +214,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return cont;
 	}
-	
+	/**
+	 * This method is to check if the genre already exists in the database
+	 * @param name The name of the genre we want to check
+	 */
 	public int genreExists(String name) throws ClassNotFoundException, SQLException, IOException{
 		int cont = 0;
 		ResultSet rs = null;
@@ -191,7 +235,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return cont;
 	}
-	
+	/**
+	 * This method check if the user already exists in the database
+	 * @param username The username of the user we want to check
+	 */
 	public int userExists(String username) throws ClassNotFoundException, SQLException, IOException{
 		int cont = 0;
 		ResultSet rs = null;
@@ -209,7 +256,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return cont;
 	}
-	
+	/**
+	 * This method returns the type of the user 'A' if the user is an admin and 'C' if the user is a client
+	 * @param username The username of the user we want to check the type
+	 */
 	public char getUserType(String username) throws ClassNotFoundException, SQLException, IOException{
 		char type = 0;
 		ResultSet rs = null;
@@ -227,6 +277,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return type;
 	}
+	/**
+	 * This method returns the password of the user we want
+	 * @param username The username of the user we are checking
+	 */
 	public String getPassword (String username) throws ClassNotFoundException, SQLException, IOException{
 		String password = null;
 		ResultSet rs = null;

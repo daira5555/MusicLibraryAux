@@ -94,7 +94,9 @@ public class UILogin extends JFrame implements ActionListener {
 		passwordField.setBounds(189, 172, 302, 23);
 		contentPane.add(passwordField);
 	}
-
+	/**
+	 * Control the events of the buttons
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 

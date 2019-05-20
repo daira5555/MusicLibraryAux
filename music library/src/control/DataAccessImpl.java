@@ -11,6 +11,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import model.Artist;
+import model.Genre;
+import model.Vinyl;
+
 public class DataAccessImpl implements DataAccess{
 	private Connection con;
 	private PreparedStatement stmt;
@@ -345,5 +349,76 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 		return genres;
+	}
+	
+	public String getArtist(int artistCode) throws ClassNotFoundException, SQLException, IOException{
+		String artistName = null;
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from artists where artistcode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, artistCode);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				artistName = rs.getString("name");
+			}
+		} finally {
+			disconnect();
+		}
+		return artistName;
+	}
+	
+	public String getGenre(int genreCode) throws ClassNotFoundException, SQLException, IOException{
+		String genreName = null;
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from genres where genrecode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, genreCode);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				genreName = rs.getString("name");
+			}
+		} finally {
+			disconnect();
+		}
+		return genreName;
+	}
+	
+	public Vinyl getVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
+		Vinyl vin = new Vinyl();
+		Artist art = new Artist();
+		Genre gen = new Genre();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select * from vinyls where vinylcode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, vinylCode);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				vin.setVinylCode(vinylCode);
+				vin.setTitle(rs.getString("title"));
+				vin.setPrice(rs.getDouble("price"));
+				vin.setPublicationDate(rs.getDate("publicationdate"));
+				vin.setDescription(rs.getString("description"));
+				vin.setOnSale(rs.getBoolean("onsale"));
+				vin.setSalePercentage(rs.getDouble("salepercentage"));
+				vin.setStock(rs.getInt("stock"));
+				vin.setAmountSold(rs.getInt("amountsold"));
+				vin.setCover(rs.getString("cover"));
+				art.setCode(rs.getInt("artistcode"));
+				art.setName(getArtist(rs.getInt("artistcode")));
+				vin.setArtist(art);
+				gen.setCode(rs.getInt("genrecode"));
+				gen.setName(getGenre(rs.getInt("genrecode")));
+				vin.setGenre(gen);
+			}
+		} finally {
+			disconnect();
+		}
+		return vin;
 	}
 }

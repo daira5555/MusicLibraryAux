@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -19,10 +20,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
 import java.awt.Color;
 import javax.swing.JPasswordField;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 public class UIRegister extends JDialog implements ActionListener {
 
@@ -37,6 +43,7 @@ public class UIRegister extends JDialog implements ActionListener {
 	private JButton okButton;
 	private JButton cancelButton;
 	private JPasswordField passwordField;
+	private JList <String> list;
 
 	/**
 	 * Launch the application.
@@ -181,6 +188,31 @@ public class UIRegister extends JDialog implements ActionListener {
 			contentPanel.add(passwordField);
 		}
 		{
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setBounds(52, 397, 266, 63);
+			contentPanel.add(scrollPane);
+			
+			
+			DefaultListModel<String> model = new DefaultListModel<String>();
+			
+			displayArtists(model);
+			
+			
+			
+			
+			
+			
+			{
+				list = new JList<String>();
+				scrollPane.setViewportView(list);
+				
+				list.setModel(model);
+				list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+			}
+		}
+		
+	
+		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
@@ -200,11 +232,30 @@ public class UIRegister extends JDialog implements ActionListener {
 		}
 	}
 
+	private void displayArtists(DefaultListModel<String> model) {
+		Logic logic = LogicFactory.getLogic();
+		try {
+			ArrayList<String> names = logic.getArtists();
+			for (String name : names) {
+				model.addElement(name);
+			}
+		}catch(Exception E) {
+			
+		}
+		
+		
+		
+		
+		
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource().equals(okButton)){
 			Logic logic = LogicFactory.getLogic();
 			try {
+				
+				
 				logic.registerClient(usernameField.getText(), passwordField.getText(), nameField.getText(), nurnameField.getText(), emailField.getText(), Integer.parseInt(phoneNumberField.getText()), addressField.getText(), Long.parseLong(bankNumberField.getText()));
 			} catch (Exception ex) {
 				ex.printStackTrace();

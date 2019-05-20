@@ -65,7 +65,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	public UINewVinyl() {
 		setTitle("Insert new vinyl");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 363, 446);
+		setBounds(100, 100, 373, 468);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 245, 238));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -213,6 +213,10 @@ public class UINewVinyl extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 
+		} else if(e.getSource().equals(btnCancel)) {
+			
+			//volver menú
+			
 		}
 
 	}

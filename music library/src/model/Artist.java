@@ -1,6 +1,8 @@
 package model;
 
-public class Artist {
+import gui.Artist;
+
+public class Artist artis {
 	
 	private int code;
 	private String name;

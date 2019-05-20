@@ -3,6 +3,8 @@ package control;
 
 import java.sql.Date;
 
+import model.Vinyl;
+
 
 public interface Logic {
 
@@ -13,4 +15,6 @@ public interface Logic {
 	public void insertNewArtist(String name) throws Exception;
 	public int artistExists(String name) throws Exception;
 	public int genreExists(String name) throws Exception;
+	public Vinyl getVynil(int vinylCode) throws Exception;
+	public void updateVynil(Vinyl vinyl) throws Exception;
 }

@@ -1,6 +1,7 @@
 package control;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class LogicImpl implements Logic {
 
@@ -62,5 +63,14 @@ public class LogicImpl implements Logic {
 		String s = dataAccess.getPassword(username);
 		return s;
 	}
-
+	
+	public ArrayList<String> getArtists() throws Exception{
+		ArrayList<String> ar = dataAccess.getArtists();
+		return ar;
+	}
+	
+	public ArrayList<String> getGenres() throws Exception{
+		ArrayList<String> ar = dataAccess.getGenres();
+		return ar;
+	}
 }

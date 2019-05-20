@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class DataAccessImpl implements DataAccess{
@@ -310,5 +311,39 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 		return password;
+	}
+	
+	public ArrayList<String> getArtists() throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<String> artists = new ArrayList<String>();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from artists";
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				artists.add(rs.getString("name"));
+			}
+		} finally {
+			disconnect();
+		}
+		return artists;
+	}
+	
+	public ArrayList<String> getGenres() throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<String> genres = new ArrayList<String>();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from genres";
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				genres.add(rs.getString("name"));
+			}
+		} finally {
+			disconnect();
+		}
+		return genres;
 	}
 }

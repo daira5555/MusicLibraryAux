@@ -16,22 +16,15 @@ public class LogicImpl implements Logic {
 		dataAccess.registerClient(client);
 	}
 	
-//	public void registerClient(String username, String password, String name, String surname, String email,
-//			int phonenumber, String address, long accountnumber) throws Exception {
-//		dataAccess.registerClient(username, password, name, surname, email, phonenumber, address, accountnumber);
-//	}
-
 	public void userType(String username) throws Exception {
 		dataAccess.userType(username);
 
 	}
 
-	public void modifyClientData(String username, String password, String name, String surname, String email,
-			int phonenumber, String address, long accountnumber) throws Exception {
-		dataAccess.modifyClientData(username, password, name, surname, email, phonenumber, address, accountnumber);
-
+	public void modifyClientData(Client client) throws Exception {
+		dataAccess.modifyClientData(client);
 	}
-
+	
 	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate,
 			String description, boolean onsale, double salepercentage, int stock, String cover) throws Exception {
 		dataAccess.insertNewVinyl(title, artistcode, genrecode, price, publicationdate, description, onsale,

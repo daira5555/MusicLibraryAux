@@ -120,24 +120,27 @@ public class DataAccessImpl implements DataAccess{
 	 * @param address The client's address
 	 * @param accountnumber The client's account number
 	 */
-	public void modifyClientData (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws ClassNotFoundException, SQLException, IOException{
+	
+	public void modifyClientData (Client client) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
 			String sql = "update clients set password=?, name=?, surname=?, email=?, phonenumber=?, address=?, accountnumber=? where username=?";
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, password);
-			stmt.setString(2, name);
-			stmt.setString(3, surname);
-			stmt.setString(4, email);
-			stmt.setInt(5, phonenumber);
-			stmt.setString(6, address);
-			stmt.setLong(7, accountnumber);
-			stmt.setString(8, username);
+			stmt.setString(1, client.getPassword());
+			stmt.setString(2, client.getName());
+			stmt.setString(3, client.getSurname());
+			stmt.setString(4, client.getEmail());
+			stmt.setInt(5, client.getPhoneNumber());
+			stmt.setString(6, client.getAddress());
+			stmt.setLong(7, client.getAccountNumber());
+			stmt.setString(8, client.getUsername());
 			stmt.executeUpdate();
 		}finally {
 			disconnect();
 		}
 	}
+
+	
 	/**
 	 * This method is to insert a new vinyl into the database (is meant to be used only by administrators)
 	 * @param title The vinyl title

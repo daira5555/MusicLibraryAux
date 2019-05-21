@@ -481,4 +481,27 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return temp;
 	}
+	
+	public void insertArtist(String name) throws ClassNotFoundException, SQLException, IOException{
+		try {
+			connect();
+			String sql = "insert into artists (name) values (?)";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, name);
+			stmt.executeUpdate();
+		} finally {
+			disconnect();
+		}
+	}
+	public void insertGenre(String name) throws ClassNotFoundException, SQLException, IOException{
+		try {
+			connect();
+			String sql = "insert into genres (name) values (?)";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, name);
+			stmt.executeUpdate();
+		} finally {
+			disconnect();
+		}
+	}
 }

@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -527,15 +528,46 @@ public class DataAccessImpl implements DataAccess{
 		}
 	}
 	
-	public ArrayList<Vinyl> getBestSellersDate (Date date) throws ClassNotFoundException, SQLException, IOException{
+	public ArrayList<Vinyl> getBestSellersDate (LocalDate date) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 		ResultSet rs = null;
+		int cont = 0;
 		try {
 			connect();
+			String sql = "select vinyls.vinylcode, title, artistcode, genrecode, price, publicationdate, description, onsale, salepercentage, stock, amountsold, cover,  amount "
+					+ "from vinyls, purchases "
+					+ "where vinyls.vinylcode=purchases.vinylcode and purchasedate>=? and purchasedate<=sysdate"
+					+ "order by amount sold descending";
+			stmt = con.prepareStatement(sql);
+			stmt.setDate(1, Date.valueOf(date));
+			rs = stmt.executeQuery();
+			while(rs.next() && cont<10) {
+				Vinyl v = new Vinyl();
+				Artist ar = new Artist();
+				Genre ge = new Genre();
+				v.setVinylCode(rs.getInt("vinyls.vinylcode"));
+				v.setTitle(rs.getString("title"));
+				ar.setCode(rs.getInt("artistcode"));
+				ar.setName(getArtist(rs.getInt("artistcode")));
+				v.setArtist(ar);
+				ge.setCode(rs.getInt("genrecode"));
+				ge.setName(getArtist(rs.getInt("genrecode")));
+				v.setGenre(ge);
+				v.setPrice(rs.getDouble("price"));
+				v.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
+				v.setDescription(rs.getString("description"));
+				v.setOnSale(rs.getBoolean("onsale"));
+				v.setSalePercentage(rs.getDouble("salepercentage"));
+				v.setStock(rs.getInt("stock"));
+				v.setAmountSold(rs.getInt("amountsold"));
+				v.setCover(rs.getString("cover"));
+				vinyls.add(v);
+				cont++;
+			}
 		} finally {
 			disconnect();
 		}
-		return null;
+		return vinyls;
 	}
 	
 	public ArrayList<Vinyl> getBestSellers() throws ClassNotFoundException, SQLException, IOException{
@@ -551,6 +583,7 @@ public class DataAccessImpl implements DataAccess{
 					Vinyl v = new Vinyl();
 					Artist ar = new Artist();
 					Genre ge = new Genre();
+					v.setVinylCode(rs.getInt("vinylcode"));
 					v.setTitle(rs.getString("title"));
 					ar.setCode(rs.getInt("artistcode"));
 					ar.setName(getArtist(rs.getInt("artistcode")));
@@ -566,6 +599,7 @@ public class DataAccessImpl implements DataAccess{
 					v.setStock(rs.getInt("stock"));
 					v.setAmountSold(rs.getInt("amountsold"));
 					v.setCover(rs.getString("cover"));
+					vinyls.add(v);
 					cont++;
 				}
 			} finally {

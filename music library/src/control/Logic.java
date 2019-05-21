@@ -2,6 +2,7 @@ package control;
 
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import model.Artist;
@@ -34,4 +35,5 @@ public interface Logic {
 	public void insertGenre(String name) throws Exception;
 	public void deleteVinyl(int vinylCode) throws Exception;
 	public ArrayList<Vinyl> getBestSellers() throws Exception;
+	public ArrayList<Vinyl> getBestSellersDate (LocalDate date) throws Exception;
 }

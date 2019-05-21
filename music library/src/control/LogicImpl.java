@@ -1,5 +1,6 @@
 package control;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import model.Artist;
@@ -122,6 +123,12 @@ public class LogicImpl implements Logic {
 	public ArrayList<Vinyl> getBestSellers() throws Exception{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 		vinyls = dataAccess.getBestSellers();
+		return vinyls;
+	}
+
+	public ArrayList<Vinyl> getBestSellersDate(LocalDate date) throws Exception {
+		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+		vinyls = dataAccess.getBestSellersDate(date);
 		return vinyls;
 	}
 }

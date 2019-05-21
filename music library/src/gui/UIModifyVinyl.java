@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.jdesktop.swingx.JXDatePicker;
+
 import control.Logic;
 import control.LogicFactory;
 import model.Genre;
@@ -38,6 +40,9 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JButton btnCancel;
 	private Vinyl vToMod = new Vinyl(12, "test", null, null, 69.69, LocalDate.now(), "pretty gud albun", true, 0.69, 12, 23, "wew");
 	private Logic logic = LogicFactory.getLogic();
+	private JXDatePicker picker;
+	private JLabel lblStock;
+	private JTextField stockField;
 	/**
 	 * Launch the application.
 	 */
@@ -57,9 +62,10 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public UIModifyVinyl() {
+		// vToMod = logic.getVynil(vinylCode);
 		setTitle("Modify vinyl");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 449, 430);
+		setBounds(100, 100, 400, 468);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 245, 238));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -86,7 +92,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		contentPane.add(rdbtnYes);
 		rdbtnNo = new JRadioButton("No");
 		rdbtnNo.setBackground(new Color(255, 250, 240));
-		rdbtnNo.setBounds(194, 225, 68, 23);
+		rdbtnNo.setBounds(284, 225, 68, 23);
 		contentPane.add(rdbtnNo);
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(rdbtnNo);
@@ -112,29 +118,29 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		genreField.setColumns(10);
 		genreField.setText("neo-test");
 		priceField = new JTextField();
-		priceField.setBounds(147, 198, 86, 20);
+		priceField.setBounds(147, 198, 178, 20);
 		contentPane.add(priceField);
 		priceField.setColumns(10);
 		priceField.setText(String.valueOf(vToMod.getPrice()));
 		JLabel label = new JLabel("\u20AC");
-		label.setBounds(239, 201, 46, 14);
+		label.setBounds(341, 201, 11, 14);
 		contentPane.add(label);
 		JLabel lblNewLabel = new JLabel("Image:");
 		lblNewLabel.setBounds(45, 282, 46, 14);
 		contentPane.add(lblNewLabel);
 		btnSelect = new JButton("Select");
 		btnSelect.setBackground(new Color(255, 218, 185));
-		btnSelect.setBounds(147, 278, 86, 23);
+		btnSelect.setBounds(147, 278, 205, 23);
 		contentPane.add(btnSelect);
 		btnSelect.addActionListener(this);
 		btnSubmitChanges = new JButton("Submit changes");
 		btnSubmitChanges.setBackground(new Color(255, 218, 185));
-		btnSubmitChanges.setBounds(24, 356, 142, 23);
+		btnSubmitChanges.setBounds(45, 390, 142, 23);
 		contentPane.add(btnSubmitChanges);
 		btnSubmitChanges.addActionListener(this);
 		btnCancel = new JButton("Cancel");
 		btnCancel.setBackground(new Color(255, 218, 185));
-		btnCancel.setBounds(302, 356, 89, 23);
+		btnCancel.setBounds(263, 390, 89, 23);
 		contentPane.add(btnCancel);
 		btnCancel.addActionListener(this);
 		JLabel lblDescription = new JLabel("Description:");
@@ -149,14 +155,28 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		lblSalePercentage.setBounds(45, 257, 138, 14);
 		contentPane.add(lblSalePercentage);
 		salePercentageField = new JTextField();
-		salePercentageField.setBounds(147, 254, 86, 20);
+		salePercentageField.setBounds(147, 254, 178, 20);
 		contentPane.add(salePercentageField);
 		salePercentageField.setColumns(10);
 		salePercentageField.setText(String.valueOf(vToMod.getSalePercentage()));
 		JLabel label_1 = new JLabel("%");
-		label_1.setBounds(239, 257, 46, 14);
+		label_1.setBounds(335, 257, 17, 14);
 		contentPane.add(label_1);
+		picker = new JXDatePicker();
+		picker.setBounds(147, 312, 205, 22);
+		contentPane.add(picker);
+		JLabel lblPublicationDate = new JLabel("Publication date:");
+		lblPublicationDate.setBounds(45, 315, 92, 14);
+		contentPane.add(lblPublicationDate);
 		
+		lblStock = new JLabel("Stock:");
+		lblStock.setBounds(45, 349, 46, 14);
+		contentPane.add(lblStock);
+		
+		stockField = new JTextField();
+		stockField.setBounds(147, 346, 205, 20);
+		contentPane.add(stockField);
+		stockField.setColumns(10);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -166,7 +186,24 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 			JFileChooser fileChooser = new JFileChooser("C:/");
 			fileChooser.showOpenDialog(this);
 		} else if (e.getSource().equals(btnSubmitChanges)) {
-			
+			try {
+				vToMod.setArtist(logic.getArtist(artistField.getText()));
+				// vToMod.setCover(cover);
+				vToMod.setDescription(descriptionField.getText());
+				vToMod.setGenre(logic.getGenre(genreField.getText()));
+				if (rdbtnYes.isSelected()) {
+					vToMod.setOnSale(true);
+				} else {
+					vToMod.setOnSale(false);
+				}
+				vToMod.setPrice((Double.valueOf(priceField.getText())));
+				// vToMod.setPublicationDate();
+				vToMod.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
+				vToMod.setStock(Integer.valueOf(stockField.getText()));
+				vToMod.setTitle(titleField.getText());
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 		}
 	}
 }

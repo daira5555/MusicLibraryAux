@@ -1,12 +1,7 @@
 package model;
-
-import gui.Artist;
-
-public class Artist artis {
-	
+public class Artist {
 	private int code;
 	private String name;
-	
 	public Artist() {
 		super();
 	}
@@ -15,7 +10,6 @@ public class Artist artis {
 		this.code = code;
 		this.name = name;
 	}
-	
 	public int getCode() {
 		return code;
 	}
@@ -28,5 +22,4 @@ public class Artist artis {
 	public void setName(String name) {
 		this.name = name;
 	}
-		
 }

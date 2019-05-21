@@ -2,6 +2,10 @@ package control;
 
 import java.sql.Date;
 
+import model.Artist;
+import model.Genre;
+import model.Vinyl;
+
 public class LogicImpl implements Logic {
 
 	
@@ -58,6 +62,34 @@ public int artistExists(String name) throws Exception {
 public int genreExists(String name) throws Exception {
 	int n=dataAccess.genreExists(name);
 	return n;
+}
+
+
+@Override
+public Vinyl getVynil(int vinylCode) throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+
+@Override
+public void updateVynil(Vinyl vinyl) throws Exception {
+	// TODO Auto-generated method stub
+	
+}
+
+
+@Override
+public Artist getArtist(String name) throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+
+@Override
+public Genre getGenre(String name) throws Exception {
+	// TODO Auto-generated method stub
+	return null;
 }
 
 

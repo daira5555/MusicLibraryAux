@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import model.Artist;
+import model.Genre;
 import model.Vinyl;
 
 public class DataAccessImpl implements DataAccess{
@@ -247,9 +249,61 @@ public class DataAccessImpl implements DataAccess{
 		
 		
 	}
-	@Override
-	public Vinyl getVinyl() throws Exception {
-		
-		return null;
+	public Vinyl getVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
+		Vinyl vin = new Vinyl();
+		Artist art = new Artist();
+		Genre gen = new Genre();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select * from vinyls where vinylcode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, vinylCode);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				vin.setVinylCode(vinylCode);
+				vin.setTitle(rs.getString("title"));
+				vin.setPrice(rs.getDouble("price"));
+				vin.setPublicationDate(rs.getDate("publicationdate"));
+				vin.setDescription(rs.getString("description"));
+				vin.setOnSale(rs.getBoolean("onsale"));
+				vin.setSalePercentage(rs.getDouble("salepercentage"));
+				vin.setStock(rs.getInt("stock"));
+				vin.setAmountSold(rs.getInt("amountsold"));
+				vin.setCover(rs.getString("cover"));
+				art.setCode(rs.getInt("artistcode"));
+				art.setName(getArtist(rs.getInt("artistcode")));
+				vin.setArtist(art);
+				gen.setCode(rs.getInt("genrecode"));
+				gen.setName(getGenre(rs.getInt("genrecode")));
+				vin.setGenre(gen);
+			}
+		} finally {
+			disconnect();
+		}
+		return vin;
 	}
+	
+	public void updateVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{
+		try {
+			connect();
+			String sql = "update vinyls set title=?, artistcode=?, genrecode=?, price=?, publicationdate=?, description=?, onsale=?, salepercentage=?, stock=?, cover=? where vinylcode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, vinyl.getTitle());
+			stmt.setInt(2, vinyl.getArtist().getCode());
+			stmt.setInt(3, vinyl.getGenre().getCode());
+			stmt.setDouble(4, vinyl.getPrice());
+			stmt.setDate(5, vinyl.getPublicationDate());
+			stmt.setString(6, vinyl.getDescription());
+			stmt.setBoolean(7, vinyl.isOnSale());
+			stmt.setDouble(8, vinyl.getSalePercentage());
+			stmt.setInt(9, vinyl.getStock());
+			stmt.setString(10, vinyl.getCover());
+			stmt.setInt(11, vinyl.getVinylCode());
+			stmt.executeUpdate();
+		} finally {
+			disconnect();
+		}
+	}
+	
 }

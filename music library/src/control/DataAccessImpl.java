@@ -421,4 +421,40 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return vin;
 	}
+	
+	public void updateVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{
+		try {
+			connect();
+			String sql = "update vinyls set title=?, artistcode=?, genrecode=?, price=?, publicationdate=?, description=?, onsale=?, salepercentage=?, stock=?, cover=? where vinylcode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, vinyl.getTitle());
+			stmt.setInt(2, vinyl.getArtist().getCode());
+			stmt.setInt(3, vinyl.getGenre().getCode());
+			stmt.setDouble(4, vinyl.getPrice());
+			stmt.setDate(5, vinyl.getPublicationDate());
+			stmt.setString(6, vinyl.getDescription());
+			stmt.setBoolean(7, vinyl.isOnSale());
+			stmt.setDouble(8, vinyl.getSalePercentage());
+			stmt.setInt(9, vinyl.getStock());
+			stmt.setString(10, vinyl.getCover());
+			stmt.setInt(11, vinyl.getVinylCode());
+			stmt.executeUpdate();
+		} finally {
+			disconnect();
+		}
+	}
+	
+	public Artist getArtist(String name) throws ClassNotFoundException, SQLException, IOException{
+		Artist temp = new Artist();
+		try {
+			connect();
+			String sql = "select * from artist where name=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, name);
+			
+		} finally {
+			disconnect();
+		}
+		return temp;
+	}
 }

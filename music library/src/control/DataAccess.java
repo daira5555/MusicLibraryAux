@@ -18,8 +18,6 @@ public interface DataAccess {
 	
 	public void insertNewVinyl(Vinyl vinyl) throws Exception;
 	
-	//public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate, String description, boolean onsale, double salepercentage, int stock, String cover) throws Exception;
-	
 	public void insertNewArtist(String name) throws Exception;
 
 	public void insertNewGenre(String name) throws Exception;

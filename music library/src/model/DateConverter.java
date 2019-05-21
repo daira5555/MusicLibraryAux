@@ -30,7 +30,4 @@ public class DateConverter {
 	      .toInstant());
 	}
 	
-	public java.sql.Date convertToSQLDate(LocalDate dateToConvert) {
-		return java.sql.Date.valueOf(dateToConvert);
-	}
 }

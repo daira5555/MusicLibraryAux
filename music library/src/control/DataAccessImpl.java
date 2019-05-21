@@ -15,6 +15,7 @@ import model.Artist;
 import model.Client;
 import model.Genre;
 import model.Vinyl;
+import model.DateConverter;
 
 public class DataAccessImpl implements DataAccess{
 	private Connection con;
@@ -164,7 +165,7 @@ public class DataAccessImpl implements DataAccess{
 			stmt.setInt(2, vinyl.getArtist().getCode());
 			stmt.setInt(3, vinyl.getGenre().getCode());
 			stmt.setDouble(4, vinyl.getPrice());
-			stmt.setDate(5, vinyl.getPublicationDate());
+			stmt.setDate(5, Date.valueOf(vinyl.getPublicationDate()));
 			stmt.setString(6, vinyl.getDescription());
 			stmt.setBoolean(7, vinyl.isOnSale());
 			stmt.setDouble(8, vinyl.getSalePercentage());
@@ -410,7 +411,7 @@ public class DataAccessImpl implements DataAccess{
 				vin.setVinylCode(vinylCode);
 				vin.setTitle(rs.getString("title"));
 				vin.setPrice(rs.getDouble("price"));
-				vin.setPublicationDate(rs.getDate("publicationdate"));
+				vin.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
 				vin.setDescription(rs.getString("description"));
 				vin.setOnSale(rs.getBoolean("onsale"));
 				vin.setSalePercentage(rs.getDouble("salepercentage"));
@@ -439,7 +440,7 @@ public class DataAccessImpl implements DataAccess{
 			stmt.setInt(2, vinyl.getArtist().getCode());
 			stmt.setInt(3, vinyl.getGenre().getCode());
 			stmt.setDouble(4, vinyl.getPrice());
-			stmt.setDate(5, vinyl.getPublicationDate());
+			stmt.setDate(5, Date.valueOf(vinyl.getPublicationDate()));
 			stmt.setString(6, vinyl.getDescription());
 			stmt.setBoolean(7, vinyl.isOnSale());
 			stmt.setDouble(8, vinyl.getSalePercentage());
@@ -558,7 +559,7 @@ public class DataAccessImpl implements DataAccess{
 					ge.setName(getArtist(rs.getInt("genrecode")));
 					v.setGenre(ge);
 					v.setPrice(rs.getDouble("price"));
-					v.setPublicationDate(rs.getDate("publicationdate"));
+					v.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
 					v.setDescription(rs.getString("description"));
 					v.setOnSale(rs.getBoolean("onsale"));
 					v.setSalePercentage(rs.getDouble("salepercentage"));

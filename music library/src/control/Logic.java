@@ -4,6 +4,10 @@ package control;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import model.Artist;
+import model.Genre;
+import model.Vinyl;
+
 
 public interface Logic {
 
@@ -19,4 +23,12 @@ public interface Logic {
 	public String getPassword (String username) throws Exception;
 	public ArrayList<String> getArtists() throws Exception;
 	public ArrayList<String> getGenres() throws Exception;
+	public String getArtist(int artistCode) throws Exception;
+	public String getGenre(int genreCode) throws Exception;
+	public Vinyl getVinyl(int vinylCode) throws Exception;
+	public void updateVinyl(Vinyl vinyl) throws Exception;
+	public Artist getArtist(String name) throws Exception;
+	public Genre getGenre(String name) throws Exception;
+	public void insertArtist(String name) throws Exception;
+	public void insertGenre(String name) throws Exception;
 }

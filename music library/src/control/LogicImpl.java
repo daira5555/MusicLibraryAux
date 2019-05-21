@@ -3,6 +3,10 @@ package control;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import model.Artist;
+import model.Genre;
+import model.Vinyl;
+
 public class LogicImpl implements Logic {
 
 	private DataAccess dataAccess = DataAccessFactory.getDataAccess();
@@ -73,4 +77,46 @@ public class LogicImpl implements Logic {
 		ArrayList<String> ar = dataAccess.getGenres();
 		return ar;
 	}
+
+	public String getArtist(int artistCode) throws Exception {
+		String s = dataAccess.getArtist(artistCode);
+		return s;
+	}
+
+	public String getGenre(int genreCode) throws Exception {
+		String s = dataAccess.getGenre(genreCode);
+		return s;
+	}
+
+	public Vinyl getVinyl(int vinylCode) throws Exception {
+		Vinyl vin = new Vinyl();
+		vin = dataAccess.getVinyl(vinylCode);
+		return vin;
+	}
+
+	public void updateVinyl(Vinyl vinyl) throws Exception {
+		dataAccess.updateVinyl(vinyl);
+	}
+
+	public Artist getArtist(String name) throws Exception {
+		Artist art = new Artist();
+		art = dataAccess.getArtist(name);
+		return art;
+	}
+
+	public Genre getGenre(String name) throws Exception {
+		Genre gen = new Genre();
+		gen = dataAccess.getGenre(name);
+		return gen;
+	}
+	
+	public void insertArtist(String name) throws Exception {
+		dataAccess.insertArtist(name);
+	}
+
+	public void insertGenre(String name) throws Exception {
+		dataAccess.insertGenre(name);
+	}
+	
+	
 }

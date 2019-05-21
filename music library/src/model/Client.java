@@ -17,6 +17,10 @@ public class Client extends User {
 		super(username, password, name, surname, email, phoneNumber);
 	}
 
+	public Client() {
+		super();
+	}
+
 	public String getAddress() {
 		return address;
 	}

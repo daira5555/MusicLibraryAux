@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import control.DataAccessImpl;
 import control.Logic;
 import control.LogicFactory;
+import model.Client;
 
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
@@ -204,8 +205,17 @@ public class UIRegister extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource().equals(okButton)){
 			Logic logic = LogicFactory.getLogic();
+			Client client = new Client();
 			try {
-				logic.registerClient(usernameField.getText(), passwordField.getText(), nameField.getText(), nurnameField.getText(), emailField.getText(), Integer.parseInt(phoneNumberField.getText()), addressField.getText(), Long.parseLong(bankNumberField.getText()));
+				client.setUsername(usernameField.getText());
+				client.setPassword(passwordField.getText());
+				client.setName(nameField.getText());
+				client.setSurname(nurnameField.getText());
+				client.setEmail(emailField.getText());
+				client.setPhoneNumber(Integer.parseInt(phoneNumberField.getText()));
+				client.setAddress(addressField.getText());
+				client.setAccountNumber(Long.parseLong(bankNumberField.getText()));
+				logic.registerClient(client);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

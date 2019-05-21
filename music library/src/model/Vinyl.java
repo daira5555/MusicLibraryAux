@@ -133,13 +133,4 @@ public class Vinyl {
 	public void setCover(String cover) {
 		this.cover = cover;
 	}
-	
-	
-	public void toStringVinyl() {
-		System.out.println(title + " " + artist + " " + genre + " " + description + " " + price + " " + salePercentage + " " + onSale + " "+ publicationDate);
-		
-	}
-	
-	
-	
 }

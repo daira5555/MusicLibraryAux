@@ -12,6 +12,9 @@ import javax.swing.border.EmptyBorder;
 import control.DataAccessImpl;
 import control.Logic;
 import control.LogicFactory;
+import model.Artist;
+import model.Client;
+import model.Genre;
 
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
@@ -34,7 +37,7 @@ public class UIRegister extends JDialog implements ActionListener {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField nameField;
-	private JTextField nurnameField;
+	private JTextField surnameField;
 	private JTextField addressField;
 	private JTextField phoneNumberField;
 	private JTextField emailField;
@@ -136,12 +139,12 @@ public class UIRegister extends JDialog implements ActionListener {
 			nameField.setColumns(10);
 		}
 		{
-			nurnameField = new JTextField();
-			nurnameField.setForeground(Color.GRAY);
-			nurnameField.setText("Fern\u00E1ndez");
-			nurnameField.setBounds(224, 83, 86, 20);
-			contentPanel.add(nurnameField);
-			nurnameField.setColumns(10);
+			surnameField = new JTextField();
+			surnameField.setForeground(Color.GRAY);
+			surnameField.setText("Fern\u00E1ndez");
+			surnameField.setBounds(224, 83, 86, 20);
+			contentPanel.add(surnameField);
+			surnameField.setColumns(10);
 		}
 		{
 			addressField = new JTextField();
@@ -277,9 +280,9 @@ public class UIRegister extends JDialog implements ActionListener {
 	private void displayGenres(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
-			ArrayList<String> names = logic.getArtists();
-			for (String name : names) {
-				model.addElement(name);
+			ArrayList<Artist> names = logic.getArtists();
+			for (Artist art : names) {
+				model.addElement(art.getName());
 			}
 		}catch(Exception E) {
 			
@@ -292,9 +295,9 @@ public class UIRegister extends JDialog implements ActionListener {
 	private void displayArtists(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
-			ArrayList<String> names = logic.getGenres();
-			for (String name : names) {
-				model.addElement(name);
+			ArrayList<Genre> names = logic.getGenres();
+			for (Genre g : names) {
+				model.addElement(g.getName());
 			}
 		}catch(Exception E) {
 			
@@ -311,9 +314,18 @@ public class UIRegister extends JDialog implements ActionListener {
 		if(e.getSource().equals(okButton)){
 			Logic logic = LogicFactory.getLogic();
 			try {
+				Client client = new Client();
+				client.setName(nameField.getText());
+				client.setSurname(surnameField.getText());
+				client.setUsername(usernameField.getText());
+				client.setPassword(passwordField.getText());
+				client.setEmail(emailField.getText());
+				client.setAddress(addressField.getText());
+				client.setPhoneNumber(Integer.parseInt(phoneNumberField.getText()));
+				client.setAccountNumber(Integer.parseInt(bankNumberField.getText()));
+				   
 				
-				
-				logic.registerClient(usernameField.getText(), passwordField.getText(), nameField.getText(), nurnameField.getText(), emailField.getText(), Integer.parseInt(phoneNumberField.getText()), addressField.getText(), Long.parseLong(bankNumberField.getText()), list.getSelectedValuesList(), list_1.getSelectedValuesList());
+				logic.registerClient(client);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

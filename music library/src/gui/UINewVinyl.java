@@ -181,42 +181,41 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource().equals(btnSubmitChanges)) {
-			Logic logic = LogicFactory.getLogic();
-
-			Vinyl v = new Vinyl();
-
-			v.setTitle(titleField.getText());
-			v.setArtist(artistField.getText());
-			v.setDescription(descriptionField.getText());
-			v.setGenre(genreField.getText());
-			v.setPrice(Double.parseDouble(priceField.getText()));
-			v.setSalePercentage(Double.parseDouble(saleField.getText()));
-			v.setAmountSold(0);
-
-			String aux = picker.getDate().toString();
-			System.out.println(aux);
-			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDate date = LocalDate.parse(aux, format);
-			v.setPublicationDate(date);
-
-			if (rdbtnYes.isSelected()) {
-				v.setOnSale(true);
-			} else {
-				v.setOnSale(false);
-			}
-
-			v.toStringVinyl();
 			try {
+				Logic logic = LogicFactory.getLogic();
+
+				Vinyl v = new Vinyl();
+
+				v.setTitle(titleField.getText());
+				v.setArtist(logic.getArtist(artistField.getText()));
+				v.setDescription(descriptionField.getText());
+				v.setGenre(logic.getGenre(genreField.getText()));
+				v.setPrice(Double.parseDouble(priceField.getText()));
+				v.setSalePercentage(Double.parseDouble(saleField.getText()));
+				v.setAmountSold(0);
+
+				String aux = picker.getDate().toString();
+				System.out.println(aux);
+				DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				LocalDate date = LocalDate.parse(aux, format);
+				// v.setPublicationDate(date);
+
+				if (rdbtnYes.isSelected()) {
+					v.setOnSale(true);
+				} else {
+					v.setOnSale(false);
+				}
+
 				logic.insertNewVinyl(v);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
-		} else if(e.getSource().equals(btnCancel)) {
-			
-			//volver menú
-			
+		} else if (e.getSource().equals(btnCancel)) {
+
+			// volver menú
+
 		}
 
 	}

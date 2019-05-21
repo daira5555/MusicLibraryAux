@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 import control.Logic;
 import control.LogicFactory;
@@ -221,7 +222,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		
 		
 
-		String[] columnNames1 = { "image", "fefeg", "Genre", "Price", "On sale:", "Sale percentage:" };
+		String[] columnNames1 = { "image", "fefeg", "Genre", "Price", "On sale:", "Sale percentage:", "codigo" };
 
 		
 		JLabel label = new JLabel();
@@ -235,12 +236,12 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 
 		Object[][] data1 = {
 				{ label, "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false),
-						new Integer(20) },
-				{ label, "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true), new Integer(20) },
+						new Integer(20), new Integer(1) },
+				{ label, "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true), new Integer(20) , new Integer(2)},
 				{ label, "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),
-						new Integer(20) },
-				{ label, "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true), new Integer(20) },
-				{ label, "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false), new Integer(20) } };
+						new Integer(20), new Integer(1) },
+				{ label, "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true), new Integer(20), new Integer(1) },
+				{ label, "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false), new Integer(20),new Integer(1) } };
 		
 		
 		scrollPane_1 = new JScrollPane();
@@ -264,7 +265,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			Vinyl v = new Vinyl();
 
 			v.setTitle(albumTitleField.getText());
-		//	v.setArtist.setName(artistField.getText());
+		//v.setArtist.setName(artistField.getText());
 		//	v.setGenre.setName(genreField.getText());
 			v.setPrice(Double.parseDouble(priceField.getText()));
 			v.setStock(Integer.parseInt(stockField.getText()));
@@ -299,6 +300,22 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			}
 			
 
+		}else if(e.getSource().equals(btnModify)) {
+			Vinyl vinyl = new Vinyl();
+			
+		int index= table.getSelectedRow();
+		TableModel model = table.getModel();
+		vinyl.setVinylCode(Integer.parseInt(model.getValueAt(index, 6).toString()));
+		
+		
+		}else if(e.getSource().equals(btnDelete)) {
+		
+		Vinyl vinyl = new Vinyl();
+		
+		int index= table.getSelectedRow();
+		TableModel model = table.getModel();
+		vinyl.setVinylCode(Integer.parseInt(model.getValueAt(index, 6).toString()));
+		
 		}
 
 	}

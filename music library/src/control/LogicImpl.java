@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 import model.Vinyl;
 
+import model.Artist;
+import model.Client;
+import model.Genre;
+import model.Vinyl;
+
 public class LogicImpl implements Logic {
 
 	
@@ -63,6 +68,34 @@ public int genreExists(String name) throws Exception {
 }
 
 
+@Override
+public Vinyl getVynil(int vinylCode) throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+
+@Override
+public void updateVynil(Vinyl vinyl) throws Exception {
+	// TODO Auto-generated method stub
+	
+}
+
+
+@Override
+public Artist getArtist(String name) throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+
+@Override
+public Genre getGenre(String name) throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+
 
 public ArrayList <Vinyl> vinyls(String time) throws Exception {
 	ArrayList <Vinyl> vinyls = new ArrayList<Vinyl>();
@@ -83,6 +116,34 @@ public ArrayList <Vinyl> vinyls(String time) throws Exception {
 
 public ArrayList<Vinyl> showBestSellers(String time) {
 	
+	return null;
+}
+
+
+@Override
+public void registerClient(Client client) throws Exception {
+	// TODO Auto-generated method stub
+	
+}
+
+
+@Override
+public void modifyClientData(Client client) throws Exception {
+	// TODO Auto-generated method stub
+	
+}
+
+
+@Override
+public ArrayList<Genre> getGenres() throws Exception {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+
+@Override
+public ArrayList<Artist> getArtists() throws Exception {
+	// TODO Auto-generated method stub
 	return null;
 }
 

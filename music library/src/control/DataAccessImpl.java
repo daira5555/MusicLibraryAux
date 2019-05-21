@@ -118,8 +118,8 @@ public class DataAccessImpl implements DataAccess{
 			String sql = "insert into vinyls (title,artiscode,genrecode,price,publicationdate,description,onsale,salepercentage,stock,amountsold,cover) values (?,?,?,?,?,?,?,?,?,0,?)";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, v.getTitle() );
-			stmt.setInt(2, v.getArtist());
-			stmt.setInt(3, v.getGenre());
+			stmt.setInt(2, v.getArtist().getCode());
+			stmt.setInt(3, v.getGenre().getCode());
 			stmt.setDouble(4, v.getPrice());
 			stmt.setDate(5, v.getPublicationDate());
 			stmt.setString(6, v.getDescription());

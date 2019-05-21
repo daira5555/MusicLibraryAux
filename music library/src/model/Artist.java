@@ -1,10 +1,7 @@
 package model;
-
 public class Artist {
-	
 	private int code;
 	private String name;
-	
 	public Artist() {
 		super();
 	}
@@ -13,7 +10,6 @@ public class Artist {
 		this.code = code;
 		this.name = name;
 	}
-	
 	public int getCode() {
 		return code;
 	}
@@ -26,5 +22,4 @@ public class Artist {
 	public void setName(String name) {
 		this.name = name;
 	}
-		
 }

@@ -446,12 +446,36 @@ public class DataAccessImpl implements DataAccess{
 	
 	public Artist getArtist(String name) throws ClassNotFoundException, SQLException, IOException{
 		Artist temp = new Artist();
+		ResultSet rs = null;
 		try {
 			connect();
 			String sql = "select * from artist where name=?";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, name);
-			
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				temp.setCode(rs.getInt("artistcode"));
+				temp.setName(rs.getString("name"));
+			}
+		} finally {
+			disconnect();
+		}
+		return temp;
+	}
+	
+	public Genre getGenre(String name) throws ClassNotFoundException, SQLException, IOException{
+		ResultSet rs = null;
+		Genre temp = new Genre();
+		try {
+			connect();
+			String sql = "select * from genres where name=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, name);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				temp.setCode(rs.getInt("genrecode"));
+				temp.setName(rs.getString("name"));
+			}
 		} finally {
 			disconnect();
 		}

@@ -112,6 +112,11 @@ public class LogicImpl implements Logic {
 		dataAccess.insertGenre(name);
 	}
 
+	
+	public void deleteVinyl(int vinylCode) throws Exception {
+		dataAccess.deleteVinyl(vinylCode);
+	}
+
 
 	
 	

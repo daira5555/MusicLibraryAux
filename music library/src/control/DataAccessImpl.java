@@ -521,6 +521,7 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
+	
 	public void insertGenre(String name) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -532,4 +533,17 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
+
+	public void deleteVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
+		try {
+			connect();
+			String sql = "delete from vinyls where vinylcode = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, vinylCode);
+			stmt.executeUpdate();
+		} finally {
+			disconnect();
+		}
+	}
+	
 }

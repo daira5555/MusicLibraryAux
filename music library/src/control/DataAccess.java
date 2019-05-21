@@ -52,6 +52,6 @@ public interface DataAccess {
 	
 	public void insertGenre(String name) throws Exception;
 
-	
+	public void deleteVinyl(int vinylCode) throws Exception;
 
 }

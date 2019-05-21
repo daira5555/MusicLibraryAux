@@ -242,4 +242,14 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return null;
 	}
+	@Override
+	public void deleteVinyl(int vinylDel) throws Exception {
+		
+		
+	}
+	@Override
+	public Vinyl getVinyl() throws Exception {
+		
+		return null;
+	}
 }

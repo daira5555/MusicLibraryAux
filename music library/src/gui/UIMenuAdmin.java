@@ -301,23 +301,35 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			
 
 		}else if(e.getSource().equals(btnModify)) {
-			Vinyl vinyl = new Vinyl();
-			
 		int index= table.getSelectedRow();
 		TableModel model = table.getModel();
-		vinyl.setVinylCode(Integer.parseInt(model.getValueAt(index, 6).toString()));
-		
+		int vinylMod= (Integer.parseInt(model.getValueAt(index, 6).toString()));
+		UIModifyVinyl mod = new UIModifyVinyl(vinylMod);
 		
 		}else if(e.getSource().equals(btnDelete)) {
 		
-		Vinyl vinyl = new Vinyl();
+		
 		
 		int index= table.getSelectedRow();
 		TableModel model = table.getModel();
-		vinyl.setVinylCode(Integer.parseInt(model.getValueAt(index, 6).toString()));
+		int vinylDel= (Integer.parseInt(model.getValueAt(index, 6).toString()));
+		deleteVinyl(vinylDel);
 		
 		}
 
+	}
+
+	private void deleteVinyl(int vinylDel) {
+		Logic logic = LogicFactory.getLogic();
+		try {
+			logic.deleteVinyl(vinylDel);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
 
 	public void tableRedone(ArrayList<Vinyl> vinyls) {

@@ -22,6 +22,10 @@ public interface DataAccess {
 	public int artistExists(String name) throws Exception;
 	
 	public int genreExists(String name) throws Exception;
+
+	public void deleteVinyl(int vinylDel) throws Exception;
+
+	public Vinyl getVinyl() throws Exception;
 	
 	
 }

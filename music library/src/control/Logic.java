@@ -20,13 +20,14 @@ public interface Logic {
 	public int artistExists(String name) throws Exception;
 	public int genreExists(String name) throws Exception;
 	public ArrayList<Vinyl> showBestSellers(String time);
-	public Vinyl getVynil(int vinylCode) throws Exception;
+	public Vinyl getVinyl(int vinylCode) throws Exception;
 	public void updateVynil(Vinyl vinyl) throws Exception;
 	public Artist getArtist(String name) throws Exception;
 	public Genre getGenre(String name) throws Exception;
 	public ArrayList<Genre> getGenres() throws Exception;
 	public ArrayList<Artist> getArtists() throws Exception;
 	void modifyClientData(Client client) throws Exception;
+	public void deleteVinyl(int vinylDel) throws Exception;
 
 	
 }

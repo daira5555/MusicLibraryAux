@@ -64,20 +64,26 @@ public int genreExists(String name) throws Exception {
 
 
 
-public ArrayList <Vinyl> vinils(String time) throws Exception {
-	ArrayList <Vinyl> vinils = new ArrayList<Vinyl>();
+public ArrayList <Vinyl> vinyls(String time) throws Exception {
+	ArrayList <Vinyl> vinyls = new ArrayList<Vinyl>();
 	if(time.equals("week")) {
-		vinils.getBestSellersWeek();
+		//vinils.getBestSellersWeek();
 	}else if(time.equals("month")) {
-		vinils.getBestSellersMonth();
+		//vinils.getBestSellersMonth();
 	}else if(time.equals("year")) {
-		vinils.getBestSellersYear();
+		//vinils.getBestSellersYear();
 	}else {
-		vinils.getBestSellersAll();
+		//vinils.getBestSellersAll();
 	}
 	
+	return vinyls;
 	
+}
+
+
+public ArrayList<Vinyl> showBestSellers(String time) {
 	
+	return null;
 }
 
 

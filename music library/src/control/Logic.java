@@ -2,6 +2,7 @@ package control;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import model.Vinyl;
 
@@ -15,5 +16,5 @@ public interface Logic {
 	public void insertNewArtist(String name) throws Exception;
 	public int artistExists(String name) throws Exception;
 	public int genreExists(String name) throws Exception;
-	public void showBestSellers(String time);
+	public ArrayList<Vinyl> showBestSellers(String time);
 }

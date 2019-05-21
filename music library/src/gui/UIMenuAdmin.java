@@ -1,15 +1,19 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,6 +23,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 
 import control.Logic;
 import control.LogicFactory;
@@ -49,21 +55,22 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 	private JScrollPane scrollPane_1;
 	private JButton btnSearch;
 	private JButton btnBestSellers;
+	private Object[][] data1;
 
 	/**
-	 * Launch the application.
+	 * Launch the application. BORRAR AL ACABAR
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
 				try {
 					UIMenuAdmin frame = new UIMenuAdmin();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-		});
+				
+				
+			
+	
 	}
 
 	/**
@@ -214,22 +221,34 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		
 		
 
-		String[] columnNames1 = { "Album Title", "Arrtist", "Genre", "Price", "On sale:", "Sale percentage:" };
+		String[] columnNames1 = { "image", "fefeg", "Genre", "Price", "On sale:", "Sale percentage:" };
+
+		
+		JLabel label = new JLabel();
+		
+		Image imagen = new ImageIcon("././koala.jpg").getImage();
+		ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
+		
+			label.setIcon(imagen2);
+			label.setHorizontalAlignment(JLabel.CENTER);
+			label.setVerticalAlignment(JLabel.CENTER);
 
 		Object[][] data1 = {
-				{ "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false),
+				{ label, "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false),
 						new Integer(20) },
-				{ "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true), new Integer(20) },
-				{ "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),
+				{ label, "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true), new Integer(20) },
+				{ label, "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),
 						new Integer(20) },
-				{ "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true), new Integer(20) },
-				{ "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false), new Integer(20) } };
-
+				{ label, "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true), new Integer(20) },
+				{ label, "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false), new Integer(20) } };
+		
+		
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(289, 354, 808, 226);
 		contentPane.add(scrollPane_1);
 
 		table_1 = new JTable(data1, columnNames1);
+		table_1.getColumn("image").setCellRenderer(new LabelRenderer());
 		scrollPane_1.setViewportView(table_1);
 		
 		btnBestSellers = new JButton("show best sellers");
@@ -245,12 +264,12 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			Vinyl v = new Vinyl();
 
 			v.setTitle(albumTitleField.getText());
-			v.setArtist(artistField.getText());
-			v.setGenre(genreField.getText());
+		//	v.setArtist.setName(artistField.getText());
+		//	v.setGenre.setName(genreField.getText());
 			v.setPrice(Double.parseDouble(priceField.getText()));
 			v.setStock(Integer.parseInt(stockField.getText()));
 
-			v.setPublicationDate(Date.parse(publicationDateField.getText()));
+		//	v.setPublicationDate(Date.parse(publicationDateField.getText()));
 			
 
 		
@@ -262,18 +281,67 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			}
 
 		} else if (e.getSource().equals(btnBestSellers)) {
+			ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+			
 			Logic logic = LogicFactory.getLogic();
 			if(rdbtnThisWeek.isSelected()) {
-				logic.showBestSellers("week");
+				vinyls=logic.showBestSellers("week");
+				tableRedone(vinyls);
 			}else if(rdbtnThisMonth.isSelected()) {
-				logic.showBestSellers("month");
+				vinyls=logic.showBestSellers("month");
+				tableRedone(vinyls);
 			}else if(rdbtnThisYear.isSelected()) {
-				logic.showBestSellers("year");
+				vinyls=logic.showBestSellers("year");
+				tableRedone(vinyls);
 			}else {
-				logic.showBestSellers("beginning");
+				vinyls=logic.showBestSellers("beginning");
+				tableRedone(vinyls);
 			}
 			
 
+		}
+
+	}
+
+	public void tableRedone(ArrayList<Vinyl> vinyls) {
+		
+		
+for(int i=0; i<vinyls.size(); i++) {
+			
+			JLabel label = new JLabel();
+
+			Image imagen = new ImageIcon(vinyls.get(i).getCover()).getImage();
+			ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
+
+			label.setIcon(imagen2);
+			label.setHorizontalAlignment(JLabel.CENTER);
+			label.setVerticalAlignment(JLabel.CENTER);
+			
+			data1[i][0] =label;
+			
+			data1[i][1] =vinyls.get(i).getTitle();
+			data1[i][2] =vinyls.get(i).getArtist().getName();
+			data1[i][3] =vinyls.get(i).getGenre().getName();
+			data1[i][4] =vinyls.get(i).getPrice();
+			data1[i][5] =vinyls.get(i).isOnSale();
+			data1[i][6] =vinyls.get(i).getSalePercentage();
+			
+		}
+		
+		
+		
+		
+	}
+	
+	class LabelRenderer implements TableCellRenderer {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			TableColumn tc = table.getColumn("image");
+			tc.setMinWidth(100);
+			tc.setMaxWidth(100);
+			table.setRowHeight(100);
+
+			return (Component) value;
 		}
 
 	}

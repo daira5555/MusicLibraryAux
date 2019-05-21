@@ -6,8 +6,8 @@ import java.time.LocalDate;
 public class Vinyl {
 	private int vinylCode;
 	private String title;
-	private String genre;
-	private String artist;
+	private Genre genre;
+	private Artist artist;
 	private double price;
 	private Date publicationDate;
 	private String description;
@@ -17,7 +17,7 @@ public class Vinyl {
 	private int amountSold;
 	private String cover;
 	
-	public Vinyl(int vinylCode, String title, String genre, String artist, double price, Date publicationDate,
+	public Vinyl(int vinylCode, String title, Genre genre, Artist artist, double price, Date publicationDate,
 			String description, boolean onSale, double salePercentage, int stock, int amountSold, String cover) {
 		super();
 		this.vinylCode = vinylCode;
@@ -54,19 +54,19 @@ public class Vinyl {
 		this.title = title;
 	}
 
-	public String getGenre() {
+	public Genre getGenre() {
 		return genre;
 	}
 
-	public void setGenre(String string) {
+	public void setGenre(Genre string) {
 		this.genre = string;
 	}
 
-	public String getArtist() {
+	public Artist getArtist() {
 		return artist;
 	}
 
-	public void setArtist(String string) {
+	public void setArtist(Artist string) {
 		this.artist = string;
 	}
 

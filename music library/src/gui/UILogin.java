@@ -130,7 +130,6 @@ public class UILogin extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}else if (e.getSource().equals(btnSignUp)) {

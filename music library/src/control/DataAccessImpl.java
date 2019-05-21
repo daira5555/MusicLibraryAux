@@ -176,26 +176,6 @@ public class DataAccessImpl implements DataAccess{
 		}
 	}
 
-	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate, String description, boolean onsale, double salepercentage, int stock, String cover) throws ClassNotFoundException, SQLException, IOException{
-		try {
-			connect();
-			String sql = "insert into vinyls (title,artiscode,genrecode,price,publicationdate,description,onsale,salepercentage,stock,amountsold,cover) values (?,?,?,?,?,?,?,?,?,0,?)";
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, title);
-			stmt.setInt(2, artistcode);
-			stmt.setInt(3, genrecode);
-			stmt.setDouble(4, price);
-			stmt.setDate(5, publicationdate);
-			stmt.setString(6, description);
-			stmt.setBoolean(7, onsale);
-			stmt.setDouble(8, salepercentage);
-			stmt.setInt(9, stock);
-			stmt.setString(10, cover);
-			stmt.executeUpdate();
-		}finally {
-			disconnect();
-		}
-	}
 	/**
 	 * This method is to add a new artist in the database
 	 * @param name The name of the artist
@@ -546,4 +526,50 @@ public class DataAccessImpl implements DataAccess{
 		}
 	}
 	
+	public ArrayList<Vinyl> getBestSellersDate (Date date) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+		ResultSet rs = null;
+		try {
+			connect();
+		} finally {
+			disconnect();
+		}
+		return null;
+	}
+	
+	public ArrayList<Vinyl> getBestSellers() throws ClassNotFoundException, SQLException, IOException{
+			ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+			int cont = 0;
+			ResultSet rs = null;
+			try {
+				connect();
+				String sql = "select * from vinyls";
+				stmt = con.prepareStatement(sql);
+				rs = stmt.executeQuery();
+				while(rs.next() && cont<10) {
+					Vinyl v = new Vinyl();
+					Artist ar = new Artist();
+					Genre ge = new Genre();
+					v.setTitle(rs.getString("title"));
+					ar.setCode(rs.getInt("artistcode"));
+					ar.setName(getArtist(rs.getInt("artistcode")));
+					v.setArtist(ar);
+					ge.setCode(rs.getInt("genrecode"));
+					ge.setName(getArtist(rs.getInt("genrecode")));
+					v.setGenre(ge);
+					v.setPrice(rs.getDouble("price"));
+					v.setPublicationDate(rs.getDate("publicationdate"));
+					v.setDescription(rs.getString("description"));
+					v.setOnSale(rs.getBoolean("onsale"));
+					v.setSalePercentage(rs.getDouble("salepercentage"));
+					v.setStock(rs.getInt("stock"));
+					v.setAmountSold(rs.getInt("amountsold"));
+					v.setCover(rs.getString("cover"));
+					cont++;
+				}
+			} finally {
+				disconnect();
+			}
+		return vinyls;
+	}
 }

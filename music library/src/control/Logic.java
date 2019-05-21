@@ -33,4 +33,5 @@ public interface Logic {
 	public void insertArtist(String name) throws Exception;
 	public void insertGenre(String name) throws Exception;
 	public void deleteVinyl(int vinylCode) throws Exception;
+	public ArrayList<Vinyl> getBestSellers() throws Exception;
 }

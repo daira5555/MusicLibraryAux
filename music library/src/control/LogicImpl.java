@@ -119,5 +119,9 @@ public class LogicImpl implements Logic {
 
 
 	
-	
+	public ArrayList<Vinyl> getBestSellers() throws Exception{
+		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+		vinyls = dataAccess.getBestSellers();
+		return vinyls;
+	}
 }

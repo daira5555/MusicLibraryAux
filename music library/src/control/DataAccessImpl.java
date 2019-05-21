@@ -154,6 +154,28 @@ public class DataAccessImpl implements DataAccess{
 	 * @param stock The amount of vinyls we have
 	 * @param cover The cover relative route
 	 */
+	
+	public void insertNewVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{
+		try {
+			connect();
+			String sql = "insert into vinyls (title,artiscode,genrecode,price,publicationdate,description,onsale,salepercentage,stock,amountsold,cover) values (?,?,?,?,?,?,?,?,?,0,?)";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, vinyl.getTitle());
+			stmt.setInt(2, vinyl.getArtist().getCode());
+			stmt.setInt(3, vinyl.getGenre().getCode());
+			stmt.setDouble(4, vinyl.getPrice());
+			stmt.setDate(5, vinyl.getPublicationDate());
+			stmt.setString(6, vinyl.getDescription());
+			stmt.setBoolean(7, vinyl.isOnSale());
+			stmt.setDouble(8, vinyl.getSalePercentage());
+			stmt.setInt(9, vinyl.getStock());
+			stmt.setString(10, vinyl.getCover());
+			stmt.executeUpdate();
+		}finally {
+			disconnect();
+		}
+	}
+
 	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate, String description, boolean onsale, double salepercentage, int stock, String cover) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();

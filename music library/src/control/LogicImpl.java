@@ -1,6 +1,5 @@
 package control;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 import model.Artist;
@@ -25,11 +24,8 @@ public class LogicImpl implements Logic {
 		dataAccess.modifyClientData(client);
 	}
 	
-	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate,
-			String description, boolean onsale, double salepercentage, int stock, String cover) throws Exception {
-		dataAccess.insertNewVinyl(title, artistcode, genrecode, price, publicationdate, description, onsale,
-				salepercentage, stock, cover);
-
+	public void insertNewVinyl(Vinyl vinyl) throws Exception {
+		dataAccess.insertNewVinyl(vinyl);
 	}
 
 	public void insertNewArtist(String name) throws Exception {

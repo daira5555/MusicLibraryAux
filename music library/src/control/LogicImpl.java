@@ -1,6 +1,7 @@
 package control;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import model.Vinyl;
 
@@ -59,6 +60,24 @@ public int artistExists(String name) throws Exception {
 public int genreExists(String name) throws Exception {
 	int n=dataAccess.genreExists(name);
 	return n;
+}
+
+
+
+public ArrayList <Vinyl> vinils(String time) throws Exception {
+	ArrayList <Vinyl> vinils = new ArrayList<Vinyl>();
+	if(time.equals("week")) {
+		vinils.getBestSellersWeek();
+	}else if(time.equals("month")) {
+		vinils.getBestSellersMonth();
+	}else if(time.equals("year")) {
+		vinils.getBestSellersYear();
+	}else {
+		vinils.getBestSellersAll();
+	}
+	
+	
+	
 }
 
 

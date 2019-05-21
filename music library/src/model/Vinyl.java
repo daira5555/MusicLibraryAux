@@ -9,7 +9,7 @@ public class Vinyl {
 	private String genre;
 	private String artist;
 	private double price;
-	private LocalDate publicationDate;
+	private Date publicationDate;
 	private String description;
 	private boolean onSale;
 	private double salePercentage;
@@ -17,7 +17,7 @@ public class Vinyl {
 	private int amountSold;
 	private String cover;
 	
-	public Vinyl(int vinylCode, String title, String genre, String artist, double price, LocalDate publicationDate,
+	public Vinyl(int vinylCode, String title, String genre, String artist, double price, Date publicationDate,
 			String description, boolean onSale, double salePercentage, int stock, int amountSold, String cover) {
 		super();
 		this.vinylCode = vinylCode;
@@ -78,11 +78,11 @@ public class Vinyl {
 		this.price = price;
 	}
 
-	public LocalDate getPublicationDate() {
+	public Date getPublicationDate() {
 		return publicationDate;
 	}
 
-	public void setPublicationDate(LocalDate publicationDate) {
+	public void setPublicationDate(Date publicationDate) {
 		this.publicationDate = publicationDate;
 	}
 

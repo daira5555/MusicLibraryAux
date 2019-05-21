@@ -3,7 +3,13 @@ package gui;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,10 +19,15 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import control.Logic;
+import control.LogicFactory;
+import model.Vinyl;
+
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
-public class UIMenuAdmin extends JFrame {
+public class UIMenuAdmin extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField artistField;
@@ -36,6 +47,8 @@ public class UIMenuAdmin extends JFrame {
 	private JRadioButton rdbtnThisYear;
 	private JRadioButton rdbtnFromTheBegining;
 	private JScrollPane scrollPane_1;
+	private JButton btnSearch;
+	private JButton btnBestSellers;
 
 	/**
 	 * Launch the application.
@@ -87,7 +100,7 @@ public class UIMenuAdmin extends JFrame {
 		contentPane.add(lblByPrice);
 
 		artistField = new JTextField();
-		artistField.setBounds(101, 39, 309, 20);
+		artistField.setBounds(98, 39, 309, 20);
 		contentPane.add(artistField);
 		artistField.setColumns(10);
 
@@ -127,11 +140,13 @@ public class UIMenuAdmin extends JFrame {
 		String[] columnNames = { "Album Title", "Arrtist", "Genre", "Price", "On sale:", "Sale percentage:" };
 
 		Object[][] data = {
-				{ "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false), new Integer(20) },
-				{ "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true),new Integer(20) },
-				{ "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),new Integer(20) },
-				{ "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true),new Integer(20) },
-				{ "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false),new Integer(20) } };
+				{ "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false),
+						new Integer(20) },
+				{ "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true), new Integer(20) },
+				{ "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),
+						new Integer(20) },
+				{ "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true), new Integer(20) },
+				{ "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false), new Integer(20) } };
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(41, 92, 1056, 202);
@@ -156,10 +171,10 @@ public class UIMenuAdmin extends JFrame {
 
 		btnNewVinyl = new JButton("New Vinyl");
 		btnNewVinyl.setBackground(new Color(255, 218, 185));
-		btnNewVinyl.setBounds(41, 591, 116, 42);
+		btnNewVinyl.setBounds(50, 591, 116, 42);
 		contentPane.add(btnNewVinyl);
 
-		JButton btnSearch = new JButton("Search");
+		btnSearch = new JButton("Search");
 		btnSearch.setBackground(new Color(222, 184, 135));
 		btnSearch.setBounds(859, 38, 238, 42);
 		contentPane.add(btnSearch);
@@ -177,27 +192,38 @@ public class UIMenuAdmin extends JFrame {
 
 		rdbtnThisMonth = new JRadioButton("This month");
 		rdbtnThisMonth.setBackground(new Color(250, 235, 215));
-		rdbtnThisMonth.setBounds(41, 420, 109, 23);
+		rdbtnThisMonth.setBounds(41, 401, 109, 23);
 		contentPane.add(rdbtnThisMonth);
 
 		rdbtnThisYear = new JRadioButton("This year");
 		rdbtnThisYear.setBackground(new Color(250, 235, 215));
-		rdbtnThisYear.setBounds(41, 477, 109, 23);
+		rdbtnThisYear.setBounds(39, 438, 109, 23);
 		contentPane.add(rdbtnThisYear);
 
 		rdbtnFromTheBegining = new JRadioButton("From the begining of the times");
 		rdbtnFromTheBegining.setBackground(new Color(250, 235, 215));
-		rdbtnFromTheBegining.setBounds(41, 534, 221, 23);
+		rdbtnFromTheBegining.setBounds(39, 476, 221, 23);
 		contentPane.add(rdbtnFromTheBegining);
+		
+		
+		ButtonGroup bestS = new ButtonGroup();
+		bestS.add(rdbtnThisWeek);
+		bestS.add(rdbtnThisMonth);
+		bestS.add(rdbtnThisYear);
+		bestS.add(rdbtnFromTheBegining);
+		
+		
 
 		String[] columnNames1 = { "Album Title", "Arrtist", "Genre", "Price", "On sale:", "Sale percentage:" };
 
 		Object[][] data1 = {
-				{ "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false), new Integer(20) },
-				{ "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true),new Integer(20) },
-				{ "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),new Integer(20) },
-				{ "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true),new Integer(20) },
-				{ "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false),new Integer(20) } };
+				{ "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false),
+						new Integer(20) },
+				{ "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true), new Integer(20) },
+				{ "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),
+						new Integer(20) },
+				{ "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true), new Integer(20) },
+				{ "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false), new Integer(20) } };
 
 		scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(289, 354, 808, 226);
@@ -205,5 +231,50 @@ public class UIMenuAdmin extends JFrame {
 
 		table_1 = new JTable(data1, columnNames1);
 		scrollPane_1.setViewportView(table_1);
+		
+		btnBestSellers = new JButton("show best sellers");
+		btnBestSellers.setBounds(41, 506, 153, 27);
+		contentPane.add(btnBestSellers);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+
+		if (e.getSource().equals(btnSearch)) {
+			Logic logic = LogicFactory.getLogic();
+
+			Vinyl v = new Vinyl();
+
+			v.setTitle(albumTitleField.getText());
+			v.setArtist(artistField.getText());
+			v.setGenre(genreField.getText());
+			v.setPrice(Double.parseDouble(priceField.getText()));
+			v.setStock(Integer.parseInt(stockField.getText()));
+
+			v.setPublicationDate(Date.parse(publicationDateField.getText()));
+			
+
+		
+			try {
+				logic.insertNewVinyl(v);
+			} catch (Exception e1) {
+				
+				e1.printStackTrace();
+			}
+
+		} else if (e.getSource().equals(btnBestSellers)) {
+			Logic logic = LogicFactory.getLogic();
+			if(rdbtnThisWeek.isSelected()) {
+				logic.showBestSellers("week");
+			}else if(rdbtnThisMonth.isSelected()) {
+				logic.showBestSellers("month");
+			}else if(rdbtnThisYear.isSelected()) {
+				logic.showBestSellers("year");
+			}else {
+				logic.showBestSellers("beginning");
+			}
+			
+
+		}
+
 	}
 }

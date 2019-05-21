@@ -15,4 +15,5 @@ public interface Logic {
 	public void insertNewArtist(String name) throws Exception;
 	public int artistExists(String name) throws Exception;
 	public int genreExists(String name) throws Exception;
+	public void showBestSellers(String time);
 }

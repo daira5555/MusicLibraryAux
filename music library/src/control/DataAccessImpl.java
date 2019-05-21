@@ -2,6 +2,7 @@ package control;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -16,7 +17,6 @@ import model.Artist;
 import model.Client;
 import model.Genre;
 import model.Vinyl;
-import model.DateConverter;
 
 public class DataAccessImpl implements DataAccess{
 	private Connection con;
@@ -605,6 +605,66 @@ public class DataAccessImpl implements DataAccess{
 			} finally {
 				disconnect();
 			}
+		return vinyls;
+	}
+
+	public ArrayList<Artist> getArtistTaste (String username) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Artist> artists = new ArrayList<Artist>();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select artistcode from taste_artist where username = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, username);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Artist temp = new Artist();
+				temp.setCode(rs.getInt("artistcode"));
+				temp.setName(getArtist(rs.getInt("artistcode")));
+				artists.add(temp);
+			}
+		} finally {
+			disconnect();
+		}
+		return artists;
+	}
+	
+	public ArrayList<Genre> getGenreTaste (String username) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Genre> genres = new ArrayList<Genre>();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select genrecode from taste_genre where username = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, username);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Genre temp = new Genre();
+				temp.setCode(rs.getInt("genrecode"));
+				temp.setName(getGenre(rs.getInt("genrecode")));
+				genres.add(temp);
+			}
+		} finally {
+			disconnect();
+		}
+		return genres;
+	}
+	
+	public ArrayList<Vinyl> getSuggestions(String username) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+		ArrayList<Artist> artistsTastes = new ArrayList<Artist>();
+		artistsTastes = getArtistTaste(username);
+		ArrayList<Genre> genresTastes = new ArrayList<Genre>();
+		genresTastes = getGenreTaste(username);
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "";
+			stmt = con.prepareStatement(sql);
+			stmt.setArray(1, (Array) artistsTastes);
+		} finally {
+			disconnect();
+		}
 		return vinyls;
 	}
 }

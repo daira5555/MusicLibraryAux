@@ -25,7 +25,7 @@ public interface DataAccess {
 
 	public void deleteVinyl(int vinylDel) throws Exception;
 
-	public Vinyl getVinyl() throws Exception;
+	public Vinyl getVinyl(int vinylCode) throws Exception;
 	
 	
 }

@@ -248,6 +248,44 @@ public class DataAccessImpl implements DataAccess{
 	public void deleteVinyl(int vinylDel) throws Exception {
 		
 		
+		
+		
+	}
+	
+	public String getArtist(int artistCode) throws ClassNotFoundException, SQLException, IOException{
+		String artistName = null;
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from artists where artistcode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, artistCode);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				artistName = rs.getString("name");
+			}
+		} finally {
+			disconnect();
+		}
+		return artistName;
+	}
+	
+	public String getGenre(int genreCode) throws ClassNotFoundException, SQLException, IOException{
+		String genreName = null;
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from genres where genrecode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, genreCode);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				genreName = rs.getString("name");
+			}
+		} finally {
+			disconnect();
+		}
+		return genreName;
 	}
 	public Vinyl getVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
 		Vinyl vin = new Vinyl();
@@ -305,5 +343,6 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
+	
 	
 }

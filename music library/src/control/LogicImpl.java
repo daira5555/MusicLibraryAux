@@ -57,8 +57,8 @@ public class LogicImpl implements Logic {
 	@Override
 	public Vinyl getVinyl(int vinylCode) throws Exception {
 		Vinyl v= new Vinyl();
-		v= dataAccess.getVinyl();
-		return null;
+		v= dataAccess.getVinyl(vinylCode);
+		return v;
 	}
 
 	@Override

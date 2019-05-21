@@ -145,16 +145,28 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		btnModify.setBackground(new Color(255, 218, 185));
 		btnModify.setBounds(663, 591, 123, 42);
 		contentPane.add(btnModify);
-		String[] columnNames = { "Album Title", "Arrtist", "Genre", "Price", "On sale:", "Sale percentage:" };
+		btnModify.addActionListener(this);
+		String[] columnNames = { "image", "fefeg", "Genre", "Price", "On sale:", "Sale percentage:", "codigo" };
 
+		
+		
+		JLabel label = new JLabel();
+		
+		Image imagen = new ImageIcon("././koala.jpg").getImage();
+		ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
+		
+			label.setIcon(imagen2);
+			label.setHorizontalAlignment(JLabel.CENTER);
+			label.setVerticalAlignment(JLabel.CENTER);
+			
 		Object[][] data = {
-				{ "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false),
-						new Integer(20) },
-				{ "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true), new Integer(20) },
-				{ "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),
-						new Integer(20) },
-				{ "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true), new Integer(20) },
-				{ "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false), new Integer(20) } };
+				{ label, "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false),
+					new Integer(20), new Integer(1) },
+			{ label, "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true), new Integer(20) , new Integer(2)},
+			{ label, "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),
+					new Integer(20), new Integer(3) },
+			{ label, "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true), new Integer(20), new Integer(4) },
+			{ label, "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false), new Integer(20),new Integer(4) } };
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(41, 92, 1056, 202);
@@ -225,32 +237,32 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		String[] columnNames1 = { "image", "fefeg", "Genre", "Price", "On sale:", "Sale percentage:", "codigo" };
 
 		
-		JLabel label = new JLabel();
+		JLabel label2 = new JLabel();
 		
-		Image imagen = new ImageIcon("././koala.jpg").getImage();
-		ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
+		Image imagen21 = new ImageIcon("././koala.jpg").getImage();
+		ImageIcon imagen3 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
 		
-			label.setIcon(imagen2);
+			label.setIcon(imagen3);
 			label.setHorizontalAlignment(JLabel.CENTER);
 			label.setVerticalAlignment(JLabel.CENTER);
 
 		Object[][] data1 = {
-				{ label, "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Integer(20), new Boolean(false),
+				{ label, "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Boolean(false),
 						new Integer(20), new Integer(1) },
-				{ label, "London Calling", "The Clash", "New wave", new Integer(22), new Boolean(true), new Integer(20) , new Integer(2)},
-				{ label, "Shilling the Rubes", "David Bowie", "New wave", new Integer(21), new Boolean(false),
-						new Integer(20), new Integer(1) },
-				{ label, "Back in Black", "AC/DC", "Hard rock", new Integer(20), new Boolean(true), new Integer(20), new Integer(1) },
-				{ label, "Nevermind", "Nirvana", "Grunge", new Integer(21), new Boolean(false), new Integer(20),new Integer(1) } };
+				{ label, "London Calling", "The Clash", "New wave", new Boolean(true), new Integer(20) , new Integer(2)},
+				{ label, "Shilling the Rubes", "David Bowie", "New wave", new Boolean(false),
+						new Integer(20), new Integer(3) },
+				{ label, "Back in Black", "AC/DC", "Hard rock", new Boolean(true), new Integer(20), new Integer(4) },
+				{ label, "Nevermind", "Nirvana", "Grunge", new Boolean(false), new Integer(20),new Integer(4) } };
 		
 		
 		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(289, 354, 808, 226);
+		scrollPane_1.setBounds(352, 354, 771, 226);
 		contentPane.add(scrollPane_1);
 
-		table_1 = new JTable(data1, columnNames1);
-		table_1.getColumn("image").setCellRenderer(new LabelRenderer());
-		scrollPane_1.setViewportView(table_1);
+		table = new JTable(data1, columnNames1);
+		table.getColumn("image").setCellRenderer(new LabelRenderer());
+		scrollPane_1.setViewportView(table);
 		
 		btnBestSellers = new JButton("show best sellers");
 		btnBestSellers.setBounds(41, 506, 153, 27);
@@ -305,7 +317,8 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		TableModel model = table.getModel();
 		int vinylMod= (Integer.parseInt(model.getValueAt(index, 6).toString()));
 		UIModifyVinyl mod = new UIModifyVinyl(vinylMod);
-		
+		this.dispose();
+		mod.setVisible(true);
 		}else if(e.getSource().equals(btnDelete)) {
 		
 		

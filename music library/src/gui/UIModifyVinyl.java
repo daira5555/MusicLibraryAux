@@ -38,7 +38,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JTextField salePercentageField;
 	private JButton btnSubmitChanges;
 	private JButton btnCancel;
-	private Vinyl vToMod = null;
+	private Vinyl vToMod = new Vinyl();
 	private Logic logic = LogicFactory.getLogic();
 	private JXDatePicker picker;
 	private JLabel lblStock;
@@ -46,18 +46,18 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIModifyVinyl frame = new UIModifyVinyl(4);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					UIModifyVinyl frame = new UIModifyVinyl(4);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	/**
 	 * Create the frame.
 	 * @param vinylMod 
@@ -101,27 +101,29 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		
 		
 		vToMod=getVinyl(vinylMod);
-		
+		System.out.println(vToMod.getTitle());
 		if (vToMod.isOnSale()) {
 			rdbtnYes.setSelected(true);
 		} else {
 			rdbtnNo.setSelected(true);
 		}
+		
 		titleField = new JTextField();
 		titleField.setBounds(147, 25, 205, 20);
 		contentPane.add(titleField);
+		
 		titleField.setColumns(10);
 		titleField.setText(vToMod.getTitle());
 		artistField = new JTextField();
 		artistField.setBounds(147, 61, 205, 20);
 		contentPane.add(artistField);
 		artistField.setColumns(10);
-		artistField.setText("testibles");
+		artistField.setText(vToMod.getArtist().getName());
 		genreField = new JTextField();
 		genreField.setBounds(147, 98, 205, 20);
 		contentPane.add(genreField);
 		genreField.setColumns(10);
-		genreField.setText("neo-test");
+		genreField.setText(vToMod.getGenre().getName());
 		priceField = new JTextField();
 		priceField.setBounds(147, 198, 178, 20);
 		contentPane.add(priceField);

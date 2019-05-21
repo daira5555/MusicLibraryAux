@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.Artist;
+import model.Client;
 import model.Genre;
 import model.Vinyl;
 
@@ -14,7 +15,9 @@ public interface DataAccess {
 	
 	public void userType (String username) throws Exception;
 	
-	public void registerClient (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws Exception;
+	public void registerClient(Client client) throws Exception;
+	
+	//public void registerClient (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws Exception;
 	
 	public void modifyClientData (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws Exception;
 	

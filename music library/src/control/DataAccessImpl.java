@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import model.Artist;
+import model.Client;
 import model.Genre;
 import model.Vinyl;
 
@@ -86,26 +87,28 @@ public class DataAccessImpl implements DataAccess{
 	 * @param address The addres of the client
 	 * @param accountnumber The account number of the client
 	 */
-	public void registerClient (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws ClassNotFoundException, SQLException, IOException{
+	
+	public void registerClient(Client client) throws ClassNotFoundException, SQLException, IOException{
 		try {
-			userType(username);
+			userType(client.getUsername());
 			connect();
 			String sql = "insert into clients values (?,?,?,?,?,?,?,?)";
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, username);
-			stmt.setString(2, password);
-			stmt.setString(3, name);
-			stmt.setString(4, surname);
-			stmt.setString(5, email);
-			stmt.setInt(6, phonenumber);
-			stmt.setString(7, address);
-			stmt.setLong(8, accountnumber);
+			stmt.setString(1, client.getUsername());
+			stmt.setString(2, client.getPassword());
+			stmt.setString(3, client.getName());
+			stmt.setString(4, client.getSurname());
+			stmt.setString(5, client.getEmail());
+			stmt.setInt(6, client.getPhoneNumber());
+			stmt.setString(7, client.getAddress());
+			stmt.setLong(8, client.getAccountNumber());
 			stmt.executeUpdate();
 		}finally {
 			
 			disconnect();
 		}
 	}
+	
 	/**
 	 * This method is to modify the data of the client (this doesn't apply to the username)
 	 * @param username The client username

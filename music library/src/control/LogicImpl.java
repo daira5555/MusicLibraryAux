@@ -4,17 +4,22 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 import model.Artist;
+import model.Client;
 import model.Genre;
 import model.Vinyl;
 
 public class LogicImpl implements Logic {
 
 	private DataAccess dataAccess = DataAccessFactory.getDataAccess();
-
-	public void registerClient(String username, String password, String name, String surname, String email,
-			int phonenumber, String address, long accountnumber) throws Exception {
-		dataAccess.registerClient(username, password, name, surname, email, phonenumber, address, accountnumber);
+	
+	public void registerClient(Client client) throws Exception {
+		dataAccess.registerClient(client);
 	}
+	
+//	public void registerClient(String username, String password, String name, String surname, String email,
+//			int phonenumber, String address, long accountnumber) throws Exception {
+//		dataAccess.registerClient(username, password, name, surname, email, phonenumber, address, accountnumber);
+//	}
 
 	public void userType(String username) throws Exception {
 		dataAccess.userType(username);
@@ -117,6 +122,8 @@ public class LogicImpl implements Logic {
 	public void insertGenre(String name) throws Exception {
 		dataAccess.insertGenre(name);
 	}
+
+
 	
 	
 }

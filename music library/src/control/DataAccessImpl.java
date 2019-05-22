@@ -16,6 +16,7 @@ import java.util.Properties;
 import model.Artist;
 import model.Client;
 import model.Genre;
+import model.Purchase;
 import model.Vinyl;
 
 public class DataAccessImpl implements DataAccess{
@@ -724,5 +725,12 @@ public class DataAccessImpl implements DataAccess{
 		return client;
 	}
 	
-	
+	public void writePurchase (Purchase purchase) throws ClassNotFoundException, SQLException, IOException{
+		try {
+			connect();
+			String sql = "";
+		} finally {
+			disconnect();
+		}
+	}
 }

@@ -1,16 +1,16 @@
 package model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Purchase {
-	private Date date;
+	private LocalDate date;
 	private double fullPrice;
 	private int amount;
 	private Client buyer;
 	private ArrayList<Vinyl> vinyls;
 
-	public Purchase(Date date, double fullPrice, int amount, Client buyer, ArrayList<Vinyl> vinyls) {
+	public Purchase(LocalDate date, double fullPrice, int amount, Client buyer, ArrayList<Vinyl> vinyls) {
 		super();
 		this.date = date;
 		this.fullPrice = fullPrice;
@@ -23,11 +23,11 @@ public class Purchase {
 		super();
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

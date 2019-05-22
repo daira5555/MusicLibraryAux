@@ -2,7 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
-public class Vinyl {
+public class Vinyl implements Comparable<Vinyl>{
 	private int vinylCode;
 	private String title;
 	private Genre genre;
@@ -131,6 +131,19 @@ public class Vinyl {
 
 	public void setCover(String cover) {
 		this.cover = cover;
+	}
+
+	@Override
+	public int compareTo(Vinyl o) {
+		int resultado = 0;
+		if(this.vinylCode<o.vinylCode) {
+			resultado = -1;
+		}else if (this.vinylCode>o.vinylCode) {
+			resultado = 1;
+		}else {
+			resultado = 0;
+		}
+		return resultado;
 	}
 	
 	

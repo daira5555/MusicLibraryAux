@@ -5,6 +5,7 @@ package control;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import model.AdvancedSearch;
 import model.Artist;
 import model.Client;
 import model.Genre;
@@ -43,4 +44,5 @@ public interface Logic {
 	public Client getClient (String username) throws Exception;
 	public void writePurchase (Purchase purchase) throws Exception;
 	public void updatePurchasedVinyl (int vinylCode, int amountSold) throws Exception;
+	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws Exception;
 }

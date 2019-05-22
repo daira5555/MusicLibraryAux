@@ -463,7 +463,7 @@ public class DataAccessImpl implements DataAccess{
 		ResultSet rs = null;
 		try {
 			connect();
-			String sql = "select * from artist where name=?";
+			String sql = "select * from artists where name=?";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, name);
 			rs = stmt.executeQuery();
@@ -775,6 +775,7 @@ public class DataAccessImpl implements DataAccess{
 			String sql = "select * from vinyls where ";
 			if (!search.getArtist().isEmpty()) {
 				Artist artist = getArtist(search.getArtist());
+				connect();
 				sql = sql + " artistcode = "+artist.getCode();
 				cont++;
 			}
@@ -782,7 +783,7 @@ public class DataAccessImpl implements DataAccess{
 				if(cont>0) {
 					sql = sql + " or ";
 				}
-				sql = sql + " title like %"+search.getTitle()+"% ";
+				sql = sql + " title like '%"+search.getTitle()+"%' ";
 				cont++;
 			}
 			if (!search.getGenre().isEmpty()) {
@@ -790,6 +791,7 @@ public class DataAccessImpl implements DataAccess{
 					sql = sql + " or ";
 				}
 				Genre genre = getGenre(search.getGenre());
+				connect();
 				sql = sql + " genrecode = "+genre.getCode();
 				cont++;
 			}
@@ -797,7 +799,7 @@ public class DataAccessImpl implements DataAccess{
 				if(cont>0) {
 					sql = sql + " or ";
 				}
-				sql = sql + " to_char(publicationdate,'YYYY') = "+search.getPublicationYear();
+				sql = sql + " YEAR(publicationdate) = "+search.getPublicationYear();
 				cont++;
 			}
 			if(search.getPrice() != 0) {

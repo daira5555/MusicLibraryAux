@@ -3,6 +3,7 @@ package control;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import model.AdvancedSearch;
 import model.Artist;
 import model.Client;
 import model.Genre;
@@ -163,5 +164,9 @@ public class LogicImpl implements Logic {
 		dataAccess.updatePurchasedVinyl(vinylCode, amountSold);
 	}
 	
-	
+	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws Exception{
+		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+		vinyls = dataAccess.advancedSearch(search);
+		return vinyls;
+	}
 }

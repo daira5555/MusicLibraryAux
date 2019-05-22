@@ -39,4 +39,5 @@ public interface Logic {
 	public ArrayList<Integer> getArtistTaste (String username) throws Exception;
 	public ArrayList<Integer> getGenreTaste (String username) throws Exception;
 	public ArrayList<Vinyl> getSuggestions(String username) throws Exception;
+	public Client getClient (String username) throws Exception;
 }

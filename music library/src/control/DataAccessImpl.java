@@ -698,4 +698,29 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return vinyls;
 	}
+
+	public Client getClient (String username) throws ClassNotFoundException, SQLException, IOException{
+		Client client = new Client();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select * from clients where username = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, username);
+			rs = stmt.executeQuery();
+			if(rs.next()) {
+				client.setUsername(username);
+				client.setPassword(rs.getString("password"));
+				client.setName(rs.getString("name"));
+				client.setSurname(rs.getString("surname"));
+				client.setEmail(rs.getString("email"));
+				client.setPhoneNumber(rs.getInt("phonenumber"));
+				client.setAddress(rs.getString("address"));
+				client.setAccountNumber(rs.getLong("accountnumber"));
+			}
+		} finally {
+			disconnect();
+		}
+		return client;
+	}
 }

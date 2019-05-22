@@ -149,4 +149,10 @@ public class LogicImpl implements Logic {
 		vinyls = dataAccess.getSuggestions(username);
 		return vinyls;
 	}
+	
+	public Client getClient (String username) throws Exception{
+		Client client = new Client();
+		client = dataAccess.getClient(username);
+		return client;
+	}
 }

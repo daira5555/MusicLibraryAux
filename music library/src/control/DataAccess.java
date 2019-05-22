@@ -64,5 +64,7 @@ public interface DataAccess {
 	public ArrayList<Integer> getGenreTaste (String username) throws Exception;
 	
 	public ArrayList<Vinyl> getSuggestions(String username) throws Exception;
+	
+	public Client getClient (String username) throws Exception;
 
 }

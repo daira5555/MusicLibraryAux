@@ -1,6 +1,7 @@
 package control;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public interface DataAccess {
 
@@ -21,4 +22,13 @@ public interface DataAccess {
 	
 	public int genreExists(String name) throws Exception;
 	
+	public int userExists(String username) throws Exception;
+	
+	public char getUserType(String username) throws Exception;
+	
+	public String getPassword (String username) throws Exception;
+	
+	public ArrayList<String> getArtists() throws Exception;
+	
+	public ArrayList<String> getGenres() throws Exception;
 }

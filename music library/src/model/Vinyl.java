@@ -1,19 +1,18 @@
 package model;
-import java.sql.Date;
 import java.time.LocalDate;
 public class Vinyl {
-	private int vinylCode;
-	private String title;
-	private Genre genre;
-	private Artist artist;
-	private double price;
-	private LocalDate publicationDate;
-	private String description;
-	private boolean onSale;
-	private double salePercentage;
-	private int stock;
-	private int amountSold;
-	private String cover;
+	protected int vinylCode;
+	protected String title;
+	protected Genre genre;
+	protected Artist artist;
+	protected double price;
+	protected LocalDate publicationDate;
+	protected String description;
+	protected boolean onSale;
+	protected double salePercentage;
+	protected int stock;
+	protected int amountSold;
+	protected String cover;
 	public Vinyl(int vinylCode, String title, Genre genre, Artist artist, double price, LocalDate publicationDate, String description, boolean onSale, double salePercentage, int stock, int amountSold,
 			String cover) {
 		super();

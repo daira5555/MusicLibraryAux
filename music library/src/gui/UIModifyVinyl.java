@@ -11,6 +11,8 @@ import javax.swing.border.EmptyBorder;
 
 import org.jdesktop.swingx.JXDatePicker;
 
+import com.toedter.calendar.JDateChooser;
+
 import control.Logic;
 import control.LogicFactory;
 import model.Genre;
@@ -38,11 +40,12 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JTextField salePercentageField;
 	private JButton btnSubmitChanges;
 	private JButton btnCancel;
-	private Vinyl vToMod = new Vinyl(12, "test", null, null, 69.69, LocalDate.now(), "pretty gud albun", true, 0.69, 12, 23, "wew");
+	private int vinylCode;
+	private Vinyl vToMod = null;
 	private Logic logic = LogicFactory.getLogic();
-	private JXDatePicker picker;
 	private JLabel lblStock;
 	private JTextField stockField;
+	private JDateChooser dateChooser;
 	/**
 	 * Launch the application.
 	 */
@@ -62,7 +65,11 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public UIModifyVinyl() {
-		// vToMod = logic.getVynil(vinylCode);
+		try {
+			vToMod = logic.getVinyl(vinylCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		setTitle("Modify vinyl");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 468);
@@ -111,12 +118,12 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		artistField.setBounds(147, 61, 205, 20);
 		contentPane.add(artistField);
 		artistField.setColumns(10);
-		artistField.setText("testibles");
+		artistField.setText(vToMod.getArtist().getName());
 		genreField = new JTextField();
 		genreField.setBounds(147, 98, 205, 20);
 		contentPane.add(genreField);
 		genreField.setColumns(10);
-		genreField.setText("neo-test");
+		genreField.setText(vToMod.getGenre().getName());
 		priceField = new JTextField();
 		priceField.setBounds(147, 198, 178, 20);
 		contentPane.add(priceField);
@@ -162,21 +169,21 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		JLabel label_1 = new JLabel("%");
 		label_1.setBounds(335, 257, 17, 14);
 		contentPane.add(label_1);
-		picker = new JXDatePicker();
-		picker.setBounds(147, 312, 205, 22);
-		contentPane.add(picker);
+		dateChooser = new JDateChooser();
+		dateChooser.setBounds(147, 312, 205, 22);
+		contentPane.add(dateChooser);
+		
 		JLabel lblPublicationDate = new JLabel("Publication date:");
 		lblPublicationDate.setBounds(45, 315, 92, 14);
 		contentPane.add(lblPublicationDate);
-		
 		lblStock = new JLabel("Stock:");
 		lblStock.setBounds(45, 349, 46, 14);
 		contentPane.add(lblStock);
-		
 		stockField = new JTextField();
 		stockField.setBounds(147, 346, 205, 20);
 		contentPane.add(stockField);
 		stockField.setColumns(10);
+		stockField.setText(String.valueOf(vToMod.getStock()));
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

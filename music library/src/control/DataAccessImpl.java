@@ -1,5 +1,4 @@
 package control;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -8,16 +7,19 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Properties;
 
-public class DataAccessImpl implements DataAccess{
+import model.Artist;
+import model.Genre;
+import model.Vinyl;
+public class DataAccessImpl implements DataAccess {
 	private Connection con;
 	private PreparedStatement stmt;
 	private String dbHost;
 	private String dbName;
 	private String dbUser;
 	private String dbPassword;
-	
 	/**
 	 * 
 	 * @throws ClassNotFoundException
@@ -55,23 +57,45 @@ public class DataAccessImpl implements DataAccess{
 			con.close();
 	}
 	/**
+	 * This method is to add to the clients table in the database
+	 * 
+	 * @param username
+	 *            The username of the user you want to register
 	 * 
 	 */
-	public void userType (String username) throws ClassNotFoundException, SQLException, IOException{
+	public void userType(String username) throws ClassNotFoundException, SQLException, IOException {
 		try {
 			connect();
 			String sql = "insert into users values (?,'C')";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, username);
 			stmt.executeUpdate();
-		}finally {
+		} finally {
 			disconnect();
 		}
 	}
 	/**
+	 * This method is to add the new client to the clients table in the database
 	 * 
+	 * @param username
+	 *            The username of the client
+	 * @param password
+	 *            The client's password
+	 * @param name
+	 *            The client's name
+	 * @param surname
+	 *            The client's surname
+	 * @param email
+	 *            The client's email
+	 * @param phonenumber
+	 *            The client's phone number
+	 * @param address
+	 *            The addres of the client
+	 * @param accountnumber
+	 *            The account number of the client
 	 */
-	public void registerClient (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws ClassNotFoundException, SQLException, IOException{
+	public void registerClient(String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber)
+			throws ClassNotFoundException, SQLException, IOException {
 		try {
 			userType(username);
 			connect();
@@ -86,13 +110,33 @@ public class DataAccessImpl implements DataAccess{
 			stmt.setString(7, address);
 			stmt.setLong(8, accountnumber);
 			stmt.executeUpdate();
-		}finally {
-			
+		} finally {
 			disconnect();
 		}
 	}
-	
-	public void modifyClientData (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws ClassNotFoundException, SQLException, IOException{
+	/**
+	 * This method is to modify the data of the client (this doesn't apply to
+	 * the username)
+	 * 
+	 * @param username
+	 *            The client username
+	 * @param password
+	 *            The client password
+	 * @param name
+	 *            The client's name
+	 * @param surname
+	 *            The client's surname
+	 * @param email
+	 *            The client's email
+	 * @param phonenumber
+	 *            The client's phone number
+	 * @param address
+	 *            The client's address
+	 * @param accountnumber
+	 *            The client's account number
+	 */
+	public void modifyClientData(String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber)
+			throws ClassNotFoundException, SQLException, IOException {
 		try {
 			connect();
 			String sql = "update clients set password=?, name=?, surname=?, email=?, phonenumber=?, address=?, accountnumber=? where username=?";
@@ -106,12 +150,37 @@ public class DataAccessImpl implements DataAccess{
 			stmt.setLong(7, accountnumber);
 			stmt.setString(8, username);
 			stmt.executeUpdate();
-		}finally {
+		} finally {
 			disconnect();
 		}
 	}
-	
-	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate, String description, boolean onsale, double salepercentage, int stock, String cover) throws ClassNotFoundException, SQLException, IOException{
+	/**
+	 * This method is to insert a new vinyl into the database (is meant to be
+	 * used only by administrators)
+	 * 
+	 * @param title
+	 *            The vinyl title
+	 * @param artistcode
+	 *            The code of the vinyl artist
+	 * @param genrecode
+	 *            The code of the vinyl genre
+	 * @param price
+	 *            The price of the vinyl
+	 * @param publicationdate
+	 *            The publication date of the vinyl
+	 * @param description
+	 *            The vinyl description
+	 * @param onsale
+	 *            If the vinyl is on sale or not
+	 * @param salepercentage
+	 *            The percentage of the discount of the vinyl (Ex:8%)
+	 * @param stock
+	 *            The amount of vinyls we have
+	 * @param cover
+	 *            The cover relative route
+	 */
+	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate, String description, boolean onsale, double salepercentage, int stock, String cover)
+			throws ClassNotFoundException, SQLException, IOException {
 		try {
 			connect();
 			String sql = "insert into vinyls (title,artiscode,genrecode,price,publicationdate,description,onsale,salepercentage,stock,amountsold,cover) values (?,?,?,?,?,?,?,?,?,0,?)";
@@ -127,12 +196,17 @@ public class DataAccessImpl implements DataAccess{
 			stmt.setInt(9, stock);
 			stmt.setString(10, cover);
 			stmt.executeUpdate();
-		}finally {
+		} finally {
 			disconnect();
 		}
 	}
-	
-	public void insertNewArtist(String name) throws ClassNotFoundException, SQLException, IOException{
+	/**
+	 * This method is to add a new artist in the database
+	 * 
+	 * @param name
+	 *            The name of the artist
+	 */
+	public void insertNewArtist(String name) throws ClassNotFoundException, SQLException, IOException {
 		try {
 			connect();
 			String sql = "insert into artists (name) values (?)";
@@ -143,8 +217,13 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
-	public void insertNewGenre(String name) throws ClassNotFoundException, SQLException, IOException{
+	/**
+	 * This method is to add a new genre in the database
+	 * 
+	 * @param name
+	 *            The name of the genre
+	 */
+	public void insertNewGenre(String name) throws ClassNotFoundException, SQLException, IOException {
 		try {
 			connect();
 			String sql = "insert into artists (name) values (?)";
@@ -155,8 +234,13 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
-	public int artistExists(String name) throws ClassNotFoundException, SQLException, IOException{
+	/**
+	 * This method is to check if the artist already exists in the database
+	 * 
+	 * @param name
+	 *            The name of the artist we want to check
+	 */
+	public int artistExists(String name) throws ClassNotFoundException, SQLException, IOException {
 		int cont = 0;
 		ResultSet rs = null;
 		try {
@@ -165,7 +249,7 @@ public class DataAccessImpl implements DataAccess{
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, name);
 			rs = stmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				cont = rs.getInt(1);
 			}
 		} finally {
@@ -173,8 +257,13 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return cont;
 	}
-	
-	public int genreExists(String name) throws ClassNotFoundException, SQLException, IOException{
+	/**
+	 * This method is to check if the genre already exists in the database
+	 * 
+	 * @param name
+	 *            The name of the genre we want to check
+	 */
+	public int genreExists(String name) throws ClassNotFoundException, SQLException, IOException {
 		int cont = 0;
 		ResultSet rs = null;
 		try {
@@ -183,7 +272,7 @@ public class DataAccessImpl implements DataAccess{
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, name);
 			rs = stmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				cont = rs.getInt(1);
 			}
 		} finally {
@@ -191,8 +280,13 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return cont;
 	}
-	
-	public int userExists(String username) throws ClassNotFoundException, SQLException, IOException{
+	/**
+	 * This method check if the user already exists in the database
+	 * 
+	 * @param username
+	 *            The username of the user we want to check
+	 */
+	public int userExists(String username) throws ClassNotFoundException, SQLException, IOException {
 		int cont = 0;
 		ResultSet rs = null;
 		try {
@@ -201,16 +295,22 @@ public class DataAccessImpl implements DataAccess{
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, username);
 			rs = stmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				cont = rs.getInt(1);
 			}
-		}finally {
+		} finally {
 			disconnect();
 		}
 		return cont;
 	}
-	
-	public char getUserType(String username) throws ClassNotFoundException, SQLException, IOException{
+	/**
+	 * This method returns the type of the user 'A' if the user is an admin and
+	 * 'C' if the user is a client
+	 * 
+	 * @param username
+	 *            The username of the user we want to check the type
+	 */
+	public char getUserType(String username) throws ClassNotFoundException, SQLException, IOException {
 		char type = 0;
 		ResultSet rs = null;
 		try {
@@ -219,7 +319,7 @@ public class DataAccessImpl implements DataAccess{
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, username);
 			rs = stmt.executeQuery();
-			if(rs.next()) {
+			if (rs.next()) {
 				type = rs.getString(1).charAt(0);
 			}
 		} finally {
@@ -227,18 +327,173 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return type;
 	}
-	public String getPassword (String username) throws ClassNotFoundException, SQLException, IOException{
+	/**
+	 * This method returns the password of the user we want
+	 * 
+	 * @param username
+	 *            The username of the user we are checking
+	 */
+	public String getPassword(String username) throws ClassNotFoundException, SQLException, IOException {
+		String password = null;
+		ResultSet rs = null;
 		try {
-			if (userExists(username)!=0) {
-				if(getUserType(username) == 'C') {
+			if (userExists(username) != 0) {
+				if (getUserType(username) == 'C') {
 					connect();
-				}else if (getUserType(username) == 'A') {
-					
+					String sql = "select password from clients where username = ?";
+					stmt = con.prepareStatement(sql);
+					stmt.setString(1, username);
+					rs = stmt.executeQuery();
+					if (rs.next()) {
+						password = rs.getString(1);
+					}
+				} else if (getUserType(username) == 'A') {
+					connect();
+					String sql = "select password from admins where username = ?";
+					stmt = con.prepareStatement(sql);
+					stmt.setString(1, username);
+					rs = stmt.executeQuery();
+					if (rs.next()) {
+						password = rs.getString(1);
+					}
 				}
 			}
-		}finally {
+		} finally {
 			disconnect();
 		}
-		return null;
+		return password;
+	}
+	public ArrayList<String> getArtists() throws ClassNotFoundException, SQLException, IOException {
+		ArrayList<String> artists = new ArrayList<String>();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from artists";
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				artists.add(rs.getString("name"));
+			}
+		} finally {
+			disconnect();
+		}
+		return artists;
+	}
+	public ArrayList<String> getGenres() throws ClassNotFoundException, SQLException, IOException {
+		ArrayList<String> genres = new ArrayList<String>();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from genres";
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				genres.add(rs.getString("name"));
+			}
+		} finally {
+			disconnect();
+		}
+		return genres;
+	}
+	public String getArtist(int artistCode) throws ClassNotFoundException, SQLException, IOException {
+		String artistName = null;
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from artists where artistcode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, artistCode);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				artistName = rs.getString("name");
+			}
+		} finally {
+			disconnect();
+		}
+		return artistName;
+	}
+	public String getGenre(int genreCode) throws ClassNotFoundException, SQLException, IOException {
+		String genreName = null;
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select name from genres where genrecode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, genreCode);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				genreName = rs.getString("name");
+			}
+		} finally {
+			disconnect();
+		}
+		return genreName;
+	}
+	public Vinyl getVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException {
+		Vinyl vin = new Vinyl();
+		Artist art = new Artist();
+		Genre gen = new Genre();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select * from vinyls where vinylcode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, vinylCode);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				vin.setVinylCode(vinylCode);
+				vin.setTitle(rs.getString("title"));
+				vin.setPrice(rs.getDouble("price"));
+				vin.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
+				vin.setDescription(rs.getString("description"));
+				vin.setOnSale(rs.getBoolean("onsale"));
+				vin.setSalePercentage(rs.getDouble("salepercentage"));
+				vin.setStock(rs.getInt("stock"));
+				vin.setAmountSold(rs.getInt("amountsold"));
+				vin.setCover(rs.getString("cover"));
+				art.setCode(rs.getInt("artistcode"));
+				art.setName(getArtist(rs.getInt("artistcode")));
+				vin.setArtist(art);
+				gen.setCode(rs.getInt("genrecode"));
+				gen.setName(getGenre(rs.getInt("genrecode")));
+				vin.setGenre(gen);
+			}
+		} finally {
+			disconnect();
+		}
+		return vin;
+	}
+	public void updateVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException {
+		try {
+			connect();
+			String sql = "update vinyls set title=?, artistcode=?, genrecode=?, price=?, publicationdate=?, description=?, onsale=?, salepercentage=?, stock=?, cover=? where vinylcode=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, vinyl.getTitle());
+			stmt.setInt(2, vinyl.getArtist().getCode());
+			stmt.setInt(3, vinyl.getGenre().getCode());
+			stmt.setDouble(4, vinyl.getPrice());
+			stmt.setDate(5, Date.valueOf(vinyl.getPublicationDate()));
+			stmt.setString(6, vinyl.getDescription());
+			stmt.setBoolean(7, vinyl.isOnSale());
+			stmt.setDouble(8, vinyl.getSalePercentage());
+			stmt.setInt(9, vinyl.getStock());
+			stmt.setString(10, vinyl.getCover());
+			stmt.setInt(11, vinyl.getVinylCode());
+			stmt.executeUpdate();
+		} finally {
+			disconnect();
+		}
+	}
+	public Artist getArtist(String name) throws ClassNotFoundException, SQLException, IOException {
+		Artist temp = new Artist();
+		try {
+			connect();
+			String sql = "select * from artist where name=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, name);
+		} finally {
+			disconnect();
+		}
+		return temp;
 	}
 }

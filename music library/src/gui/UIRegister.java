@@ -210,7 +210,9 @@ public class UIRegister extends JDialog implements ActionListener {
 				ex.printStackTrace();
 			}
 		}else if (e.getSource().equals(cancelButton)) {
-			
+			this.dispose();
+			UILogin login = new UILogin();
+			login.setVisible(true);
 		}
 		
 	}

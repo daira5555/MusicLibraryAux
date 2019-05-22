@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
+import model.AdvancedSearch;
 import model.Artist;
 import model.Client;
 import model.Genre;
@@ -695,6 +696,7 @@ public class DataAccessImpl implements DataAccess{
 				temp.setCover(rs.getString("cover"));
 				
 				vinyls.add(temp);
+				cont++;
 			}
 		} finally {
 			disconnect();
@@ -764,5 +766,84 @@ public class DataAccessImpl implements DataAccess{
 		}
 	}
 	
-	//TODO public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws ClassNotFoundException, SQLException, IOException
+	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+		ResultSet rs = null;
+		int cont = 0;
+		try {
+			connect();
+			String sql = "select * from vinyls where ";
+			if (!search.getArtist().isEmpty()) {
+				Artist artist = getArtist(search.getArtist());
+				sql = sql + " artistcode = "+artist.getCode();
+				cont++;
+			}
+			if (!search.getTitle().isEmpty()) {
+				if(cont>0) {
+					sql = sql + " or ";
+				}
+				sql = sql + " title like %"+search.getTitle()+"% ";
+				cont++;
+			}
+			if (!search.getGenre().isEmpty()) {
+				if(cont>0) {
+					sql = sql + " or ";
+				}
+				Genre genre = getGenre(search.getGenre());
+				sql = sql + " genrecode = "+genre.getCode();
+				cont++;
+			}
+			if (search.getPublicationYear() != 0) {
+				if(cont>0) {
+					sql = sql + " or ";
+				}
+				sql = sql + " to_char(publicationdate,'YYYY') = "+search.getPublicationYear();
+				cont++;
+			}
+			if(search.getPrice() != 0) {
+				if(cont>0) {
+					sql = sql + " or ";
+				}
+				sql = sql + " price = "+search.getPrice();
+				cont++;
+			}
+			if(search.getStockLessThan() != 0) {
+				if(cont>0) {
+					sql = sql + " or ";
+				}
+				sql = sql + " stock < "+search.getStockLessThan();
+			}
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Vinyl temp = new Vinyl();
+				temp.setVinylCode(rs.getInt("vinylcode"));
+				temp.setTitle(rs.getString("title"));
+				
+				Artist artTemp = new Artist();
+				artTemp.setCode(rs.getInt("artistcode"));
+				artTemp.setName(getArtist(rs.getInt("artistcode")));
+				temp.setArtist(artTemp);
+				
+				Genre genTemp = new Genre();
+				genTemp.setCode(rs.getInt("genrecode"));
+				genTemp.setName(getGenre(rs.getInt("genrecode")));
+				temp.setGenre(genTemp);
+				
+				temp.setPrice(rs.getDouble("price"));
+				temp.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
+				temp.setDescription(rs.getString("description"));
+				temp.setOnSale(rs.getBoolean("onsale"));
+				temp.setSalePercentage(rs.getDouble("salepercentage"));
+				temp.setStock(rs.getInt("stock"));
+				temp.setAmountSold(rs.getInt("amountsold"));
+				temp.setCover(rs.getString("cover"));
+				
+				vinyls.add(temp);
+			}
+		} finally {
+			disconnect();
+		}
+		return vinyls;
+	}
 }

@@ -36,4 +36,7 @@ public interface Logic {
 	public void deleteVinyl(int vinylCode) throws Exception;
 	public ArrayList<Vinyl> getBestSellers() throws Exception;
 	public ArrayList<Vinyl> getBestSellersDate (LocalDate date) throws Exception;
+	public ArrayList<Integer> getArtistTaste (String username) throws Exception;
+	public ArrayList<Integer> getGenreTaste (String username) throws Exception;
+	public ArrayList<Vinyl> getSuggestions(String username) throws Exception;
 }

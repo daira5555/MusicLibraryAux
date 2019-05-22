@@ -608,8 +608,8 @@ public class DataAccessImpl implements DataAccess{
 		return vinyls;
 	}
 
-	public ArrayList<Artist> getArtistTaste (String username) throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<Artist> artists = new ArrayList<Artist>();
+	public ArrayList<Integer> getArtistTaste (String username) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Integer> artists = new ArrayList<Integer>();
 		ResultSet rs = null;
 		try {
 			connect();
@@ -618,10 +618,7 @@ public class DataAccessImpl implements DataAccess{
 			stmt.setString(1, username);
 			rs = stmt.executeQuery();
 			while(rs.next()) {
-				Artist temp = new Artist();
-				temp.setCode(rs.getInt("artistcode"));
-				temp.setName(getArtist(rs.getInt("artistcode")));
-				artists.add(temp);
+				artists.add(rs.getInt("artistcode"));
 			}
 		} finally {
 			disconnect();
@@ -629,9 +626,9 @@ public class DataAccessImpl implements DataAccess{
 		return artists;
 	}
 	
-	public ArrayList<Genre> getGenreTaste (String username) throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<Genre> genres = new ArrayList<Genre>();
+	public ArrayList<Integer> getGenreTaste (String username) throws ClassNotFoundException, SQLException, IOException{ 
 		ResultSet rs = null;
+		ArrayList<Integer> genres = new ArrayList<Integer>();
 		try {
 			connect();
 			String sql = "select genrecode from taste_genre where username = ?";
@@ -639,10 +636,7 @@ public class DataAccessImpl implements DataAccess{
 			stmt.setString(1, username);
 			rs = stmt.executeQuery();
 			while(rs.next()) {
-				Genre temp = new Genre();
-				temp.setCode(rs.getInt("genrecode"));
-				temp.setName(getGenre(rs.getInt("genrecode")));
-				genres.add(temp);
+				genres.add(rs.getInt("genrecode"));
 			}
 		} finally {
 			disconnect();
@@ -652,16 +646,53 @@ public class DataAccessImpl implements DataAccess{
 	
 	public ArrayList<Vinyl> getSuggestions(String username) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
-		ArrayList<Artist> artistsTastes = new ArrayList<Artist>();
+		int cont = 0;
+		
+		ArrayList<Integer> artistsTastes = new ArrayList<Integer>();
 		artistsTastes = getArtistTaste(username);
-		ArrayList<Genre> genresTastes = new ArrayList<Genre>();
+		Integer[] dataArtist = artistsTastes.toArray(new Integer[artistsTastes.size()]);
+		Array sqlArtists = con.createArrayOf("int", dataArtist);
+		
+		ArrayList<Integer> genresTastes = new ArrayList<Integer>();
 		genresTastes = getGenreTaste(username);
+		Integer[] dataGenre = genresTastes.toArray(new Integer[genresTastes.size()]);
+		Array sqlGenres = con.createArrayOf("int", dataGenre);
+		
 		ResultSet rs = null;
 		try {
 			connect();
-			String sql = "";
+			String sql = "select * from vinyls where artistcode in ? or genrecode in ? "
+					+ "order by amountsold descending";
 			stmt = con.prepareStatement(sql);
-			stmt.setArray(1, (Array) artistsTastes);
+			stmt.setArray(1, sqlArtists);
+			stmt.setArray(2, sqlGenres);
+			rs = stmt.executeQuery();
+			while(rs.next() && cont<10) {
+				Vinyl temp = new Vinyl();
+				temp.setVinylCode(rs.getInt("vinylcode"));
+				temp.setTitle(rs.getString("title"));
+				
+				Artist artTemp = new Artist();
+				artTemp.setCode(rs.getInt("artistcode"));
+				artTemp.setName(getArtist(rs.getInt("artistcode")));
+				temp.setArtist(artTemp);
+				
+				Genre genTemp = new Genre();
+				genTemp.setCode(rs.getInt("genrecode"));
+				genTemp.setName(getGenre(rs.getInt("genrecode")));
+				temp.setGenre(genTemp);
+				
+				temp.setPrice(rs.getDouble("price"));
+				temp.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
+				temp.setDescription(rs.getString("description"));
+				temp.setOnSale(rs.getBoolean("onsale"));
+				temp.setSalePercentage(rs.getDouble("salepercentage"));
+				temp.setStock(rs.getInt("stock"));
+				temp.setAmountSold(rs.getInt("amountsold"));
+				temp.setCover(rs.getString("cover"));
+				
+				vinyls.add(temp);
+			}
 		} finally {
 			disconnect();
 		}

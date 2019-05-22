@@ -131,4 +131,22 @@ public class LogicImpl implements Logic {
 		vinyls = dataAccess.getBestSellersDate(date);
 		return vinyls;
 	}
+
+	public ArrayList<Integer> getArtistTaste(String username) throws Exception {
+		ArrayList<Integer> artistTaste = new ArrayList<Integer>();
+		artistTaste = dataAccess.getArtistTaste(username);
+		return artistTaste;
+	}
+
+	public ArrayList<Integer> getGenreTaste(String username) throws Exception {
+		ArrayList<Integer> genreTaste = new ArrayList<Integer>();
+		genreTaste = dataAccess.getGenreTaste(username);
+		return genreTaste;
+	}
+
+	public ArrayList<Vinyl> getSuggestions(String username) throws Exception {
+		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+		vinyls = dataAccess.getSuggestions(username);
+		return vinyls;
+	}
 }

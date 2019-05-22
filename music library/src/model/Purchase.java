@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Purchase {
@@ -98,7 +99,20 @@ public class Purchase {
 	}
 	
 	public void getVinylAmount (ArrayList<Vinyl> vinyls) {
-		
+		Collections.sort(vinyls);
+		int cont = 0;
+		int vinylCode = vinyls.get(0).getVinylCode();
+		for (int i = 0; i < vinyls.size(); i++) {
+			if (vinylCode == vinyls.get(i).getVinylCode()) {
+				cont++;
+			}else {
+				addWithAmount(vinylCode, cont);
+				cont = 0;
+				vinylCode = vinyls.get(i).getVinylCode();
+				i--;
+			}
+		}
+		addWithAmount(vinylCode, cont);
 	}
 	
 }

@@ -728,9 +728,14 @@ public class DataAccessImpl implements DataAccess{
 	public void writePurchase (Purchase purchase) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
+			for (int amount : purchase.getWithAmount().values()) {
+				
+			}
 			String sql = "";
 		} finally {
 			disconnect();
 		}
 	}
+	
+	//TODO public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws ClassNotFoundException, SQLException, IOException
 }

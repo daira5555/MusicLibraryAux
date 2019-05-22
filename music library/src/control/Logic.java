@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import model.Artist;
 import model.Client;
 import model.Genre;
+import model.Purchase;
 import model.Vinyl;
 
 
@@ -40,4 +41,6 @@ public interface Logic {
 	public ArrayList<Integer> getGenreTaste (String username) throws Exception;
 	public ArrayList<Vinyl> getSuggestions(String username) throws Exception;
 	public Client getClient (String username) throws Exception;
+	public void writePurchase (Purchase purchase) throws Exception;
+	public void updatePurchasedVinyl (int vinylCode, int amountSold) throws Exception;
 }

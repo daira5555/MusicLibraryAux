@@ -1,12 +1,12 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
 public class Purchase {
-	private LocalDate date;
+	private LocalDateTime date;
 	private double fullPrice;
 	private int amount;
 	private String buyer;
@@ -18,7 +18,7 @@ public class Purchase {
 		super();
 	}
 
-	public Purchase(LocalDate date, double fullPrice, int amount, String buyer, ArrayList<Vinyl> vinyls,
+	public Purchase(LocalDateTime date, double fullPrice, int amount, String buyer, ArrayList<Vinyl> vinyls,
 			HashMap<Integer, Integer> withAmount, HashMap<Integer, Double> withPrice) {
 		super();
 		this.date = date;
@@ -30,11 +30,11 @@ public class Purchase {
 		this.withPrice = withPrice;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

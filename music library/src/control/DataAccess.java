@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import model.Artist;
 import model.Client;
 import model.Genre;
+import model.Purchase;
 import model.Vinyl;
 
 public interface DataAccess {
@@ -66,5 +67,9 @@ public interface DataAccess {
 	public ArrayList<Vinyl> getSuggestions(String username) throws Exception;
 	
 	public Client getClient (String username) throws Exception;
+	
+	public void updatePurchasedVinyl (int vinylCode, int amountSold) throws Exception;
+	
+	public void writePurchase (Purchase purchase) throws Exception;
 
 }

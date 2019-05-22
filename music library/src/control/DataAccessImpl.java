@@ -9,8 +9,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Properties;
 
 import model.Artist;
@@ -725,13 +727,38 @@ public class DataAccessImpl implements DataAccess{
 		return client;
 	}
 	
-	public void writePurchase (Purchase purchase) throws ClassNotFoundException, SQLException, IOException{
+	public void updatePurchasedVinyl (int vinylCode, int amountSold) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
-			for (int amount : purchase.getWithAmount().values()) {
-				
+			String sql = "update vinyls set amountsold = amountsold + ? where vinylcode = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, amountSold);
+			stmt.setInt(2, vinylCode);
+			stmt.executeUpdate();
+		} finally {
+			disconnect();
+		}
+	}
+	
+	public void writePurchase (Purchase purchase) throws ClassNotFoundException, SQLException, IOException{
+		try {
+			for (Map.Entry<Integer, Integer> entry : purchase.getWithAmount().entrySet()) {
+				connect();
+				int key = entry.getKey();
+				int amount = entry.getValue();
+				Double price = purchase.getWithPrice().get(key);
+				Double totalPrice = amount * price;
+				String sql = "insert into purchases values (?, ?, ?, ?, ?)";
+				stmt = con.prepareStatement(sql);
+				stmt.setString(1, purchase.getBuyer());
+				stmt.setInt(2, key);
+				stmt.setTimestamp(3, Timestamp.valueOf(purchase.getDate()));
+				stmt.setInt(4, amount);
+				stmt.setDouble(5, totalPrice);
+				stmt.executeUpdate();
+				updatePurchasedVinyl(key, amount);
 			}
-			String sql = "";
+			
 		} finally {
 			disconnect();
 		}

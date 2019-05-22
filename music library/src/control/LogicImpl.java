@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import model.Artist;
 import model.Client;
 import model.Genre;
+import model.Purchase;
 import model.Vinyl;
 
 public class LogicImpl implements Logic {
@@ -113,12 +114,9 @@ public class LogicImpl implements Logic {
 		dataAccess.insertGenre(name);
 	}
 
-	
 	public void deleteVinyl(int vinylCode) throws Exception {
 		dataAccess.deleteVinyl(vinylCode);
 	}
-
-
 	
 	public ArrayList<Vinyl> getBestSellers() throws Exception{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
@@ -155,4 +153,15 @@ public class LogicImpl implements Logic {
 		client = dataAccess.getClient(username);
 		return client;
 	}
+
+	public void writePurchase(Purchase purchase) throws Exception {
+		dataAccess.writePurchase(purchase);
+	}
+
+	
+	public void updatePurchasedVinyl(int vinylCode, int amountSold) throws Exception {
+		dataAccess.updatePurchasedVinyl(vinylCode, amountSold);
+	}
+	
+	
 }

@@ -82,16 +82,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
+	
 	/**
 	 * This method is to add the new client to the clients table in the database
-	 * @param username The username of the client
-	 * @param password The client's password
-	 * @param name The client's name
-	 * @param surname The client's surname
-	 * @param email The client's email
-	 * @param phonenumber The client's phone number
-	 * @param address The addres of the client
-	 * @param accountnumber The account number of the client
+	 * @param client The Client class with all the information about the client
 	 */
 	
 	public void insertArtistTaste (Client client) throws ClassNotFoundException, SQLException, IOException{
@@ -109,6 +103,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
+	
+	/**
+	 * This method inserts into the database the 
+	 */
 	
 	public void insertGenreTaste (Client client) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Genre> genres = client.getTastes().getGenres();

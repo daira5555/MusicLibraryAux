@@ -49,22 +49,23 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIModifyVinyl frame = new UIModifyVinyl();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					UIModifyVinyl frame = new UIModifyVinyl(4);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	/**
 	 * Create the frame.
+	 * @param vinylMod 
 	 */
-	public UIModifyVinyl() {
+	public UIModifyVinyl(int vinylMod) {
 		try {
 			vToMod = logic.getVinyl(vinylCode);
 		} catch (Exception e) {
@@ -104,14 +105,20 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(rdbtnNo);
 		bg.add(rdbtnYes);
+		
+		
+		vToMod=getVinyl(vinylMod);
+		System.out.println(vToMod.getTitle());
 		if (vToMod.isOnSale()) {
 			rdbtnYes.setSelected(true);
 		} else {
 			rdbtnNo.setSelected(true);
 		}
+		
 		titleField = new JTextField();
 		titleField.setBounds(147, 25, 205, 20);
 		contentPane.add(titleField);
+		
 		titleField.setColumns(10);
 		titleField.setText(vToMod.getTitle());
 		artistField = new JTextField();
@@ -184,6 +191,18 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		contentPane.add(stockField);
 		stockField.setColumns(10);
 		stockField.setText(String.valueOf(vToMod.getStock()));
+	}
+	private Vinyl getVinyl(int vinylCode) {
+		Vinyl v= new Vinyl();
+		Logic logic = LogicFactory.getLogic();
+		try {
+			v= logic.getVinyl(vinylCode);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		
+		return v;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

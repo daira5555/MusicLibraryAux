@@ -15,6 +15,7 @@ import com.toedter.calendar.JDateChooser;
 
 import control.Logic;
 import control.LogicFactory;
+import model.AdvancedSearch;
 import model.Client;
 import model.CloseTabButton;
 import model.Purchase;
@@ -61,6 +62,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private JButton btnBuySelected;
 	private JButton btnGoToCart;
 	private JButton btnReturnToMenu;
+	private JButton btnSearch;
 	private JTextField nameField;
 	private JTextField surnameField;
 	private JTextField numberField;
@@ -76,6 +78,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private JButton btnClearCart;
 	private JScrollPane scrollPaneSuggestions;
 	private JScrollPane scrollPaneBestSellers;
+	private JScrollPane scrollPaneAdvancedSearch;
 	private JButton btnFromTheBeginningOfTime;
 	private JLabel lblChooseADate;
 	private JButton btnSearchBestSeller;
@@ -87,9 +90,13 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private DefaultTableModel modelSuggestions;
 	private DefaultTableModel modelBestSellers;
 	private DefaultTableModel modelAdvancedSearch;
-	ArrayList<Vinyl> searchResultList;
-	ArrayList<Vinyl> suggestionsList;
-	ArrayList<Vinyl> bestSellers;
+	private String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On sale:", "Sale percentage:"};
+	private ArrayList<Vinyl> vinylList;
+	private ArrayList<Vinyl> bestSellers;
+	private ArrayList<Vinyl> suggestionsList;
+	private ArrayList<Vinyl> searchResultList;
+	private ArrayList<Vinyl> boughtVinylsList;
+	private AdvancedSearch advancedSearch;
 	/**
 	 * Create the frame.
 	 */
@@ -124,9 +131,6 @@ public class UIClientMenu extends JFrame implements ActionListener {
 				for (Integer i : tableSuggestions.getSelectedRows()) {
 					cart.addVinyl(suggestionsList.get(i));
 				}
-				for (Integer i : tableAdvancedSearch.getSelectedRows()) {
-					cart.addVinyl(searchResultList.get(i));
-				}
 			} catch (Exception e2) {
 				e2.getStackTrace();
 			}
@@ -134,18 +138,22 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			seeCart();
 		} else if (e.getSource().equals(btnSearchBestSeller)) {
 			try {
-				bestSellers = logic.getBestSellersDate(bestSellerCalendar.getDate());
+				searchResultList = logic.getBestSellersDate(bestSellerCalendar.getDate());
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			fillBestSellerList(bestSellers);
+			modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
+			tableBestSellers = new JTable(modelBestSellers);
+			scrollPaneBestSellers.setViewportView(tableBestSellers);
 		} else if (e.getSource().equals(btnFromTheBeginningOfTime)) {
 			try {
-				bestSellers = logic.getBestSellers();
+				searchResultList = logic.getBestSellers();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			fillBestSellerList(bestSellers);
+			modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
+			tableBestSellers = new JTable(modelBestSellers);
+			scrollPaneBestSellers.setViewportView(tableBestSellers);
 		} else if (e.getSource().equals(btnConfirm)) {
 			try {
 				logic.writePurchase(cart);
@@ -154,6 +162,26 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			}
 		} else if (e.getSource().equals(btnClearCart)) {
 			cart.getVinyls().clear();
+		} else if (e.getSource().equals(btnSearch)) {
+			advancedSearch = new AdvancedSearch();
+			advancedSearch.setArtist(artistField.getText());
+			advancedSearch.setGenre(genreField.getText());
+			advancedSearch.setPrice(Double.valueOf(priceField.getText()));
+			advancedSearch.setPublicationYear(Integer.valueOf(publicationDateField.getText()));
+			advancedSearch.setTitle(albumTitleField.getText());
+			advancedSearch.setStockLessThan(Integer.MAX_VALUE);
+			try {
+				searchResultList = logic.advancedSearch(advancedSearch);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			modelAdvancedSearch = new DefaultTableModel(fillData(searchResultList), columnNames);
+			tableAdvancedSearch = new JTable(modelAdvancedSearch);
+			scrollPaneAdvancedSearch.setViewportView(tableAdvancedSearch);
+		} else if (e.getSource().equals(btnBuySelected)) {
+			for (Integer i : tableAdvancedSearch.getSelectedRows()) {
+				cart.addVinyl(searchResultList.get(i));
+			}
 		}
 	}
 	/**
@@ -163,25 +191,22 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	 *            Fills the list of best sellers based on the ArrayList of best
 	 *            sold Vinyls given by the Data Base
 	 */
-	private void fillBestSellerList(ArrayList<Vinyl> bestSellers) {
-		String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On sale:", "Sale percentage:"};
-		Object[][] dataBestSellers = new Object[7][bestSellers.size()];
-		for (int i = 0; i < bestSellers.size(); i++) {
-			dataBestSellers[0][i] = "Placeholder";
-			dataBestSellers[1][i] = bestSellers.get(i).getTitle();
-			dataBestSellers[2][i] = bestSellers.get(i).getArtist().getName();
-			dataBestSellers[3][i] = bestSellers.get(i).getGenre().getName();
-			dataBestSellers[4][i] = bestSellers.get(i).getPrice();
-			dataBestSellers[5][i] = bestSellers.get(i).isOnSale();
-			if (bestSellers.get(i).isOnSale()) {
-				dataBestSellers[6][i] = bestSellers.get(i).getSalePercentage();
+	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
+		Object[][] data = new Object[7][auxVinylList.size()];
+		for (int i = 0; i < auxVinylList.size(); i++) {
+			data[0][i] = "Placeholder";
+			data[1][i] = auxVinylList.get(i).getTitle();
+			data[2][i] = auxVinylList.get(i).getArtist().getName();
+			data[3][i] = auxVinylList.get(i).getGenre().getName();
+			data[4][i] = auxVinylList.get(i).getPrice();
+			data[5][i] = auxVinylList.get(i).isOnSale();
+			if (auxVinylList.get(i).isOnSale()) {
+				data[6][i] = auxVinylList.get(i).getSalePercentage();
 			} else {
-				dataBestSellers[6][i] = "Not on Sale";
+				data[6][i] = "Not on Sale";
 			}
 		}
-		modelBestSellers = new DefaultTableModel(dataBestSellers, columnNames);
-		tableBestSellers = new JTable(modelBestSellers);
-		scrollPaneBestSellers.setViewportView(tableBestSellers);
+		return data;
 	}
 	private void seeCart() {
 		JPanel cartPanel = new JPanel();
@@ -223,22 +248,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		cartDateField.setColumns(10);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 		cartDateField.setText(cart.getDate().format(formatter));
-		String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On sale:", "Sale percentage:"};
-		Object[][] dataCart = new Object[7][cart.getVinyls().size()];
-		for (int i = 0; i < cart.getVinyls().size(); i++) {
-			dataCart[0][i] = "Placeholder";
-			dataCart[1][i] = cart.getVinyls().get(i).getTitle();
-			dataCart[2][i] = cart.getVinyls().get(i).getArtist().getName();
-			dataCart[3][i] = cart.getVinyls().get(i).getGenre().getName();
-			dataCart[4][i] = cart.getVinyls().get(i).getPrice();
-			dataCart[5][i] = cart.getVinyls().get(i).isOnSale();
-			if (cart.getVinyls().get(i).isOnSale()) {
-				dataCart[6][i] = cart.getVinyls().get(i).getSalePercentage();
-			} else {
-				dataCart[6][i] = "Not on Sale";
-			}
-		}
-		tableBestSellers = new JTable(dataCart, columnNames);
+		tableBestSellers = new JTable(fillData(cart.getVinyls()), columnNames);
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
 	}
 	private void boughtVinyls() {
@@ -255,31 +265,15 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		btnGoBackToMenu = new JButton("Volver al men\u00FA");
 		btnGoBackToMenu.setBounds(451, 577, 134, 37);
 		boughtVinyls.add(btnGoBackToMenu);
-		ArrayList<Vinyl> boughtVinylsList = null;
 		try {
 			boughtVinylsList = logic.getBoughtVinyls(client);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On sale:", "Sale percentage:"};
-		Object[][] dataBought = new Object[7][boughtVinylsList.size()];
-		for (int i = 0; i < cart.getVinyls().size(); i++) {
-			dataBought[0][i] = "Placeholder";
-			dataBought[1][i] = boughtVinylsList.get(i).getTitle();
-			dataBought[2][i] = boughtVinylsList.get(i).getArtist().getName();
-			dataBought[3][i] = boughtVinylsList.get(i).getGenre().getName();
-			dataBought[4][i] = boughtVinylsList.get(i).getPrice();
-			dataBought[5][i] = boughtVinylsList.get(i).isOnSale();
-			if (boughtVinylsList.get(i).isOnSale()) {
-				dataBought[6][i] = boughtVinylsList.get(i).getSalePercentage();
-			} else {
-				dataBought[6][i] = "Not on Sale";
-			}
-		}
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(20, 91, 969, 444);
 		boughtVinyls.add(scrollPane);
-		tableBoughtVinyls = new JTable(dataBought, columnNames);
+		tableBoughtVinyls = new JTable(fillData(boughtVinylsList), columnNames);
 		scrollPane.setViewportView(tableBoughtVinyls);
 	}
 	private void modifyPersonalInfo() {
@@ -394,32 +388,14 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		btnReturnToMenu.setBackground(new Color(255, 218, 185));
 		btnReturnToMenu.setBounds(652, 616, 137, 42);
 		advanced.add(btnReturnToMenu);
-		try {
-			searchResultList = logic.getSuggestions(client);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On sale:", "Sale percentage:"};
-		Object[][] dataResultSearch = new Object[7][searchResultList.size()];
-		for (int i = 0; i < cart.getVinyls().size(); i++) {
-			dataResultSearch[0][i] = "Placeholder";
-			dataResultSearch[1][i] = searchResultList.get(i).getTitle();
-			dataResultSearch[2][i] = searchResultList.get(i).getArtist().getName();
-			dataResultSearch[3][i] = searchResultList.get(i).getGenre().getName();
-			dataResultSearch[4][i] = searchResultList.get(i).getPrice();
-			dataResultSearch[5][i] = searchResultList.get(i).isOnSale();
-			if (searchResultList.get(i).isOnSale()) {
-				dataResultSearch[6][i] = searchResultList.get(i).getSalePercentage();
-			} else {
-				dataResultSearch[6][i] = "Not on Sale";
-			}
-		}
+		btnSearch = new JButton("Return to menu");
+		btnSearch.setBackground(new Color(255, 218, 185));
+		btnSearch.setBounds(700, 700, 137, 42);
+		advanced.add(btnSearch);
+		btnSearch.addActionListener(this);
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(84, 240, 930, 344);
 		advanced.add(scrollPane);
-		modelAdvancedSearch = new DefaultTableModel(dataResultSearch, columnNames);
-		tableAdvancedSearch = new JTable(modelAdvancedSearch);
-		scrollPane.setViewportView(tableAdvancedSearch);
 	}
 	private void mainMenu() {
 		JPanel panelMainMenu = new JPanel();
@@ -480,22 +456,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On sale:", "Sale percentage:"};
-		Object[][] dataSuggestions = new Object[7][suggestionsList.size()];
-		for (int i = 0; i < cart.getVinyls().size(); i++) {
-			dataSuggestions[0][i] = "Placeholder";
-			dataSuggestions[1][i] = suggestionsList.get(i).getTitle();
-			dataSuggestions[2][i] = suggestionsList.get(i).getArtist().getName();
-			dataSuggestions[3][i] = suggestionsList.get(i).getGenre().getName();
-			dataSuggestions[4][i] = suggestionsList.get(i).getPrice();
-			dataSuggestions[5][i] = suggestionsList.get(i).isOnSale();
-			if (suggestionsList.get(i).isOnSale()) {
-				dataSuggestions[6][i] = suggestionsList.get(i).getSalePercentage();
-			} else {
-				dataSuggestions[6][i] = "Not on Sale";
-			}
-		}
-		modelSuggestions = new DefaultTableModel(dataSuggestions, columnNames);
+		modelSuggestions = new DefaultTableModel(fillData(suggestionsList), columnNames);
 		tableSuggestions = new JTable(modelSuggestions);
 		scrollPaneSuggestions.setViewportView(tableSuggestions);
 		scrollPaneBestSellers = new JScrollPane();
@@ -520,5 +481,13 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		panelMainMenu.add(btnSeeCart);
 		btnSeeCart.addActionListener(this);
 		btnSearchBestSeller.addActionListener(this);
+		try {
+			bestSellers = logic.getBestSellers();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
+		tableBestSellers = new JTable(modelBestSellers);
+		scrollPaneBestSellers.setViewportView(tableBestSellers);
 	}
 }

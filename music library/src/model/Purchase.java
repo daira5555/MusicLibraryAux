@@ -3,12 +3,12 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 public class Purchase {
-	private static final LocalDate DATE = LocalDate.now();
+	private final LocalDate DATE = LocalDate.now();
 	private double fullPrice;
 	private int amount;
-	private Client buyer;
+	private String buyer;
 	private ArrayList<Vinyl> vinyls;
-	public Purchase(double fullPrice, int amount, Client buyer, ArrayList<Vinyl> vinyls) {
+	public Purchase(double fullPrice, int amount, String buyer, ArrayList<Vinyl> vinyls) {
 		super();
 		this.fullPrice = fullPrice;
 		this.amount = amount;
@@ -33,10 +33,10 @@ public class Purchase {
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
-	public Client getBuyer() {
+	public String getBuyer() {
 		return buyer;
 	}
-	public void setBuyer(Client buyer) {
+	public void setBuyer(String buyer) {
 		this.buyer = buyer;
 	}
 	public ArrayList<Vinyl> getVinyls() {

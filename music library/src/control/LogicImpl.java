@@ -2,6 +2,8 @@ package control;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import model.Vinyl;
+import model.AdvancedSearch;
 import model.Artist;
 import model.Client;
 import model.Genre;
@@ -9,18 +11,8 @@ import model.Purchase;
 import model.Vinyl;
 public class LogicImpl implements Logic {
 	private DataAccess dataAccess = DataAccessFactory.getDataAccess();
-	public void registerClient(String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws Exception {
-		dataAccess.registerClient(username, password, name, surname, email, phonenumber, address, accountnumber);
-	}
 	public void userType(String username) throws Exception {
 		dataAccess.userType(username);
-	}
-	public void modifyClientData(String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws Exception {
-		dataAccess.modifyClientData(username, password, name, surname, email, phonenumber, address, accountnumber);
-	}
-	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate, String description, boolean onsale, double salepercentage, int stock, String cover)
-			throws Exception {
-		dataAccess.insertNewVinyl(title, artistcode, genrecode, price, publicationdate, description, onsale, salepercentage, stock, cover);
 	}
 	public void insertNewArtist(String name) throws Exception {
 		dataAccess.insertNewArtist(name);
@@ -76,11 +68,6 @@ public class LogicImpl implements Logic {
 		return null;
 	}
 	@Override
-	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, java.util.Date publicationdate, String description, boolean onsale, double salepercentage, int stock,
-			String cover) throws Exception {
-		// TODO Auto-generated method stub
-	}
-	@Override
 	public ArrayList<Vinyl> getBestSellersDate(java.util.Date dateChosen) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
@@ -107,6 +94,31 @@ public class LogicImpl implements Logic {
 	}
 	@Override
 	public void writePurchase(Purchase cart) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void registerClient(Client client) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void modifyClientData(Client client) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void insertNewVinyl(Vinyl v) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public ArrayList<Vinyl> advancedSearch(AdvancedSearch advancedSearch) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void deleteVinyl(int vinylDel) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

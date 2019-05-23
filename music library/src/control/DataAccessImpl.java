@@ -13,7 +13,7 @@ import java.util.Properties;
 import model.Artist;
 import model.Genre;
 import model.Vinyl;
-public class DataAccessImpl implements DataAccess {
+public class DataAccessImpl implements DataAccess{
 	private Connection con;
 	private PreparedStatement stmt;
 	private String dbHost;
@@ -179,22 +179,21 @@ public class DataAccessImpl implements DataAccess {
 	 * @param cover
 	 *            The cover relative route
 	 */
-	public void insertNewVinyl(String title, int artistcode, int genrecode, double price, Date publicationdate, String description, boolean onsale, double salepercentage, int stock, String cover)
-			throws ClassNotFoundException, SQLException, IOException {
+	public void insertNewVinyl(Vinyl v) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
 			String sql = "insert into vinyls (title,artiscode,genrecode,price,publicationdate,description,onsale,salepercentage,stock,amountsold,cover) values (?,?,?,?,?,?,?,?,?,0,?)";
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, title);
-			stmt.setInt(2, artistcode);
-			stmt.setInt(3, genrecode);
-			stmt.setDouble(4, price);
-			stmt.setDate(5, publicationdate);
-			stmt.setString(6, description);
-			stmt.setBoolean(7, onsale);
-			stmt.setDouble(8, salepercentage);
-			stmt.setInt(9, stock);
-			stmt.setString(10, cover);
+			stmt.setString(1, v.getTitle() );
+			stmt.setInt(2, v.getArtist().getCode());
+			stmt.setInt(3, v.getGenre().getCode());
+			stmt.setDouble(4, v.getPrice());
+			stmt.setDate(5, Date.valueOf(v.getPublicationDate()));
+			stmt.setString(6, v.getDescription());
+			stmt.setBoolean(7, v.isOnSale());
+			stmt.setDouble(8, v.getSalePercentage());
+			stmt.setInt(9, v.getStock());
+			stmt.setString(10, v.getCover());
 			stmt.executeUpdate();
 		} finally {
 			disconnect();
@@ -395,7 +394,27 @@ public class DataAccessImpl implements DataAccess {
 		}
 		return genres;
 	}
-	public String getArtist(int artistCode) throws ClassNotFoundException, SQLException, IOException {
+	public Artist getArtistName(String name) throws ClassNotFoundException, SQLException, IOException {
+		Artist temp = new Artist();
+		try {
+			connect();
+			String sql = "select * from artist where name=?";
+			stmt = con.prepareStatement(sql);
+			stmt.setString(1, name);
+		} finally {
+			disconnect();
+		}
+		return temp;
+	}
+	@Override
+	public void deleteVinyl(int vinylDel) throws Exception {
+		
+		
+		
+		
+	}
+	
+	public String getArtist(int artistCode) throws ClassNotFoundException, SQLException, IOException{
 		String artistName = null;
 		ResultSet rs = null;
 		try {
@@ -404,7 +423,7 @@ public class DataAccessImpl implements DataAccess {
 			stmt = con.prepareStatement(sql);
 			stmt.setInt(1, artistCode);
 			rs = stmt.executeQuery();
-			if (rs.next()) {
+			if(rs.next()) {
 				artistName = rs.getString("name");
 			}
 		} finally {
@@ -412,7 +431,8 @@ public class DataAccessImpl implements DataAccess {
 		}
 		return artistName;
 	}
-	public String getGenre(int genreCode) throws ClassNotFoundException, SQLException, IOException {
+	
+	public String getGenre(int genreCode) throws ClassNotFoundException, SQLException, IOException{
 		String genreName = null;
 		ResultSet rs = null;
 		try {
@@ -421,7 +441,7 @@ public class DataAccessImpl implements DataAccess {
 			stmt = con.prepareStatement(sql);
 			stmt.setInt(1, genreCode);
 			rs = stmt.executeQuery();
-			if (rs.next()) {
+			if(rs.next()) {
 				genreName = rs.getString("name");
 			}
 		} finally {
@@ -429,7 +449,7 @@ public class DataAccessImpl implements DataAccess {
 		}
 		return genreName;
 	}
-	public Vinyl getVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException {
+	public Vinyl getVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
 		Vinyl vin = new Vinyl();
 		Artist art = new Artist();
 		Genre gen = new Genre();
@@ -440,7 +460,7 @@ public class DataAccessImpl implements DataAccess {
 			stmt = con.prepareStatement(sql);
 			stmt.setInt(1, vinylCode);
 			rs = stmt.executeQuery();
-			if (rs.next()) {
+			if(rs.next()) {
 				vin.setVinylCode(vinylCode);
 				vin.setTitle(rs.getString("title"));
 				vin.setPrice(rs.getDouble("price"));
@@ -463,7 +483,8 @@ public class DataAccessImpl implements DataAccess {
 		}
 		return vin;
 	}
-	public void updateVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException {
+	
+	public void updateVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
 			String sql = "update vinyls set title=?, artistcode=?, genrecode=?, price=?, publicationdate=?, description=?, onsale=?, salepercentage=?, stock=?, cover=? where vinylcode=?";
@@ -484,16 +505,6 @@ public class DataAccessImpl implements DataAccess {
 			disconnect();
 		}
 	}
-	public Artist getArtist(String name) throws ClassNotFoundException, SQLException, IOException {
-		Artist temp = new Artist();
-		try {
-			connect();
-			String sql = "select * from artist where name=?";
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, name);
-		} finally {
-			disconnect();
-		}
-		return temp;
-	}
+	
+	
 }

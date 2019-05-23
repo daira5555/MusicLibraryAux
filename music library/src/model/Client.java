@@ -13,9 +13,8 @@ public class Client extends User {
 		this.accountNumber = accountNumber;
 	}
 
-	public Client(String username, String password, String name, String surname, String email, int phoneNumber) {
-		super(username, password, name, surname, email, phoneNumber);
-	}
+	
+	
 
 	public String getAddress() {
 		return address;
@@ -31,6 +30,17 @@ public class Client extends User {
 
 	public void setAccountNumber(long accountNumber) {
 		this.accountNumber = accountNumber;
+	}
+
+	public Client(String username, String password, String name, String surname, String email, int phoneNumber) {
+		super(username, password, name, surname, email, phoneNumber);
+	}
+
+
+
+
+	public Client() {
+		super();
 	}
 
 }

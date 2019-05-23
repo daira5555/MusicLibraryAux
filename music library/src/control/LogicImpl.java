@@ -169,4 +169,12 @@ public class LogicImpl implements Logic {
 		vinyls = dataAccess.advancedSearch(search);
 		return vinyls;
 	}
+
+	public void insertArtistTaste(Client client) throws Exception {
+		dataAccess.insertArtistTaste(client);	
+	}
+
+	public void insertGenreTaste(Client client) throws Exception {
+		dataAccess.insertArtistTaste(client);
+	}
 }

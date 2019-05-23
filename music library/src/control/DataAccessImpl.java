@@ -94,6 +94,38 @@ public class DataAccessImpl implements DataAccess{
 	 * @param accountnumber The account number of the client
 	 */
 	
+	public void insertArtistTaste (Client client) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Artist> artists = client.getTastes().getArtists();
+		try {
+			connect();
+			for (Artist artist : artists) {
+				String sql = "insert into taste_artist values (?, ?)";
+				stmt = con.prepareStatement(sql);
+				stmt.setString(1, client.getUsername());
+				stmt.setInt(2, artist.getCode());
+				stmt.executeUpdate();
+			}
+		} finally {
+			disconnect();
+		}
+	}
+	
+	public void insertGenreTaste (Client client) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Genre> genres = client.getTastes().getGenres();
+		try {
+			connect();
+			for (Genre genre : genres) {
+				String sql = "insert into taste_genre values (?, ?)";
+				stmt = con.prepareStatement(sql);
+				stmt.setString(1, client.getUsername());
+				stmt.setInt(2, genre.getCode());
+				stmt.executeUpdate();
+			}
+		} finally {
+			disconnect();
+		}
+	}
+	
 	public void registerClient(Client client) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			userType(client.getUsername());
@@ -109,6 +141,8 @@ public class DataAccessImpl implements DataAccess{
 			stmt.setString(7, client.getAddress());
 			stmt.setLong(8, client.getAccountNumber());
 			stmt.executeUpdate();
+			insertArtistTaste(client);
+			insertGenreTaste(client);
 		}finally {
 			
 			disconnect();

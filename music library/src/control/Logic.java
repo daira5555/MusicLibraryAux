@@ -45,4 +45,6 @@ public interface Logic {
 	public void writePurchase (Purchase purchase) throws Exception;
 	public void updatePurchasedVinyl (int vinylCode, int amountSold) throws Exception;
 	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws Exception;
+	public void insertArtistTaste (Client client) throws Exception;
+	public void insertGenreTaste (Client client) throws Exception;
 }

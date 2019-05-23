@@ -15,6 +15,10 @@ public interface DataAccess {
 	
 	public void userType (String username) throws Exception;
 	
+	public void insertArtistTaste (Client client) throws Exception;
+	
+	public void insertGenreTaste (Client client) throws Exception;
+	
 	public void registerClient(Client client) throws Exception;
 	
 	public void modifyClientData(Client client) throws Exception;

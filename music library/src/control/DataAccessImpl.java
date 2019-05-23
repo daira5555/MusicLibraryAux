@@ -67,8 +67,8 @@ public class DataAccessImpl implements DataAccess{
 			con.close();
 	}
 	/**
-	 * This method is to add to the clients table in the database
-	 * @param username The username of the user you want to register
+	 * This method is to check the type of the user
+	 * @param username The username of the user you want to check
 	 * 
 	 */
 	public void userType (String username) throws ClassNotFoundException, SQLException, IOException{
@@ -84,7 +84,7 @@ public class DataAccessImpl implements DataAccess{
 	}
 	
 	/**
-	 * This method is to add the new client to the clients table in the database
+	 * This method is to add the new client artist taste to the taste_artist table in the database
 	 * @param client The Client class with all the information about the client
 	 */
 	
@@ -105,7 +105,8 @@ public class DataAccessImpl implements DataAccess{
 	}
 	
 	/**
-	 * This method inserts into the database the 
+	 * This method inserts into the database the new client genre taste to the taste_genre table in the database
+	 * @param client The Client class with all the information about the client
 	 */
 	
 	public void insertGenreTaste (Client client) throws ClassNotFoundException, SQLException, IOException{
@@ -123,6 +124,11 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
+	
+	/**
+	 * This method is to register a new client into the database
+	 * @param client The Client class with all the information about the client
+	 */
 	
 	public void registerClient(Client client) throws ClassNotFoundException, SQLException, IOException{
 		try {
@@ -149,14 +155,7 @@ public class DataAccessImpl implements DataAccess{
 	
 	/**
 	 * This method is to modify the data of the client (this doesn't apply to the username)
-	 * @param username The client username
-	 * @param password The client password
-	 * @param name The client's name
-	 * @param surname The client's surname
-	 * @param email The client's email
-	 * @param phonenumber The client's phone number
-	 * @param address The client's address
-	 * @param accountnumber The client's account number
+	 * @param client The Client class with all the information about the client
 	 */
 	
 	public void modifyClientData (Client client) throws ClassNotFoundException, SQLException, IOException{
@@ -181,16 +180,7 @@ public class DataAccessImpl implements DataAccess{
 	
 	/**
 	 * This method is to insert a new vinyl into the database (is meant to be used only by administrators)
-	 * @param title The vinyl title
-	 * @param artistcode The code of the vinyl artist
-	 * @param genrecode The code of the vinyl genre
-	 * @param price The price of the vinyl
-	 * @param publicationdate The publication date of the vinyl
-	 * @param description The vinyl description
-	 * @param onsale If the vinyl is on sale or not
-	 * @param salepercentage The percentage of the discount of the vinyl (Ex:8%)
-	 * @param stock The amount of vinyls we have
-	 * @param cover The cover relative route
+	 * @param vinyl The Vinyl class with all the information about the vinyl
 	 */
 	
 	public void insertNewVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{

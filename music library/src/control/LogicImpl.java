@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 import model.Vinyl;
-
+import model.AdvancedSearch;
 import model.Artist;
 import model.Client;
 import model.Genre;
@@ -14,21 +14,12 @@ public class LogicImpl implements Logic {
 
 	private DataAccess dataAccess = DataAccessFactory.getDataAccess();
 
-	public void registerClient(String username, String password, String name, String surname, String email,
-			int phonenumber, String address, long accountnumber) throws Exception {
-		dataAccess.registerClient(username, password, name, surname, email, phonenumber, address, accountnumber);
-	}
 
 	public void userType(String username) throws Exception {
 		dataAccess.userType(username);
 
 	}
 
-	public void modifyClientData(String username, String password, String name, String surname, String email,
-			int phonenumber, String address, long accountnumber) throws Exception {
-		dataAccess.modifyClientData(username, password, name, surname, email, phonenumber, address, accountnumber);
-
-	}
 
 	public void insertNewVinyl(Vinyl v) throws Exception {
 		dataAccess.insertNewVinyl(v);
@@ -54,80 +45,87 @@ public class LogicImpl implements Logic {
 		return n;
 	}
 
-	@Override
+
 	public Vinyl getVinyl(int vinylCode) throws Exception {
 		Vinyl v= new Vinyl();
 		v= dataAccess.getVinyl(vinylCode);
 		return v;
 	}
 
-	@Override
+
 	public void updateVynil(Vinyl vinyl) throws Exception {
-		// TODO Auto-generated method stub
-
+		
 	}
 
-	@Override
+
 	public Artist getArtist(String name) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Artist a = new Artist();
+		a=dataAccess.getArtist(name);
+		return a;
 	}
 
-	@Override
+
 	public Genre getGenre(String name) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Genre a = new Genre();
+		a=dataAccess.getGenre(name);
+		return a;
 	}
 
-	public ArrayList<Vinyl> vinyls(String time) throws Exception {
-		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
-		if (time.equals("week")) {
-			// vinils.getBestSellersWeek();
-		} else if (time.equals("month")) {
-			// vinils.getBestSellersMonth();
-		} else if (time.equals("year")) {
-			// vinils.getBestSellersYear();
-		} else {
-			// vinils.getBestSellersAll();
-		}
+//	public ArrayList<Vinyl> vinyls(String time) throws Exception {
+//
+//
+//		
+//
+//	}
 
+	public ArrayList<Vinyl> getBestSellers(String time) throws Exception {
+		ArrayList <Vinyl> vinyls = new ArrayList<Vinyl>();
+		
+		vinyls=dataAccess.getBestSellers(time);
+		
 		return vinyls;
-
 	}
 
-	public ArrayList<Vinyl> showBestSellers(String time) {
 
-		return null;
-	}
-
-	@Override
 	public void registerClient(Client client) throws Exception {
-		// TODO Auto-generated method stub
+		dataAccess.registerClient(client);
 
 	}
 
-	@Override
+
 	public void modifyClientData(Client client) throws Exception {
-		// TODO Auto-generated method stub
+		dataAccess.modifyClientData(client);
 
 	}
 
-	@Override
+
 	public ArrayList<Genre> getGenres() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Genre>genres = new ArrayList <Genre>();
+		genres=dataAccess.getGenres();
+		
+		return genres;
 	}
 
-	@Override
+
 	public ArrayList<Artist> getArtists() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Artist> artists = new ArrayList<Artist>();
+		artists=dataAccess.getArtists();
+		return artists;
 	}
 
-	@Override
+
 	public void deleteVinyl(int vinylDel) throws Exception {
 		dataAccess.deleteVinyl(vinylDel);
 		
+	}
+
+	@Override
+	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) {
+		ArrayList <Vinyl> vinyls= new ArrayList<Vinyl>();
+		vinyls=dataAccess.advancedSearch(search);
+		
+		
+		return vinyls;
 	}
 
 }

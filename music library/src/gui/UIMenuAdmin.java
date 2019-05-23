@@ -322,16 +322,12 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			
 			Logic logic = LogicFactory.getLogic();
 			if(rdbtnThisWeek.isSelected()) {
-				vinyls=logic.showBestSellers("week");
-				tableRedone(vinyls,2);
-			}else if(rdbtnThisMonth.isSelected()) {
-				vinyls=logic.showBestSellers("month");
-				tableRedone(vinyls,2);
-			}else if(rdbtnThisYear.isSelected()) {
-				vinyls=logic.showBestSellers("year");
-				tableRedone(vinyls,2);
+		
 			}else {
-				vinyls=logic.showBestSellers("beginning");
+				try {
+					vinyls=logic.getBestSellers("beginning");
+				} catch (Exception e1) {
+				}
 				tableRedone(vinyls,2);
 			}
 			

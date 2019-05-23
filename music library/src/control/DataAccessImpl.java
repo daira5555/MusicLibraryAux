@@ -2,24 +2,16 @@ package control;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Map;
 import java.util.Properties;
 
-import model.AdvancedSearch;
 import model.Artist;
-import model.Client;
 import model.Genre;
-import model.Purchase;
 import model.Vinyl;
 
 public class DataAccessImpl implements DataAccess{
@@ -67,8 +59,6 @@ public class DataAccessImpl implements DataAccess{
 			con.close();
 	}
 	/**
-	 * This method is to add to the clients table in the database
-	 * @param username The username of the user you want to register
 	 * 
 	 */
 	public void userType (String username) throws ClassNotFoundException, SQLException, IOException{
@@ -83,143 +73,68 @@ public class DataAccessImpl implements DataAccess{
 		}
 	}
 	/**
-	 * This method is to add the new client to the clients table in the database
-	 * @param username The username of the client
-	 * @param password The client's password
-	 * @param name The client's name
-	 * @param surname The client's surname
-	 * @param email The client's email
-	 * @param phonenumber The client's phone number
-	 * @param address The addres of the client
-	 * @param accountnumber The account number of the client
+	 * 
 	 */
-	
-	public void insertArtistTaste (Client client) throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<Artist> artists = client.getTastes().getArtists();
+	public void registerClient (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws ClassNotFoundException, SQLException, IOException{
 		try {
-			connect();
-			for (Artist artist : artists) {
-				String sql = "insert into taste_artist values (?, ?)";
-				stmt = con.prepareStatement(sql);
-				stmt.setString(1, client.getUsername());
-				stmt.setInt(2, artist.getCode());
-				stmt.executeUpdate();
-			}
-		} finally {
-			disconnect();
-		}
-	}
-	
-	public void insertGenreTaste (Client client) throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<Genre> genres = client.getTastes().getGenres();
-		try {
-			connect();
-			for (Genre genre : genres) {
-				String sql = "insert into taste_genre values (?, ?)";
-				stmt = con.prepareStatement(sql);
-				stmt.setString(1, client.getUsername());
-				stmt.setInt(2, genre.getCode());
-				stmt.executeUpdate();
-			}
-		} finally {
-			disconnect();
-		}
-	}
-	
-	public void registerClient(Client client) throws ClassNotFoundException, SQLException, IOException{
-		try {
-			userType(client.getUsername());
+			userType(username);
 			connect();
 			String sql = "insert into clients values (?,?,?,?,?,?,?,?)";
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, client.getUsername());
-			stmt.setString(2, client.getPassword());
-			stmt.setString(3, client.getName());
-			stmt.setString(4, client.getSurname());
-			stmt.setString(5, client.getEmail());
-			stmt.setInt(6, client.getPhoneNumber());
-			stmt.setString(7, client.getAddress());
-			stmt.setLong(8, client.getAccountNumber());
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+			stmt.setString(3, name);
+			stmt.setString(4, surname);
+			stmt.setString(5, email);
+			stmt.setInt(6, phonenumber);
+			stmt.setString(7, address);
+			stmt.setLong(8, accountnumber);
 			stmt.executeUpdate();
-			insertArtistTaste(client);
-			insertGenreTaste(client);
 		}finally {
 			
 			disconnect();
 		}
 	}
 	
-	/**
-	 * This method is to modify the data of the client (this doesn't apply to the username)
-	 * @param username The client username
-	 * @param password The client password
-	 * @param name The client's name
-	 * @param surname The client's surname
-	 * @param email The client's email
-	 * @param phonenumber The client's phone number
-	 * @param address The client's address
-	 * @param accountnumber The client's account number
-	 */
-	
-	public void modifyClientData (Client client) throws ClassNotFoundException, SQLException, IOException{
+	public void modifyClientData (String username, String password, String name, String surname, String email, int phonenumber, String address, long accountnumber) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
 			String sql = "update clients set password=?, name=?, surname=?, email=?, phonenumber=?, address=?, accountnumber=? where username=?";
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, client.getPassword());
-			stmt.setString(2, client.getName());
-			stmt.setString(3, client.getSurname());
-			stmt.setString(4, client.getEmail());
-			stmt.setInt(5, client.getPhoneNumber());
-			stmt.setString(6, client.getAddress());
-			stmt.setLong(7, client.getAccountNumber());
-			stmt.setString(8, client.getUsername());
+			stmt.setString(1, password);
+			stmt.setString(2, name);
+			stmt.setString(3, surname);
+			stmt.setString(4, email);
+			stmt.setInt(5, phonenumber);
+			stmt.setString(6, address);
+			stmt.setLong(7, accountnumber);
+			stmt.setString(8, username);
 			stmt.executeUpdate();
 		}finally {
 			disconnect();
 		}
 	}
-
-	
-	/**
-	 * This method is to insert a new vinyl into the database (is meant to be used only by administrators)
-	 * @param title The vinyl title
-	 * @param artistcode The code of the vinyl artist
-	 * @param genrecode The code of the vinyl genre
-	 * @param price The price of the vinyl
-	 * @param publicationdate The publication date of the vinyl
-	 * @param description The vinyl description
-	 * @param onsale If the vinyl is on sale or not
-	 * @param salepercentage The percentage of the discount of the vinyl (Ex:8%)
-	 * @param stock The amount of vinyls we have
-	 * @param cover The cover relative route
-	 */
-	
-	public void insertNewVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{
+	public void insertNewVinyl(Vinyl v) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
 			String sql = "insert into vinyls (title,artiscode,genrecode,price,publicationdate,description,onsale,salepercentage,stock,amountsold,cover) values (?,?,?,?,?,?,?,?,?,0,?)";
 			stmt = con.prepareStatement(sql);
-			stmt.setString(1, vinyl.getTitle());
-			stmt.setInt(2, vinyl.getArtist().getCode());
-			stmt.setInt(3, vinyl.getGenre().getCode());
-			stmt.setDouble(4, vinyl.getPrice());
-			stmt.setDate(5, Date.valueOf(vinyl.getPublicationDate()));
-			stmt.setString(6, vinyl.getDescription());
-			stmt.setBoolean(7, vinyl.isOnSale());
-			stmt.setDouble(8, vinyl.getSalePercentage());
-			stmt.setInt(9, vinyl.getStock());
-			stmt.setString(10, vinyl.getCover());
+			stmt.setString(1, v.getTitle() );
+			stmt.setInt(2, v.getArtist().getCode());
+			stmt.setInt(3, v.getGenre().getCode());
+			stmt.setDouble(4, v.getPrice());
+			stmt.setDate(5, v.getPublicationDate());
+			stmt.setString(6, v.getDescription());
+			stmt.setBoolean(7, v.isOnSale());
+			stmt.setDouble(8, v.getSalePercentage());
+			stmt.setInt(9, v.getStock());
+			stmt.setString(10, v.getCover());
 			stmt.executeUpdate();
 		}finally {
 			disconnect();
 		}
 	}
-
-	/**
-	 * This method is to add a new artist in the database
-	 * @param name The name of the artist
-	 */
+	
 	public void insertNewArtist(String name) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -231,10 +146,7 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	/**
-	 * This method is to add a new genre in the database
-	 * @param name The name of the genre
-	 */
+	
 	public void insertNewGenre(String name) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -246,10 +158,7 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	/**
-	 * This method is to check if the artist already exists in the database
-	 * @param name The name of the artist we want to check
-	 */
+	
 	public int artistExists(String name) throws ClassNotFoundException, SQLException, IOException{
 		int cont = 0;
 		ResultSet rs = null;
@@ -267,10 +176,7 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return cont;
 	}
-	/**
-	 * This method is to check if the genre already exists in the database
-	 * @param name The name of the genre we want to check
-	 */
+	
 	public int genreExists(String name) throws ClassNotFoundException, SQLException, IOException{
 		int cont = 0;
 		ResultSet rs = null;
@@ -288,10 +194,7 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return cont;
 	}
-	/**
-	 * This method check if the user already exists in the database
-	 * @param username The username of the user we want to check
-	 */
+	
 	public int userExists(String username) throws ClassNotFoundException, SQLException, IOException{
 		int cont = 0;
 		ResultSet rs = null;
@@ -309,10 +212,7 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return cont;
 	}
-	/**
-	 * This method returns the type of the user 'A' if the user is an admin and 'C' if the user is a client
-	 * @param username The username of the user we want to check the type
-	 */
+	
 	public char getUserType(String username) throws ClassNotFoundException, SQLException, IOException{
 		char type = 0;
 		ResultSet rs = null;
@@ -330,73 +230,26 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return type;
 	}
-	/**
-	 * This method returns the password of the user we want
-	 * @param username The username of the user we are checking
-	 */
 	public String getPassword (String username) throws ClassNotFoundException, SQLException, IOException{
-		String password = null;
-		ResultSet rs = null;
 		try {
 			if (userExists(username)!=0) {
 				if(getUserType(username) == 'C') {
 					connect();
-					String sql = "select password from clients where username = ?";
-					stmt = con.prepareStatement(sql);
-					stmt.setString(1, username);
-					rs = stmt.executeQuery();
-					if(rs.next()) {
-						password = rs.getString(1);
-					}
 				}else if (getUserType(username) == 'A') {
-					connect();
-					String sql = "select password from admins where username = ?";
-					stmt = con.prepareStatement(sql);
-					stmt.setString(1, username);
-					rs = stmt.executeQuery();
-					if(rs.next()) {
-						password = rs.getString(1);
-					}
+					
 				}
 			}
 		}finally {
 			disconnect();
 		}
-		return password;
+		return null;
 	}
-	
-	public ArrayList<String> getArtists() throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<String> artists = new ArrayList<String>();
-		ResultSet rs = null;
-		try {
-			connect();
-			String sql = "select name from artists";
-			stmt = con.prepareStatement(sql);
-			rs = stmt.executeQuery();
-			while(rs.next()) {
-				artists.add(rs.getString("name"));
-			}
-		} finally {
-			disconnect();
-		}
-		return artists;
-	}
-	
-	public ArrayList<String> getGenres() throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<String> genres = new ArrayList<String>();
-		ResultSet rs = null;
-		try {
-			connect();
-			String sql = "select name from genres";
-			stmt = con.prepareStatement(sql);
-			rs = stmt.executeQuery();
-			while(rs.next()) {
-				genres.add(rs.getString("name"));
-			}
-		} finally {
-			disconnect();
-		}
-		return genres;
+	@Override
+	public void deleteVinyl(int vinylDel) throws Exception {
+		
+		
+		
+		
 	}
 	
 	public String getArtist(int artistCode) throws ClassNotFoundException, SQLException, IOException{
@@ -434,7 +287,6 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return genreName;
 	}
-	
 	public Vinyl getVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
 		Vinyl vin = new Vinyl();
 		Artist art = new Artist();
@@ -450,7 +302,7 @@ public class DataAccessImpl implements DataAccess{
 				vin.setVinylCode(vinylCode);
 				vin.setTitle(rs.getString("title"));
 				vin.setPrice(rs.getDouble("price"));
-				vin.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
+				vin.setPublicationDate(rs.getDate("publicationdate"));
 				vin.setDescription(rs.getString("description"));
 				vin.setOnSale(rs.getBoolean("onsale"));
 				vin.setSalePercentage(rs.getDouble("salepercentage"));
@@ -479,7 +331,7 @@ public class DataAccessImpl implements DataAccess{
 			stmt.setInt(2, vinyl.getArtist().getCode());
 			stmt.setInt(3, vinyl.getGenre().getCode());
 			stmt.setDouble(4, vinyl.getPrice());
-			stmt.setDate(5, Date.valueOf(vinyl.getPublicationDate()));
+			stmt.setDate(5, vinyl.getPublicationDate());
 			stmt.setString(6, vinyl.getDescription());
 			stmt.setBoolean(7, vinyl.isOnSale());
 			stmt.setDouble(8, vinyl.getSalePercentage());
@@ -492,394 +344,5 @@ public class DataAccessImpl implements DataAccess{
 		}
 	}
 	
-	public Artist getArtist(String name) throws ClassNotFoundException, SQLException, IOException{
-		Artist temp = new Artist();
-		ResultSet rs = null;
-		try {
-			connect();
-			String sql = "select * from artists where name=?";
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, name);
-			rs = stmt.executeQuery();
-			if (rs.next()) {
-				temp.setCode(rs.getInt("artistcode"));
-				temp.setName(rs.getString("name"));
-			}
-		} finally {
-			disconnect();
-		}
-		return temp;
-	}
 	
-	public Genre getGenre(String name) throws ClassNotFoundException, SQLException, IOException{
-		ResultSet rs = null;
-		Genre temp = new Genre();
-		try {
-			connect();
-			String sql = "select * from genres where name=?";
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, name);
-			rs = stmt.executeQuery();
-			if(rs.next()) {
-				temp.setCode(rs.getInt("genrecode"));
-				temp.setName(rs.getString("name"));
-			}
-		} finally {
-			disconnect();
-		}
-		return temp;
-	}
-	
-	public void insertArtist(String name) throws ClassNotFoundException, SQLException, IOException{
-		try {
-			connect();
-			String sql = "insert into artists (name) values (?)";
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, name);
-			stmt.executeUpdate();
-		} finally {
-			disconnect();
-		}
-	}
-	
-	public void insertGenre(String name) throws ClassNotFoundException, SQLException, IOException{
-		try {
-			connect();
-			String sql = "insert into genres (name) values (?)";
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, name);
-			stmt.executeUpdate();
-		} finally {
-			disconnect();
-		}
-	}
-
-	public void deleteVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
-		try {
-			connect();
-			String sql = "delete from vinyls where vinylcode = ?";
-			stmt = con.prepareStatement(sql);
-			stmt.setInt(1, vinylCode);
-			stmt.executeUpdate();
-		} finally {
-			disconnect();
-		}
-	}
-	
-	public ArrayList<Vinyl> getBestSellersDate (LocalDate date) throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
-		ResultSet rs = null;
-		int cont = 0;
-		try {
-			connect();
-			String sql = "select vinyls.vinylcode, title, artistcode, genrecode, price, publicationdate, description, onsale, salepercentage, stock, amountsold, cover,  amount "
-					+ "from vinyls, purchases "
-					+ "where vinyls.vinylcode=purchases.vinylcode and purchasedate>=? and purchasedate<=sysdate"
-					+ "order by amount sold descending";
-			stmt = con.prepareStatement(sql);
-			stmt.setDate(1, Date.valueOf(date));
-			rs = stmt.executeQuery();
-			while(rs.next() && cont<10) {
-				Vinyl v = new Vinyl();
-				Artist ar = new Artist();
-				Genre ge = new Genre();
-				v.setVinylCode(rs.getInt("vinyls.vinylcode"));
-				v.setTitle(rs.getString("title"));
-				ar.setCode(rs.getInt("artistcode"));
-				ar.setName(getArtist(rs.getInt("artistcode")));
-				v.setArtist(ar);
-				ge.setCode(rs.getInt("genrecode"));
-				ge.setName(getArtist(rs.getInt("genrecode")));
-				v.setGenre(ge);
-				v.setPrice(rs.getDouble("price"));
-				v.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
-				v.setDescription(rs.getString("description"));
-				v.setOnSale(rs.getBoolean("onsale"));
-				v.setSalePercentage(rs.getDouble("salepercentage"));
-				v.setStock(rs.getInt("stock"));
-				v.setAmountSold(rs.getInt("amountsold"));
-				v.setCover(rs.getString("cover"));
-				vinyls.add(v);
-				cont++;
-			}
-		} finally {
-			disconnect();
-		}
-		return vinyls;
-	}
-	
-	public ArrayList<Vinyl> getBestSellers() throws ClassNotFoundException, SQLException, IOException{
-			ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
-			int cont = 0;
-			ResultSet rs = null;
-			try {
-				connect();
-				String sql = "select * from vinyls";
-				stmt = con.prepareStatement(sql);
-				rs = stmt.executeQuery();
-				while(rs.next() && cont<10) {
-					Vinyl v = new Vinyl();
-					Artist ar = new Artist();
-					Genre ge = new Genre();
-					v.setVinylCode(rs.getInt("vinylcode"));
-					v.setTitle(rs.getString("title"));
-					ar.setCode(rs.getInt("artistcode"));
-					ar.setName(getArtist(rs.getInt("artistcode")));
-					v.setArtist(ar);
-					ge.setCode(rs.getInt("genrecode"));
-					ge.setName(getArtist(rs.getInt("genrecode")));
-					v.setGenre(ge);
-					v.setPrice(rs.getDouble("price"));
-					v.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
-					v.setDescription(rs.getString("description"));
-					v.setOnSale(rs.getBoolean("onsale"));
-					v.setSalePercentage(rs.getDouble("salepercentage"));
-					v.setStock(rs.getInt("stock"));
-					v.setAmountSold(rs.getInt("amountsold"));
-					v.setCover(rs.getString("cover"));
-					vinyls.add(v);
-					cont++;
-				}
-			} finally {
-				disconnect();
-			}
-		return vinyls;
-	}
-
-	public ArrayList<Integer> getArtistTaste (String username) throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<Integer> artists = new ArrayList<Integer>();
-		ResultSet rs = null;
-		try {
-			connect();
-			String sql = "select artistcode from taste_artist where username = ?";
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, username);
-			rs = stmt.executeQuery();
-			while(rs.next()) {
-				artists.add(rs.getInt("artistcode"));
-			}
-		} finally {
-			disconnect();
-		}
-		return artists;
-	}
-	
-	public ArrayList<Integer> getGenreTaste (String username) throws ClassNotFoundException, SQLException, IOException{ 
-		ResultSet rs = null;
-		ArrayList<Integer> genres = new ArrayList<Integer>();
-		try {
-			connect();
-			String sql = "select genrecode from taste_genre where username = ?";
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, username);
-			rs = stmt.executeQuery();
-			while(rs.next()) {
-				genres.add(rs.getInt("genrecode"));
-			}
-		} finally {
-			disconnect();
-		}
-		return genres;
-	}
-	
-	public ArrayList<Vinyl> getSuggestions(String username) throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
-		int cont = 0;
-		
-		ArrayList<Integer> artistsTastes = new ArrayList<Integer>();
-		artistsTastes = getArtistTaste(username);
-		Integer[] dataArtist = artistsTastes.toArray(new Integer[artistsTastes.size()]);
-		Array sqlArtists = con.createArrayOf("int", dataArtist);
-		
-		ArrayList<Integer> genresTastes = new ArrayList<Integer>();
-		genresTastes = getGenreTaste(username);
-		Integer[] dataGenre = genresTastes.toArray(new Integer[genresTastes.size()]);
-		Array sqlGenres = con.createArrayOf("int", dataGenre);
-		
-		ResultSet rs = null;
-		try {
-			connect();
-			String sql = "select * from vinyls where artistcode in ? or genrecode in ? "
-					+ "order by amountsold descending";
-			stmt = con.prepareStatement(sql);
-			stmt.setArray(1, sqlArtists);
-			stmt.setArray(2, sqlGenres);
-			rs = stmt.executeQuery();
-			while(rs.next() && cont<10) {
-				Vinyl temp = new Vinyl();
-				temp.setVinylCode(rs.getInt("vinylcode"));
-				temp.setTitle(rs.getString("title"));
-				
-				Artist artTemp = new Artist();
-				artTemp.setCode(rs.getInt("artistcode"));
-				artTemp.setName(getArtist(rs.getInt("artistcode")));
-				temp.setArtist(artTemp);
-				
-				Genre genTemp = new Genre();
-				genTemp.setCode(rs.getInt("genrecode"));
-				genTemp.setName(getGenre(rs.getInt("genrecode")));
-				temp.setGenre(genTemp);
-				
-				temp.setPrice(rs.getDouble("price"));
-				temp.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
-				temp.setDescription(rs.getString("description"));
-				temp.setOnSale(rs.getBoolean("onsale"));
-				temp.setSalePercentage(rs.getDouble("salepercentage"));
-				temp.setStock(rs.getInt("stock"));
-				temp.setAmountSold(rs.getInt("amountsold"));
-				temp.setCover(rs.getString("cover"));
-				
-				vinyls.add(temp);
-				cont++;
-			}
-		} finally {
-			disconnect();
-		}
-		return vinyls;
-	}
-
-	public Client getClient (String username) throws ClassNotFoundException, SQLException, IOException{
-		Client client = new Client();
-		ResultSet rs = null;
-		try {
-			connect();
-			String sql = "select * from clients where username = ?";
-			stmt = con.prepareStatement(sql);
-			stmt.setString(1, username);
-			rs = stmt.executeQuery();
-			if(rs.next()) {
-				client.setUsername(username);
-				client.setPassword(rs.getString("password"));
-				client.setName(rs.getString("name"));
-				client.setSurname(rs.getString("surname"));
-				client.setEmail(rs.getString("email"));
-				client.setPhoneNumber(rs.getInt("phonenumber"));
-				client.setAddress(rs.getString("address"));
-				client.setAccountNumber(rs.getLong("accountnumber"));
-			}
-		} finally {
-			disconnect();
-		}
-		return client;
-	}
-	
-	public void updatePurchasedVinyl (int vinylCode, int amountSold) throws ClassNotFoundException, SQLException, IOException{
-		try {
-			connect();
-			String sql = "update vinyls set amountsold = amountsold + ? where vinylcode = ?";
-			stmt = con.prepareStatement(sql);
-			stmt.setInt(1, amountSold);
-			stmt.setInt(2, vinylCode);
-			stmt.executeUpdate();
-		} finally {
-			disconnect();
-		}
-	}
-	
-	public void writePurchase (Purchase purchase) throws ClassNotFoundException, SQLException, IOException{
-		try {
-			for (Map.Entry<Integer, Integer> entry : purchase.getWithAmount().entrySet()) {
-				connect();
-				int key = entry.getKey();
-				int amount = entry.getValue();
-				Double price = purchase.getWithPrice().get(key);
-				Double totalPrice = amount * price;
-				String sql = "insert into purchases values (?, ?, ?, ?, ?)";
-				stmt = con.prepareStatement(sql);
-				stmt.setString(1, purchase.getBuyer());
-				stmt.setInt(2, key);
-				stmt.setTimestamp(3, Timestamp.valueOf(purchase.getDate()));
-				stmt.setInt(4, amount);
-				stmt.setDouble(5, totalPrice);
-				stmt.executeUpdate();
-				updatePurchasedVinyl(key, amount);
-			}
-			
-		} finally {
-			disconnect();
-		}
-	}
-	
-	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws ClassNotFoundException, SQLException, IOException{
-		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
-		ResultSet rs = null;
-		int cont = 0;
-		try {
-			connect();
-			String sql = "select * from vinyls where ";
-			if (!search.getArtist().isEmpty()) {
-				Artist artist = getArtist(search.getArtist());
-				connect();
-				sql = sql + " artistcode = "+artist.getCode();
-				cont++;
-			}
-			if (!search.getTitle().isEmpty()) {
-				if(cont>0) {
-					sql = sql + " or ";
-				}
-				sql = sql + " title like '%"+search.getTitle()+"%' ";
-				cont++;
-			}
-			if (!search.getGenre().isEmpty()) {
-				if(cont>0) {
-					sql = sql + " or ";
-				}
-				Genre genre = getGenre(search.getGenre());
-				connect();
-				sql = sql + " genrecode = "+genre.getCode();
-				cont++;
-			}
-			if (search.getPublicationYear() != 0) {
-				if(cont>0) {
-					sql = sql + " or ";
-				}
-				sql = sql + " YEAR(publicationdate) = "+search.getPublicationYear();
-				cont++;
-			}
-			if(search.getPrice() != 0) {
-				if(cont>0) {
-					sql = sql + " or ";
-				}
-				sql = sql + " price = "+search.getPrice();
-				cont++;
-			}
-			if(search.getStockLessThan() != 0) {
-				if(cont>0) {
-					sql = sql + " or ";
-				}
-				sql = sql + " stock < "+search.getStockLessThan();
-			}
-			stmt = con.prepareStatement(sql);
-			rs = stmt.executeQuery();
-			while(rs.next()) {
-				Vinyl temp = new Vinyl();
-				temp.setVinylCode(rs.getInt("vinylcode"));
-				temp.setTitle(rs.getString("title"));
-				
-				Artist artTemp = new Artist();
-				artTemp.setCode(rs.getInt("artistcode"));
-				artTemp.setName(getArtist(rs.getInt("artistcode")));
-				temp.setArtist(artTemp);
-				
-				Genre genTemp = new Genre();
-				genTemp.setCode(rs.getInt("genrecode"));
-				genTemp.setName(getGenre(rs.getInt("genrecode")));
-				temp.setGenre(genTemp);
-				
-				temp.setPrice(rs.getDouble("price"));
-				temp.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
-				temp.setDescription(rs.getString("description"));
-				temp.setOnSale(rs.getBoolean("onsale"));
-				temp.setSalePercentage(rs.getDouble("salepercentage"));
-				temp.setStock(rs.getInt("stock"));
-				temp.setAmountSold(rs.getInt("amountsold"));
-				temp.setCover(rs.getString("cover"));
-				
-				vinyls.add(temp);
-			}
-		} finally {
-			disconnect();
-		}
-		return vinyls;
-	}
 }

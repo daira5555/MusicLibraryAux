@@ -1,5 +1,4 @@
 package gui;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
@@ -32,9 +31,7 @@ import java.awt.Color;
 import javax.swing.JPasswordField;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-
 public class UIRegister extends JDialog implements ActionListener {
-
 	private final JPanel contentPanel = new JPanel();
 	private JTextField nameField;
 	private JTextField surnameField;
@@ -46,9 +43,8 @@ public class UIRegister extends JDialog implements ActionListener {
 	private JButton okButton;
 	private JButton cancelButton;
 	private JPasswordField passwordField;
-	private JList <String> list;
+	private JList<String> list;
 	private JList list_1;
-
 	/**
 	 * Launch the application.
 	 */
@@ -61,7 +57,6 @@ public class UIRegister extends JDialog implements ActionListener {
 			e.printStackTrace();
 		}
 	}
-
 	/**
 	 * Create the dialog.
 	 */
@@ -88,23 +83,18 @@ public class UIRegister extends JDialog implements ActionListener {
 			lblAddress.setBounds(42, 133, 59, 14);
 			contentPanel.add(lblAddress);
 		}
-		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(42, 120, 266, 2);
 		contentPanel.add(separator);
-		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(42, 173, 266, 2);
 		contentPanel.add(separator_1);
-		
 		JLabel lblPhoneNumber = new JLabel("Phone number:");
 		lblPhoneNumber.setBounds(42, 186, 97, 14);
 		contentPanel.add(lblPhoneNumber);
-		
 		JLabel lblEmail = new JLabel("e-mail:");
 		lblEmail.setBounds(42, 222, 59, 14);
 		contentPanel.add(lblEmail);
-		
 		JLabel lblBankAccount = new JLabel("Bank account number:");
 		lblBankAccount.setBounds(42, 259, 149, 14);
 		contentPanel.add(lblBankAccount);
@@ -195,68 +185,35 @@ public class UIRegister extends JDialog implements ActionListener {
 			JScrollPane scrollPane = new JScrollPane();
 			scrollPane.setBounds(42, 447, 266, 58);
 			contentPanel.add(scrollPane);
-			
-			
 			DefaultListModel<String> model = new DefaultListModel<String>();
-			
-			
 			displayArtists(model);
-			
-			
-			
 			list.setModel(model);
-		
 			list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			
-			
-			
 			{
 				list = new JList<String>();
 				scrollPane.setViewportView(list);
-				
-
 			}
 		}
-		
-		
-		
-		
-		
-		
 		JLabel lblArtists = new JLabel("Artists you like:");
 		lblArtists.setBounds(42, 422, 97, 14);
 		contentPanel.add(lblArtists);
-		
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setBounds(43, 409, 265, 2);
 		contentPanel.add(separator_2);
-		
 		JSeparator separator_3 = new JSeparator();
 		separator_3.setBounds(42, 516, 266, 2);
 		contentPanel.add(separator_3);
-		
 		JLabel lblGenresYouLike = new JLabel("Genres you like:");
 		lblGenresYouLike.setBounds(42, 529, 97, 14);
 		contentPanel.add(lblGenresYouLike);
-		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(42, 554, 266, 58);
 		contentPanel.add(scrollPane);
-		
 		list_1 = new JList();
 		scrollPane.setViewportView(list_1);
-		
-		
 		DefaultListModel<String> model2 = new DefaultListModel<String>();
-		
 		displayGenres(model2);
 		list_1.setModel(model2);
-	
-		
-		
-		
-		
-		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -276,7 +233,6 @@ public class UIRegister extends JDialog implements ActionListener {
 			}
 		}
 	}
-
 	private void displayGenres(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -284,14 +240,9 @@ public class UIRegister extends JDialog implements ActionListener {
 			for (Artist art : names) {
 				model.addElement(art.getName());
 			}
-		}catch(Exception E) {
-			
+		} catch (Exception E) {
 		}
-		
-		
-		
 	}
-
 	private void displayArtists(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -299,16 +250,9 @@ public class UIRegister extends JDialog implements ActionListener {
 			for (Genre g : names) {
 				model.addElement(g.getName());
 			}
-		}catch(Exception E) {
-			
+		} catch (Exception E) {
 		}
-		
-		
-		
-		
-		
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource().equals(okButton)){

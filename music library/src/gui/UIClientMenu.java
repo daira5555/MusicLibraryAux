@@ -9,13 +9,17 @@ import com.toedter.calendar.JDateChooser;
 import control.Logic;
 import control.LogicFactory;
 import model.AdvancedSearch;
+import model.Artist;
 import model.Client;
 import model.CloseTabButton;
+import model.Genre;
 import model.Purchase;
+import model.Taste;
 import model.Vinyl;
 
 import java.awt.Color;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -23,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
@@ -89,7 +94,11 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private ArrayList<Vinyl> searchResultList;
 	private ArrayList<Vinyl> boughtVinylsList;
 	private AdvancedSearch advancedSearch;
+	private JList listOfGenres;
+	private JList listOfArtists;
 	private JPanel personalInfo;
+	private ArrayList<Artist> artists;
+	private ArrayList<Genre> genres;
 	/**
 	 * Create the frame.
 	 */
@@ -183,8 +192,16 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			client.setPassword(passwordField.getText());
 			client.setPhoneNumber(Integer.valueOf(phoneNumberField.getText()));
 			client.setSurname(surnameField.getText());
-			client.setTastes(tastes);
-			logic.modifyClientData(client);
+			Taste auxTaste = new Taste();
+			for (Object o : listOfArtists.getSelectedValuesList()) {
+				
+			}
+			client.setTastes(auxTaste);
+			try {
+				logic.modifyClientData(client);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		} else if (e.getSource().equals(btnCancel)) {
 			personalInfo.repaint();
 		}
@@ -350,6 +367,14 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		personalInfo.add(btnCancel);
 		btnSubmit.addActionListener(this);
 		btnCancel.addActionListener(this);
+		listOfGenres = new JList();
+		DefaultListModel<Artist> modelGenre = new DefaultListModel<Artist>();
+		fillModelGenres(modelGenre);
+		listOfGenres.setModel(modelGenre);
+		listOfArtists = new JList();
+		DefaultListModel<Genre> modelArtists = new DefaultListModel<Genre>();
+		fillModelArtists(modelArtists);
+		listOfArtists.setModel(modelArtists);
 	}
 	private void advancedSearch() {
 		JPanel advanced = new JPanel();
@@ -508,5 +533,23 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
 		tableBestSellers = new JTable(modelBestSellers);
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
+	}
+	private void fillModelGenres(DefaultListModel<Artist> model) {
+		try {
+			artists = logic.getArtists();
+			for (Artist art : artists) {
+				model.addElement(art.getName());
+			}
+		} catch (Exception E) {
+		}
+	}
+	private void fillModelArtists(DefaultListModel<Genre> model) {
+		try {
+			genres = logic.getGenres();
+			for (Genre g : genres) {
+				model.addElement(g.getName());
+			}
+		} catch (Exception E) {
+		}
 	}
 }

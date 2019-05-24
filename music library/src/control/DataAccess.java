@@ -78,5 +78,8 @@ public interface DataAccess {
 	public void writePurchase (Purchase purchase) throws Exception;
 	
 	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws Exception;
-
+	
+	public ArrayList<Vinyl> getBoughtVinyls(String username) throws Exception;
+	
+	public ArrayList<Integer> getBoughtVinylsCodes (String username) throws Exception;
 }

@@ -3,33 +3,43 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import control.DataAccessImpl;
+
 import control.Logic;
 import control.LogicFactory;
+import model.Artist;
 import model.Client;
-
+import model.Genre;
+import model.Taste;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.io.IOException;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
 import java.awt.Color;
 import javax.swing.JPasswordField;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 public class UIRegister extends JDialog implements ActionListener {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField nameField;
-	private JTextField nurnameField;
+	private JTextField surnameField;
 	private JTextField addressField;
 	private JTextField phoneNumberField;
 	private JTextField emailField;
@@ -38,6 +48,8 @@ public class UIRegister extends JDialog implements ActionListener {
 	private JButton okButton;
 	private JButton cancelButton;
 	private JPasswordField passwordField;
+	private JList <String> list;
+	private JList list_1;
 
 	/**
 	 * Launch the application.
@@ -57,7 +69,7 @@ public class UIRegister extends JDialog implements ActionListener {
 	 */
 	public UIRegister() {
 		setTitle("Sign up");
-		setBounds(100, 100, 380, 542);
+		setBounds(100, 100, 393, 710);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(new Color(255, 239, 213));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -129,12 +141,12 @@ public class UIRegister extends JDialog implements ActionListener {
 			nameField.setColumns(10);
 		}
 		{
-			nurnameField = new JTextField();
-			nurnameField.setForeground(Color.GRAY);
-			nurnameField.setText("Fern\u00E1ndez");
-			nurnameField.setBounds(224, 83, 86, 20);
-			contentPanel.add(nurnameField);
-			nurnameField.setColumns(10);
+			surnameField = new JTextField();
+			surnameField.setForeground(Color.GRAY);
+			surnameField.setText("Fern\u00E1ndez");
+			surnameField.setBounds(224, 83, 86, 20);
+			contentPanel.add(surnameField);
+			surnameField.setColumns(10);
 		}
 		{
 			addressField = new JTextField();
@@ -182,6 +194,71 @@ public class UIRegister extends JDialog implements ActionListener {
 			contentPanel.add(passwordField);
 		}
 		{
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setBounds(42, 447, 266, 58);
+			contentPanel.add(scrollPane);
+			
+			
+			DefaultListModel<String> model = new DefaultListModel<String>();
+			
+			
+			displayArtists(model);
+			
+			
+			
+			
+			{
+				list = new JList<String>();
+				scrollPane.setViewportView(list);
+				
+				list.setModel(model);
+				
+				list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+				
+
+			}
+		}
+		
+		
+		
+		
+		
+		
+		JLabel lblArtists = new JLabel("Genres you like:");
+		lblArtists.setBounds(42, 422, 97, 14);
+		contentPanel.add(lblArtists);
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(43, 409, 265, 2);
+		contentPanel.add(separator_2);
+		
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setBounds(42, 516, 266, 2);
+		contentPanel.add(separator_3);
+		
+		JLabel lblGenresYouLike = new JLabel("Artists you like:");
+		lblGenresYouLike.setBounds(42, 529, 97, 14);
+		contentPanel.add(lblGenresYouLike);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(42, 554, 266, 58);
+		contentPanel.add(scrollPane);
+		
+		list_1 = new JList();
+		scrollPane.setViewportView(list_1);
+		
+		
+		DefaultListModel<String> model2 = new DefaultListModel<String>();
+		
+		displayGenres(model2);
+		list_1.setModel(model2);
+	
+		
+		
+		
+		
+		
+		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
@@ -201,27 +278,86 @@ public class UIRegister extends JDialog implements ActionListener {
 		}
 	}
 
+	private void displayGenres(DefaultListModel<String> model) {
+		Logic logic = LogicFactory.getLogic();
+		try {
+			ArrayList<String> names = logic.getArtists();
+			for (String art : names) {
+				model.addElement(art);
+			}
+		}catch(Exception E) {
+			
+		}
+		
+		
+		
+	}
+
+	private void displayArtists(DefaultListModel<String> model) {
+		Logic logic = LogicFactory.getLogic();
+		try {
+			ArrayList<String> names = logic.getGenres();
+			for (String g : names) {
+				model.addElement(g);
+			}
+		}catch(Exception E) {
+			
+		}
+		
+		
+		
+	}
+
+		
+		
+		
+	
+
 	@Override
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource().equals(okButton)){
 			Logic logic = LogicFactory.getLogic();
-			Client client = new Client();
 			try {
+				Client client = new Client();
+				client.setName(nameField.getText());
+				client.setSurname(surnameField.getText());
 				client.setUsername(usernameField.getText());
 				client.setPassword(passwordField.getText());
-				client.setName(nameField.getText());
-				client.setSurname(nurnameField.getText());
 				client.setEmail(emailField.getText());
-				client.setPhoneNumber(Integer.parseInt(phoneNumberField.getText()));
 				client.setAddress(addressField.getText());
+				client.setPhoneNumber(Integer.parseInt(phoneNumberField.getText()));
 				client.setAccountNumber(Long.parseLong(bankNumberField.getText()));
+
+				
+				//ArrayList<String> artists = new ArrayList<String>();
+				ArrayList<Artist> artists = new ArrayList<Artist>();
+				List<String> a;
+				a = list_1.getSelectedValuesList();
+				for (String string : a) {
+					artists.add(logic.getArtist(string));
+				}
+				
+				ArrayList<Genre> genres = new ArrayList<Genre>();
+				List<String> b;
+				b = list.getSelectedValuesList();
+				for (String string : b) {
+					genres.add(logic.getGenre(string));
+				}
+				
+				Taste taste = new Taste();
+				taste.setArtists(artists);
+				taste.setGenres(genres);
+				client.setTastes(taste);
+				
+
+				
 				logic.registerClient(client);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}else if (e.getSource().equals(cancelButton)) {
 			this.dispose();
-			UILogin login = new UILogin();
+			UILogin login= new UILogin();
 			login.setVisible(true);
 		}
 		

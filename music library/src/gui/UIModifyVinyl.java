@@ -210,10 +210,11 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 					vToMod.setOnSale(false);
 				}
 				vToMod.setPrice((Double.valueOf(priceField.getText())));
-				// vToMod.setPublicationDate();
+				vToMod.setPublicationDate(dateChooser.getDate());
 				vToMod.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
 				vToMod.setStock(Integer.valueOf(stockField.getText()));
 				vToMod.setTitle(titleField.getText());
+				logic.updateVinyl(vToMod);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}

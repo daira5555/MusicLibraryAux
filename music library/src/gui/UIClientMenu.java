@@ -55,9 +55,10 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private JButton btnSearch;
 	private JTextField nameField;
 	private JTextField surnameField;
-	private JTextField numberField;
+	private JTextField phoneNumberField;
 	private JTextField emailField;
 	private JTextField bankNumberField;
+	private JTextField addressField;
 	private JButton btnCancel;
 	private JButton btnSubmit;
 	private JPasswordField passwordField;
@@ -88,6 +89,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private ArrayList<Vinyl> searchResultList;
 	private ArrayList<Vinyl> boughtVinylsList;
 	private AdvancedSearch advancedSearch;
+	private JPanel personalInfo;
 	/**
 	 * Create the frame.
 	 */
@@ -173,6 +175,18 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			for (Integer i : tableAdvancedSearch.getSelectedRows()) {
 				cart.addVinyl(searchResultList.get(i));
 			}
+		} else if (e.getSource().equals(btnSubmit)) {
+			client.setAccountNumber(Long.valueOf(bankNumberField.getText()));
+			client.setAddress(addressField.getText());
+			client.setEmail(emailField.getText());
+			client.setName(nameField.getText());
+			client.setPassword(passwordField.getText());
+			client.setPhoneNumber(Integer.valueOf(phoneNumberField.getText()));
+			client.setSurname(surnameField.getText());
+			client.setTastes(tastes);
+			logic.modifyClientData(client);
+		} else if (e.getSource().equals(btnCancel)) {
+			personalInfo.repaint();
 		}
 	}
 	/**
@@ -270,7 +284,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		scrollPane.setViewportView(tableBoughtVinyls);
 	}
 	private void modifyPersonalInfo() {
-		JPanel personalInfo = new JPanel();
+		personalInfo = new JPanel();
 		personalInfo.setBackground(new Color(250, 235, 215));
 		personalInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
 		personalInfo.setLayout(null);
@@ -297,22 +311,35 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		nameField.setBounds(189, 37, 133, 20);
 		personalInfo.add(nameField);
 		nameField.setColumns(10);
+		nameField.setText(client.getName());
+		addressField = new JTextField();
+		addressField.setBounds(189, 37, 133, 20);
+		personalInfo.add(addressField);
+		addressField.setColumns(10);
+		addressField.setText(client.getAddress());
 		surnameField = new JTextField();
 		surnameField.setBounds(189, 79, 133, 20);
 		personalInfo.add(surnameField);
 		surnameField.setColumns(10);
-		numberField = new JTextField();
-		numberField.setBounds(188, 122, 134, 20);
-		personalInfo.add(numberField);
-		numberField.setColumns(10);
+		surnameField.setText(client.getSurname());
+		phoneNumberField = new JTextField();
+		phoneNumberField.setBounds(188, 122, 134, 20);
+		personalInfo.add(phoneNumberField);
+		phoneNumberField.setColumns(10);
+		phoneNumberField.setText(String.valueOf(client.getPhoneNumber()));
 		emailField = new JTextField();
 		emailField.setBounds(188, 159, 134, 20);
 		personalInfo.add(emailField);
 		emailField.setColumns(10);
+		emailField.setText(client.getEmail());
 		bankNumberField = new JTextField();
 		bankNumberField.setBounds(188, 198, 134, 20);
 		personalInfo.add(bankNumberField);
 		bankNumberField.setColumns(10);
+		bankNumberField.setText(String.valueOf(client.getAccountNumber()));
+		passwordField = new JPasswordField();
+		passwordField.setBounds(189, 240, 133, 20);
+		personalInfo.add(passwordField);
 		btnSubmit = new JButton("Save changes");
 		btnSubmit.setBackground(new Color(255, 228, 196));
 		btnSubmit.setBounds(28, 307, 115, 33);
@@ -321,9 +348,8 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		btnCancel.setBackground(new Color(255, 228, 196));
 		btnCancel.setBounds(188, 307, 115, 33);
 		personalInfo.add(btnCancel);
-		passwordField = new JPasswordField();
-		passwordField.setBounds(189, 240, 133, 20);
-		personalInfo.add(passwordField);
+		btnSubmit.addActionListener(this);
+		btnCancel.addActionListener(this);
 	}
 	private void advancedSearch() {
 		JPanel advanced = new JPanel();

@@ -185,6 +185,12 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		contentPane.add(stockField);
 		stockField.setColumns(10);
 	}
+	
+	/**
+	 * gets the vinyl by the code given
+	 * @param vinylCode
+	 * @return Vinyl
+	 */
 	private Vinyl getVinyl(int vinylCode) {
 		Vinyl v= new Vinyl();
 		Logic logic = LogicFactory.getLogic();

@@ -281,9 +281,9 @@ public class UIRegister extends JDialog implements ActionListener {
 	private void displayGenres(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
-			ArrayList<Artist> names = logic.getArtists();
-			for (Artist art : names) {
-				model.addElement(art.getName());
+			ArrayList<String> names = logic.getArtists();
+			for (String art : names) {
+				model.addElement(art);
 			}
 		}catch(Exception E) {
 			
@@ -296,9 +296,9 @@ public class UIRegister extends JDialog implements ActionListener {
 	private void displayArtists(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
-			ArrayList<Genre> names = logic.getGenres();
-			for (Genre g : names) {
-				model.addElement(g.getName());
+			ArrayList<String> names = logic.getGenres();
+			for (String g : names) {
+				model.addElement(g);
 			}
 		}catch(Exception E) {
 			

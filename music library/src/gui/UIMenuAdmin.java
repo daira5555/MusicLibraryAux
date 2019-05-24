@@ -64,6 +64,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 	private JButton btnModify_1;
 	private JButton btnOrder;
 	private JButton btnDelete_1;
+	String[] columnNames;
 
 	/**
 	 * Launch the application. BORRAR AL ACABAR
@@ -144,15 +145,15 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 
 		btnDelete = new JButton("Delete");
 		btnDelete.setBackground(new Color(255, 218, 185));
-		btnDelete.setBounds(981, 591, 116, 42);
+		btnDelete.setBounds(1007, 591, 116, 42);
 		contentPane.add(btnDelete);
 
 		btnModify = new JButton("Modify");
 		btnModify.setBackground(new Color(255, 218, 185));
-		btnModify.setBounds(663, 591, 123, 42);
+		btnModify.setBounds(675, 591, 123, 42);
 		contentPane.add(btnModify);
 		btnModify.addActionListener(this);
-		String[] columnNames = { "image", "fefeg", "Genre", "Price", "On sale:", "Sale percentage:", "codigo" };
+		String[] columnNames = { "image", "Title", "Genre", "Price", "On sale:", "Sale percentage:", "codigo" };
 
 		
 		
@@ -193,12 +194,12 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 
 		btnOrderVinyl = new JButton("Order vinyl");
 		btnOrderVinyl.setBackground(new Color(255, 218, 185));
-		btnOrderVinyl.setBounds(336, 591, 137, 42);
+		btnOrderVinyl.setBounds(352, 591, 137, 42);
 		contentPane.add(btnOrderVinyl);
 
 		btnNewVinyl = new JButton("New Vinyl");
 		btnNewVinyl.setBackground(new Color(255, 218, 185));
-		btnNewVinyl.setBounds(50, 591, 116, 42);
+		btnNewVinyl.setBounds(41, 591, 116, 42);
 		contentPane.add(btnNewVinyl);
 
 		btnSearch = new JButton("Search");
@@ -272,7 +273,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		scrollPane_1.setViewportView(table_below);
 		
 		btnBestSellers = new JButton("show best sellers");
-		btnBestSellers.setBounds(41, 506, 153, 27);
+		btnBestSellers.setBounds(41, 553, 153, 27);
 		contentPane.add(btnBestSellers);
 		
 		btnModify_1 = new JButton("Modify");
@@ -304,16 +305,39 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			AdvancedSearch search = new AdvancedSearch();
 			search.setArtist(artistField.getText());
 			search.setGenre(genreField.getText());
-			search.setPrice(Double.parseDouble(priceField.getText()));
-			search.setPublicationYear(Integer.parseInt(publicationDateField.getText()));
-			search.setStockLessThan(Integer.parseInt(stockField.getText()));
+			if (priceField.getText().isEmpty()) {
+				search.setPrice(0);
+			}else {
+				search.setPrice(Double.parseDouble(priceField.getText()));
+			}
+			
+			if (publicationDateField.getText().isEmpty()) {
+				search.setPublicationYear(0);
+			}else {
+				search.setPublicationYear(Integer.parseInt(publicationDateField.getText()));
+			}
+			
+			if (stockField.getText().isEmpty()) {
+				search.setStockLessThan(0);
+			}else {
+				search.setStockLessThan(Integer.parseInt(stockField.getText()));
+			}
+			
+			
 			search.setTitle(albumTitleField.getText());
 			
 			
-			vinyls= logic.advancedSearch(search);
+			try {
+				vinyls= logic.advancedSearch(search);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			for (Vinyl vinyl : vinyls) {
+				System.out.println(vinyl.getTitle()+" "+vinyl.getArtist().getName()+" "+vinyl.getPrice());
+			}
 			
 			
-			tableRedone(vinyls,1);
+			table_upper=tableRedone(vinyls);
 			
 
 		} else if (e.getSource().equals(btnBestSellers)) {
@@ -324,10 +348,10 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		
 			}else {
 				try {
-					vinyls=logic.getBestSellers("beginning");
+					vinyls=logic.getBestSellersDate(LocalDate.now());
 				} catch (Exception e1) {
 				}
-				tableRedone(vinyls,2);
+				tableRedone(vinyls);
 			}
 			
 
@@ -367,6 +391,10 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	 * deletes the vinyl given a vinyl code
+	 * @param vinylDel
+	 */
 	private void deleteVinyl(int vinylDel) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -379,50 +407,39 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		
 		
 	}
-
-	public void tableRedone(ArrayList<Vinyl> vinyls, int opt) {
+/**
+ * redoes the table by giving new data
+ * @param vinyls
+ */
+	public JTable tableRedone(ArrayList<Vinyl> vinyls) {
+		String[] columnNames = { "image", "Title", "Genre", "Price", "On sale:", "Sale percentage:", "codigo" };
+			Object[][] data3 = new Object[vinyls.size()][7];
 		
-		
-for(int i=0; i<vinyls.size(); i++) {
 			
-			JLabel label = new JLabel();
+				for( int f = 0; f < vinyls.size(); f++ ) {
+					
+					JLabel label = new JLabel();
 
-			Image imagen = new ImageIcon(vinyls.get(i).getCover()).getImage();
-			ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
+					Image imagen = new ImageIcon(vinyls.get(f).getCover()).getImage();
+					ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
 
-			label.setIcon(imagen2);
-			label.setHorizontalAlignment(JLabel.CENTER);
-			label.setVerticalAlignment(JLabel.CENTER);
+					label.setIcon(imagen2);
+					label.setHorizontalAlignment(JLabel.CENTER);
+					label.setVerticalAlignment(JLabel.CENTER);
+				
+				
+			data3[f][0] =label;
+			data3[f][1]=vinyls.get(f).getTitle();
+			data3[f][2]=vinyls.get(f).getArtist().getName();
+			data3[f][3]=vinyls.get(f).getGenre().getName();
+			data3[f][4]=vinyls.get(f).getPrice();
+			data3[f][5]=vinyls.get(f).isOnSale();
+			data3[f][6]=vinyls.get(f).getSalePercentage();
 			
-			if(opt==1) {
-			
-				for( int f = 0; f < data1.length; f++ )
-					   Arrays.fill( data1[f], null );
-				
-				
-				
-			data1[i][0] =label;
-			
-			data1[i][1] =vinyls.get(i).getTitle();
-			data1[i][2] =vinyls.get(i).getArtist().getName();
-			data1[i][3] =vinyls.get(i).getGenre().getName();
-			data1[i][4] =vinyls.get(i).getPrice();
-			data1[i][5] =vinyls.get(i).isOnSale();
-			data1[i][6] =vinyls.get(i).getSalePercentage();
-			}
-			else {
-				
-				for( int f = 0; f < data.length; f++ )
-					   Arrays.fill( data[f], null );
-				
-			data[i][1] =vinyls.get(i).getTitle();
-			data[i][2] =vinyls.get(i).getArtist().getName();
-			data[i][3] =vinyls.get(i).getGenre().getName();
-			data[i][4] =vinyls.get(i).getPrice();
-			data[i][5] =vinyls.get(i).isOnSale();
-			data[i][6] =vinyls.get(i).getSalePercentage();
-			}
 		}
+				
+				JTable tabla = new JTable(data3, columnNames);
+return tabla;
 		
 		
 		

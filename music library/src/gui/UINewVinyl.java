@@ -213,8 +213,9 @@ public class UINewVinyl extends JFrame implements ActionListener {
 			}
 
 		} else if (e.getSource().equals(btnCancel)) {
-
-			// volver menú
+				this.dispose();
+				UIMenuAdmin admin = new UIMenuAdmin();
+				admin.setVisible(true);
 
 		}
 

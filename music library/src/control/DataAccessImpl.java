@@ -691,7 +691,8 @@ public class DataAccessImpl implements DataAccess{
 		return artists;
 	}
 	/**
-	 * 
+	 * This method returns an arraylist of genre codes
+	 * @param username Is the username of the user we want to get his genre tastes
 	 */
 	public ArrayList<Integer> getGenreTaste (String username) throws ClassNotFoundException, SQLException, IOException{ 
 		ResultSet rs = null;
@@ -710,7 +711,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return genres;
 	}
-	
+	/**
+	 * This method returns an ArrayList with vinyls that the program suggest to the user
+	 * @param username Is the username of the user we want to suggest vinyls 
+	 */
 	public ArrayList<Vinyl> getSuggestions(String username) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 		int cont = 0;
@@ -766,7 +770,9 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return vinyls;
 	}
-
+	/**
+	 * 
+	 */
 	public Client getClient (String username) throws ClassNotFoundException, SQLException, IOException{
 		Client client = new Client();
 		ResultSet rs = null;

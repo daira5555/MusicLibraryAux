@@ -771,7 +771,8 @@ public class DataAccessImpl implements DataAccess{
 		return vinyls;
 	}
 	/**
-	 * 
+	 * This method returns a client from the database
+	 * @param username The username of the client we want to search
 	 */
 	public Client getClient (String username) throws ClassNotFoundException, SQLException, IOException{
 		Client client = new Client();
@@ -797,7 +798,11 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return client;
 	}
-	
+	/**
+	 * This method updates the vinyl that user purchases 
+	 * @param vinylCode The code of the vinyl we want to update
+	 * @param amountSold The amount of vinyls that the user bought
+	 */
 	public void updatePurchasedVinyl (int vinylCode, int amountSold) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -811,7 +816,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method writes the purchase into the database
+	 * @param purchase The object Purchase with all the information about the purchase
+	 */
 	public void writePurchase (Purchase purchase) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			for (Map.Entry<Integer, Integer> entry : purchase.getWithAmount().entrySet()) {
@@ -835,7 +843,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method is to do a search with different parameters vinyls the user wants
+	 * @param search Is an AdvanceSearch object with all the search parameters
+	 */
 	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 		ResultSet rs = null;

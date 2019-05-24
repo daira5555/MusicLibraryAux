@@ -596,8 +596,8 @@ public class DataAccessImpl implements DataAccess{
 			connect();
 			String sql = "select vinyls.vinylcode, title, artistcode, genrecode, price, publicationdate, description, onsale, salepercentage, stock, amountsold, cover,  amount "
 					+ "from vinyls, purchases "
-					+ "where vinyls.vinylcode=purchases.vinylcode and purchasedate>=? and purchasedate<=sysdate"
-					+ "order by amount sold descending";
+					+ "where vinyls.vinylcode=purchases.vinylcode and purchasedate>=? and purchasedate<=sysdate()"
+					+ "order by amountsold desc";
 			stmt = con.prepareStatement(sql);
 			stmt.setDate(1, Date.valueOf(date));
 			rs = stmt.executeQuery();

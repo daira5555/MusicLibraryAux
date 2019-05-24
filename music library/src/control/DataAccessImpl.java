@@ -788,10 +788,11 @@ public class DataAccessImpl implements DataAccess{
 	public void updatePurchasedVinyl (int vinylCode, int amountSold) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
-			String sql = "update vinyls set amountsold = amountsold + ? where vinylcode = ?";
+			String sql = "update vinyls set amountsold = amountsold + ?, stock = stock - ? where vinylcode = ?";
 			stmt = con.prepareStatement(sql);
 			stmt.setInt(1, amountSold);
-			stmt.setInt(2, vinylCode);
+			stmt.setInt(2, amountSold);
+			stmt.setInt(3, vinylCode);
 			stmt.executeUpdate();
 		} finally {
 			disconnect();

@@ -352,7 +352,9 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return password;
 	}
-	
+	/**
+	 * This method returns an ArrayList of Strings with the name of all the artists
+	 */
 	public ArrayList<String> getArtists() throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<String> artists = new ArrayList<String>();
 		ResultSet rs = null;
@@ -369,7 +371,9 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return artists;
 	}
-	
+	/**
+	 * This method returns an ArrayList of Strings with the name of all the artists
+	 */
 	public ArrayList<String> getGenres() throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<String> genres = new ArrayList<String>();
 		ResultSet rs = null;
@@ -386,7 +390,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return genres;
 	}
-	
+	/**
+	 * This method returns the artist name
+	 * @param artistCode Is the code of the artist
+	 */
 	public String getArtist(int artistCode) throws ClassNotFoundException, SQLException, IOException{
 		String artistName = null;
 		ResultSet rs = null;
@@ -404,7 +411,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return artistName;
 	}
-	
+	/**
+	 * This method returns the genre name
+	 * @param genreCode Is the code of the genre
+	 */
 	public String getGenre(int genreCode) throws ClassNotFoundException, SQLException, IOException{
 		String genreName = null;
 		ResultSet rs = null;
@@ -422,7 +432,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return genreName;
 	}
-	
+	/**
+	 * This method returns a Vinyl object 
+	 * @param vinylCode This code correspond to the vinyl we want to search
+	 */
 	public Vinyl getVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
 		Vinyl vin = new Vinyl();
 		Artist art = new Artist();
@@ -457,7 +470,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return vin;
 	}
-	
+	/**
+	 * This method is to update the information of the vinyl in the database
+	 * @param vinyl this object contains all the information about the vinyl
+	 */
 	public void updateVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -479,7 +495,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method returns a object of type Artist
+	 * @param name the name of the artist we want to search
+	 */
 	public Artist getArtist(String name) throws ClassNotFoundException, SQLException, IOException{
 		Artist temp = new Artist();
 		ResultSet rs = null;
@@ -498,7 +517,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return temp;
 	}
-	
+	/**
+	 * This method returns a object of type Genre
+	 * @param name The name of the genre we want to search
+	 */
 	public Genre getGenre(String name) throws ClassNotFoundException, SQLException, IOException{
 		ResultSet rs = null;
 		Genre temp = new Genre();
@@ -517,7 +539,10 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return temp;
 	}
-	
+	/**
+	 * This method insert an artist into the database
+	 * @param name The name of the artist we want to insert
+	 */
 	public void insertArtist(String name) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -529,7 +554,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method inserts a genre into the database
+	 * @param name the name of the genre we want to insert
+	 */
 	public void insertGenre(String name) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -541,7 +569,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-
+	/**
+	 * This method deletes from the database a vinyl
+	 * @param vinylCode the code of the vinyl we want to delete
+	 */
 	public void deleteVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
@@ -553,7 +584,10 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
-	
+	/**
+	 * This method returns an ArrayList of Vinyl
+	 * @param date The date f
+	 */
 	public ArrayList<Vinyl> getBestSellersDate (LocalDate date) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 		ResultSet rs = null;

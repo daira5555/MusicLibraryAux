@@ -586,7 +586,7 @@ public class DataAccessImpl implements DataAccess{
 	}
 	/**
 	 * This method returns an ArrayList of Vinyl
-	 * @param date The date f
+	 * @param date The date from you want to look the best sellers
 	 */
 	public ArrayList<Vinyl> getBestSellersDate (LocalDate date) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
@@ -629,7 +629,9 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return vinyls;
 	}
-	
+	/**
+	 * This method returns an ArrayList of Vinyls of the all time best sellers
+	 */
 	public ArrayList<Vinyl> getBestSellers() throws ClassNotFoundException, SQLException, IOException{
 			ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 			int cont = 0;
@@ -667,7 +669,10 @@ public class DataAccessImpl implements DataAccess{
 			}
 		return vinyls;
 	}
-
+	/**
+	 * This method returns an ArrayList with the code of the artists that user likes
+	 * @param username 
+	 */
 	public ArrayList<Integer> getArtistTaste (String username) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Integer> artists = new ArrayList<Integer>();
 		ResultSet rs = null;

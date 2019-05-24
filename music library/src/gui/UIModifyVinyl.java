@@ -1,21 +1,14 @@
 package gui;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.time.LocalDate;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import org.jdesktop.swingx.JXDatePicker;
 
 import com.toedter.calendar.JDateChooser;
 
 import control.Logic;
 import control.LogicFactory;
-import model.Genre;
 import model.Vinyl;
 
 import javax.swing.JLabel;
@@ -49,21 +42,22 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					UIModifyVinyl frame = new UIModifyVinyl(4);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	// public static void main(String[] args) {
+	// EventQueue.invokeLater(new Runnable() {
+	// public void run() {
+	// try {
+	// UIModifyVinyl frame = new UIModifyVinyl(4);
+	// frame.setVisible(true);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// }
 	/**
 	 * Create the frame.
-	 * @param vinylMod 
+	 * 
+	 * @param vinylMod
 	 */
 	public UIModifyVinyl(int vinylMod) {
 		try {
@@ -105,20 +99,16 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(rdbtnNo);
 		bg.add(rdbtnYes);
-		
-		
-		vToMod=getVinyl(vinylMod);
+		vToMod = getVinyl(vinylMod);
 		System.out.println(vToMod.getTitle());
 		if (vToMod.isOnSale()) {
 			rdbtnYes.setSelected(true);
 		} else {
 			rdbtnNo.setSelected(true);
 		}
-		
 		titleField = new JTextField();
 		titleField.setBounds(147, 25, 205, 20);
 		contentPane.add(titleField);
-		
 		titleField.setColumns(10);
 		titleField.setText(vToMod.getTitle());
 		artistField = new JTextField();
@@ -179,7 +169,6 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		dateChooser = new JDateChooser();
 		dateChooser.setBounds(147, 312, 205, 22);
 		contentPane.add(dateChooser);
-		
 		JLabel lblPublicationDate = new JLabel("Publication date:");
 		lblPublicationDate.setBounds(45, 315, 92, 14);
 		contentPane.add(lblPublicationDate);
@@ -193,15 +182,13 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		stockField.setText(String.valueOf(vToMod.getStock()));
 	}
 	private Vinyl getVinyl(int vinylCode) {
-		Vinyl v= new Vinyl();
+		Vinyl v = new Vinyl();
 		Logic logic = LogicFactory.getLogic();
 		try {
-			v= logic.getVinyl(vinylCode);
+			v = logic.getVinyl(vinylCode);
 		} catch (Exception e) {
-			
 			e.printStackTrace();
 		}
-		
 		return v;
 	}
 	@Override

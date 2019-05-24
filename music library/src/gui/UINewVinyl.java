@@ -3,7 +3,6 @@ package gui;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -198,7 +197,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 				System.out.println(aux);
 				DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				LocalDate date = LocalDate.parse(aux, format);
-				// v.setPublicationDate(date);
+				v.setPublicationDate(date);
 
 				if (rdbtnYes.isSelected()) {
 					v.setOnSale(true);
@@ -208,7 +207,6 @@ public class UINewVinyl extends JFrame implements ActionListener {
 
 				logic.insertNewVinyl(v);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 

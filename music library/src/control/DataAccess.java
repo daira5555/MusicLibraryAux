@@ -1,6 +1,5 @@
 package control;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 import model.Vinyl;

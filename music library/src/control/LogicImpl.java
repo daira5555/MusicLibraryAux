@@ -1,5 +1,4 @@
 package control;
-import java.sql.Date;
 import java.util.ArrayList;
 
 import model.Vinyl;
@@ -8,7 +7,6 @@ import model.Artist;
 import model.Client;
 import model.Genre;
 import model.Purchase;
-import model.Vinyl;
 public class LogicImpl implements Logic {
 	private DataAccess dataAccess = DataAccessFactory.getDataAccess();
 	public void userType(String username) throws Exception {
@@ -95,22 +93,18 @@ public class LogicImpl implements Logic {
 	@Override
 	public void writePurchase(Purchase cart) throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void registerClient(Client client) throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void modifyClientData(Client client) throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public void insertNewVinyl(Vinyl v) throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
 	@Override
 	public ArrayList<Vinyl> advancedSearch(AdvancedSearch advancedSearch) throws Exception {
@@ -120,6 +114,5 @@ public class LogicImpl implements Logic {
 	@Override
 	public void deleteVinyl(int vinylDel) throws Exception {
 		// TODO Auto-generated method stub
-		
 	}
 }

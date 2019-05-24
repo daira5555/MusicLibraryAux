@@ -1,7 +1,5 @@
 package model;
 
-import java.time.LocalDate;
-
 public class AdvancedSearch {
 	private String artist;
 	private String title;

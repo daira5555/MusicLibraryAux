@@ -1,16 +1,9 @@
 package gui;
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import org.jdesktop.swingx.plaf.TableAddon;
-
 import com.toedter.calendar.JDateChooser;
 
 import control.Logic;
@@ -21,35 +14,32 @@ import model.CloseTabButton;
 import model.Purchase;
 import model.Vinyl;
 
-import javax.swing.JTabbedPane;
 import java.awt.Color;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 public class UIClientMenu extends JFrame implements ActionListener {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private CloseTabButton tabbedPane;
 	private JTable tableSuggestions;
 	private JTable tableBestSellers;
 	private JTable tableAdvancedSearch;
 	private JTable tableBoughtVinyls;
+	private JTable cartTable;
 	private JButton buttonAdvancedSearch;
 	private JButton buttonModInfo;
 	private JButton buttonBoughtVinyls;
@@ -79,6 +69,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private JScrollPane scrollPaneSuggestions;
 	private JScrollPane scrollPaneBestSellers;
 	private JScrollPane scrollPaneAdvancedSearch;
+	private JScrollPane scrollPaneCartTable;
 	private JButton btnFromTheBeginningOfTime;
 	private JLabel lblChooseADate;
 	private JButton btnSearchBestSeller;
@@ -90,8 +81,8 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private DefaultTableModel modelSuggestions;
 	private DefaultTableModel modelBestSellers;
 	private DefaultTableModel modelAdvancedSearch;
-	private String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On sale:", "Sale percentage:"};
-	private ArrayList<Vinyl> vinylList;
+	private DefaultTableModel cartModel;
+	private final String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On sale:", "Sale percentage:"};
 	private ArrayList<Vinyl> bestSellers;
 	private ArrayList<Vinyl> suggestionsList;
 	private ArrayList<Vinyl> searchResultList;
@@ -248,8 +239,10 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		cartDateField.setColumns(10);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 		cartDateField.setText(cart.getDate().format(formatter));
-		tableBestSellers = new JTable(fillData(cart.getVinyls()), columnNames);
-		scrollPaneBestSellers.setViewportView(tableBestSellers);
+		cartModel = new DefaultTableModel(fillData(cart.getVinyls()), columnNames);
+		cartTable = new JTable(cartModel);
+		scrollPaneCartTable.setViewportView(cartTable);
+		cartPanel.add(scrollPaneCartTable);
 	}
 	private void boughtVinyls() {
 		JPanel boughtVinyls = new JPanel();
@@ -443,11 +436,11 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setBounds(297, 291, 636, 2);
 		panelMainMenu.add(separator_2);
-		JLabel label_1 = new JLabel("Best sellers:");
-		label_1.setForeground(new Color(188, 143, 143));
-		label_1.setFont(new Font("Arial", Font.BOLD, 15));
-		label_1.setBounds(48, 304, 134, 27);
-		panelMainMenu.add(label_1);
+		JLabel labelBestSellers = new JLabel("Best sellers:");
+		labelBestSellers.setForeground(new Color(188, 143, 143));
+		labelBestSellers.setFont(new Font("Arial", Font.BOLD, 15));
+		labelBestSellers.setBounds(48, 304, 134, 27);
+		panelMainMenu.add(labelBestSellers);
 		scrollPaneSuggestions = new JScrollPane();
 		scrollPaneSuggestions.setBounds(302, 55, 605, 193);
 		panelMainMenu.add(scrollPaneSuggestions);

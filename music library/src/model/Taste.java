@@ -26,7 +26,7 @@ public class Taste {
 	public void addArtist(Artist artistToAdd) {
 		artists.add(artistToAdd);
 	}
-	public void addgenre(Genre genreToAdd) {
+	public void addGenre(Genre genreToAdd) {
 		genres.add(genreToAdd);
 	}
 }

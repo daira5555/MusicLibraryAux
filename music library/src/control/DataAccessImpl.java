@@ -671,7 +671,7 @@ public class DataAccessImpl implements DataAccess{
 	}
 	/**
 	 * This method returns an ArrayList with the code of the artists that user likes
-	 * @param username 
+	 * @param username the username of the user you want to search his tastes
 	 */
 	public ArrayList<Integer> getArtistTaste (String username) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Integer> artists = new ArrayList<Integer>();
@@ -690,7 +690,9 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return artists;
 	}
-	
+	/**
+	 * 
+	 */
 	public ArrayList<Integer> getGenreTaste (String username) throws ClassNotFoundException, SQLException, IOException{ 
 		ResultSet rs = null;
 		ArrayList<Integer> genres = new ArrayList<Integer>();

@@ -190,7 +190,6 @@ public class LogicImpl implements Logic {
 		return vinylCodes;
 	}
 
-	@Override
 	public boolean haveStock(int vinylCode, int amountSold) throws Exception {
 		boolean stock = dataAccess.haveStock(vinylCode, amountSold);
 		return stock;

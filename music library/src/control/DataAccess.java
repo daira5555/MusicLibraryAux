@@ -82,4 +82,6 @@ public interface DataAccess {
 	public ArrayList<Vinyl> getBoughtVinyls(String username) throws Exception;
 	
 	public ArrayList<Integer> getBoughtVinylsCodes (String username) throws Exception;
+	
+	public boolean haveStock (int vinylCode, int amountSold) throws Exception;
 }

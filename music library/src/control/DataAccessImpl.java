@@ -910,6 +910,27 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
+	public boolean haveStock (int vinylCode, int amountSold) throws ClassNotFoundException, SQLException, IOException{
+		boolean stockResult = false;
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select stock from vinyls where vinylcode = ?";
+			stmt = con.prepareStatement(sql);
+			stmt.setInt(1, vinylCode);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				if (rs.getInt("stock")>amountSold) {
+					stockResult = true;
+				}else {
+					stockResult = false;
+				}
+			}
+		} finally {
+			disconnect();
+		}
+		return stockResult;
+	}
 	/**
 	 * This method writes the purchase into the database
 	 * @param purchase The object Purchase with all the information about the purchase
@@ -920,9 +941,14 @@ public class DataAccessImpl implements DataAccess{
 	public void writePurchase (Purchase purchase) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			for (Map.Entry<Integer, Integer> entry : purchase.getWithAmount().entrySet()) {
-				connect();
+				
 				int key = entry.getKey();
 				int amount = entry.getValue();
+				boolean stock = haveStock(key, amount);
+				if (stock == false) {
+					throw new Exception("There isn't enought stock");
+				}
+				connect();
 				Double price = purchase.getWithPrice().get(key);
 				Double totalPrice = amount * price;
 				String sql = "insert into purchases values (?, ?, ?, ?, ?)";
@@ -935,6 +961,8 @@ public class DataAccessImpl implements DataAccess{
 				stmt.executeUpdate();
 				updatePurchasedVinyl(key, amount);
 			}
+		}catch (Exception e) {
+				e.printStackTrace();
 			
 		} finally {
 			disconnect();

@@ -49,4 +49,5 @@ public interface Logic {
 	public void insertGenreTaste (Client client) throws Exception;
 	public ArrayList<Vinyl> getBoughtVinyls(String username) throws Exception;
 	public ArrayList<Integer> getBoughtVinylsCodes (String username) throws Exception;
+	public boolean haveStock (int vinylCode, int amountSold) throws Exception;
 }

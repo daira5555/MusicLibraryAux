@@ -951,16 +951,25 @@ public class DataAccessImpl implements DataAccess{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 		ResultSet rs = null;
 		int cont = 0;
+		int first = 0;
 		try {
 			connect();
-			String sql = "select * from vinyls where ";
+			String sql = "select * from vinyls ";
 			if (!search.getArtist().isEmpty()) {
+				if (first == 0) {
+					sql = sql + "where ";
+					first++;
+				}
 				Artist artist = getArtist(search.getArtist());
 				connect();
 				sql = sql + " artistcode = "+artist.getCode();
 				cont++;
 			}
 			if (!search.getTitle().isEmpty()) {
+				if (first == 0) {
+					sql = sql + "where ";
+					first++;
+				}
 				if(cont>0) {
 					sql = sql + " or ";
 				}
@@ -968,6 +977,10 @@ public class DataAccessImpl implements DataAccess{
 				cont++;
 			}
 			if (!search.getGenre().isEmpty()) {
+				if (first == 0) {
+					sql = sql + "where ";
+					first++;
+				}
 				if(cont>0) {
 					sql = sql + " or ";
 				}
@@ -977,6 +990,10 @@ public class DataAccessImpl implements DataAccess{
 				cont++;
 			}
 			if (search.getPublicationYear() != 0) {
+				if (first == 0) {
+					sql = sql + "where ";
+					first++;
+				}
 				if(cont>0) {
 					sql = sql + " or ";
 				}
@@ -984,6 +1001,10 @@ public class DataAccessImpl implements DataAccess{
 				cont++;
 			}
 			if(search.getPrice() != 0) {
+				if (first == 0) {
+					sql = sql + "where ";
+					first++;
+				}
 				if(cont>0) {
 					sql = sql + " or ";
 				}
@@ -991,6 +1012,10 @@ public class DataAccessImpl implements DataAccess{
 				cont++;
 			}
 			if(search.getStockLessThan() != 0) {
+				if (first == 0) {
+					sql = sql + "where ";
+					first++;
+				}
 				if(cont>0) {
 					sql = sql + " or ";
 				}

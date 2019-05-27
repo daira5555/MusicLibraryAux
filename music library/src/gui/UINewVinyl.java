@@ -50,7 +50,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	private JRadioButton rdbtnNo;
 	private JRadioButton rdbtnYes;
 	private JTextField saleField;
-	private JButton btnSelect;
+	private JButton btnSelectImage;
 	private JButton btnSubmitChanges;
 	private JButton btnCancel;
 	private JDateChooser calendarPublication = new JDateChooser();
@@ -172,11 +172,11 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		label_1.setBounds(50, 353, 46, 14);
 		contentPane.add(label_1);
 
-		btnSelect = new JButton("Select");
-		btnSelect.setBackground(new Color(255, 218, 185));
-		btnSelect.setBounds(156, 350, 89, 23);
-		contentPane.add(btnSelect);
-		btnSelect.addActionListener(this);
+		btnSelectImage = new JButton("Select");
+		btnSelectImage.setBackground(new Color(255, 218, 185));
+		btnSelectImage.setBounds(156, 350, 89, 23);
+		contentPane.add(btnSelectImage);
+		btnSelectImage.addActionListener(this);
 
 		JLabel lblPublicationDate = new JLabel("Publication date:");
 		lblPublicationDate.setBounds(50, 298, 153, 14);
@@ -203,9 +203,8 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		artistsList = new JList();
 		artistsSP.setViewportView(artistsList);
 		
-		displayArtists(model);
-		artistsList.setModel(model);
-		artistsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		fillArtistsList();
+		
 
 		genresSP = new JScrollPane();
 		genresSP.setBounds(144, 118, 178, 47);
@@ -214,9 +213,22 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		genresList = new JList();
 		genresSP.setViewportView(genresList);
 		
+		fillGenresList();
+		
+	}
+
+	private void fillGenresList() {
+		model2 = new DefaultListModel<String>();
 		displayGenres(model2);
 		genresList.setModel(model2);
 		genresList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+
+	private void fillArtistsList() {
+		model = new DefaultListModel<String>();
+		displayArtists(model);
+		artistsList.setModel(model);
+		artistsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 
 	@Override
@@ -256,7 +268,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 			UIMenuAdmin admin = new UIMenuAdmin();
 			admin.setVisible(true);
 
-		} else if (e.getSource().equals(btnSelect)) {
+		} else if (e.getSource().equals(btnSelectImage)) {
 			JFileChooser chooser = new JFileChooser("././imagenes/");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Images", "jpg", "png", "jpeg");
@@ -282,6 +294,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 			if (newArtist != null) {
 				try {
 					logic.insertArtist(newArtist);
+					fillArtistsList();
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, "Error. Maybe the artist arleady exists","Error", JOptionPane.ERROR_MESSAGE);
 					//e1.printStackTrace();
@@ -293,6 +306,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 			if (newGenre != null) {
 				try {
 					logic.insertGenre(newGenre);
+					fillGenresList();
 				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(null, "Error. Maybe the genre arleady exists","Error", JOptionPane.ERROR_MESSAGE);
 					//e2.printStackTrace();

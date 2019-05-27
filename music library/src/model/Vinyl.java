@@ -104,4 +104,7 @@ public class Vinyl {
 	public void setCover(String cover) {
 		this.cover = cover;
 	}
+	public Double getPriceWithSale() {
+		return price * salePercentage;
+	}
 }

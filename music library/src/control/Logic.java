@@ -23,8 +23,8 @@ public interface Logic {
 	public int userExists(String username) throws Exception;
 	public char getUserType(String username) throws Exception;
 	public String getPassword(String username) throws Exception;
-	public ArrayList<Artist> getArtists() throws Exception;
-	public ArrayList<Genre> getGenres() throws Exception;
+	public ArrayList<String> getArtists() throws Exception;
+	public ArrayList<String> getGenres() throws Exception;
 	public ArrayList<Vinyl> getBestSellersDate(Date dateChosen) throws Exception;
 	public ArrayList<Vinyl> getBestSellers() throws Exception;
 	public ArrayList<Vinyl> getBoughtVinyls(Client client) throws Exception;
@@ -33,4 +33,6 @@ public interface Logic {
 	public void writePurchase(Purchase cart) throws Exception;
 	public ArrayList<Vinyl> advancedSearch(AdvancedSearch advancedSearch) throws Exception;
 	public void deleteVinyl(int vinylDel) throws Exception;
+	public ArrayList<Artist> getArtistsAllData() throws Exception;
+	public ArrayList<Genre> getGenresAllData() throws Exception;
 }

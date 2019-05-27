@@ -115,4 +115,12 @@ public class LogicImpl implements Logic {
 	public void deleteVinyl(int vinylDel) throws Exception {
 		// TODO Auto-generated method stub
 	}
+	public ArrayList<Artist> getArtistsAllData() throws Exception {
+		ArrayList<Artist> ar = dataAccess.getArtistsAllData();
+		return ar;
+	}
+	public ArrayList<Genre> getGenresAllData() throws Exception {
+		ArrayList<Genre> ar = dataAccess.getGenresAllData();
+		return ar;
+	}
 }

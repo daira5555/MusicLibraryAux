@@ -1,6 +1,13 @@
 package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -12,6 +19,7 @@ import control.LogicFactory;
 import model.Vinyl;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.ButtonGroup;
@@ -39,6 +47,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JLabel lblStock;
 	private JTextField stockField;
 	private JDateChooser dateChooser;
+	private JFileChooser fileChooser;
 	/**
 	 * Launch the application.
 	 */
@@ -192,31 +201,35 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		return v;
 	}
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(btnCancel)) {
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource().equals(btnCancel)) {
 			this.dispose();
-		} else if (e.getSource().equals(btnSelect)) {
-			JFileChooser fileChooser = new JFileChooser("C:/");
+		} else if (event.getSource().equals(btnSelect)) {
+			fileChooser = new JFileChooser("C:/");
 			fileChooser.showOpenDialog(this);
-		} else if (e.getSource().equals(btnSubmitChanges)) {
+		} else if (event.getSource().equals(btnSubmitChanges)) {
 			try {
+				File coverArtSrc = fileChooser.getSelectedFile();
+				File coverArtDest = new File("././Images/" + coverArtSrc.getName());
+				Files.copy(coverArtSrc.toPath(), coverArtDest.toPath());
 				vToMod.setArtist(logic.getArtist(artistField.getText()));
-				// vToMod.setCover(cover);
+				vToMod.setCover(coverArtDest.toPath().toString());
 				vToMod.setDescription(descriptionField.getText());
 				vToMod.setGenre(logic.getGenre(genreField.getText()));
 				if (rdbtnYes.isSelected()) {
 					vToMod.setOnSale(true);
+					vToMod.setSalePercentage((Double.valueOf(priceField.getText()) / 100) + 1);
 				} else {
 					vToMod.setOnSale(false);
+					vToMod.setSalePercentage(1);
 				}
 				vToMod.setPrice((Double.valueOf(priceField.getText())));
-				vToMod.setPublicationDate(dateChooser.getDate());
-				vToMod.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
+				vToMod.setPublicationDate(DateConverter.converttoLocalDateViaInstant(dateChooser.getDate()));
 				vToMod.setStock(Integer.valueOf(stockField.getText()));
 				vToMod.setTitle(titleField.getText());
 				logic.updateVinyl(vToMod);
-			} catch (Exception e2) {
-				e2.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

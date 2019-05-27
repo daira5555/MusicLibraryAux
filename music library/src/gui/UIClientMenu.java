@@ -29,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
@@ -110,7 +111,6 @@ public class UIClientMenu extends JFrame implements ActionListener {
 					UIClientMenu frame = new UIClientMenu(new Client());
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
 				}
 			}
 		});
@@ -132,14 +132,14 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	}
 	@SuppressWarnings("deprecation")
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(buttonAdvancedSearch)) {
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource().equals(buttonAdvancedSearch)) {
 			advancedSearch();
-		} else if (e.getSource().equals(buttonModInfo)) {
+		} else if (event.getSource().equals(buttonModInfo)) {
 			modifyPersonalInfo();
-		} else if (e.getSource().equals(buttonBoughtVinyls)) {
+		} else if (event.getSource().equals(buttonBoughtVinyls)) {
 			boughtVinyls();
-		} else if (e.getSource().equals(buttonAddCart)) {
+		} else if (event.getSource().equals(buttonAddCart)) {
 			try {
 				for (Integer i : tableBestSellers.getSelectedRows()) {
 					cart.addVinyl(bestSellers.get(i));
@@ -147,58 +147,58 @@ public class UIClientMenu extends JFrame implements ActionListener {
 				for (Integer i : tableSuggestions.getSelectedRows()) {
 					cart.addVinyl(suggestionsList.get(i));
 				}
-			} catch (Exception e2) {
-				e2.getStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-		} else if (e.getSource().equals(btnSeeCart)) {
+		} else if (event.getSource().equals(btnSeeCart)) {
 			seeCart();
-		} else if (e.getSource().equals(btnSearchBestSeller)) {
+		} else if (event.getSource().equals(btnSearchBestSeller)) {
 			try {
 				searchResultList = logic.getBestSellersDate(bestSellerCalendar.getDate());
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
 			tableBestSellers = new JTable(modelBestSellers);
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
-		} else if (e.getSource().equals(btnFromTheBeginningOfTime)) {
+		} else if (event.getSource().equals(btnFromTheBeginningOfTime)) {
 			try {
 				searchResultList = logic.getBestSellers();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
 			tableBestSellers = new JTable(modelBestSellers);
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
-		} else if (e.getSource().equals(btnConfirm)) {
+		} else if (event.getSource().equals(btnConfirm)) {
 			try {
 				logic.writePurchase(cart);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-		} else if (e.getSource().equals(btnClearCart)) {
+		} else if (event.getSource().equals(btnClearCart)) {
 			cart.getVinyls().clear();
-		} else if (e.getSource().equals(btnSearch)) {
-			advancedSearch = new AdvancedSearch();
-			advancedSearch.setArtist(artistField.getText());
-			advancedSearch.setGenre(genreField.getText());
-			advancedSearch.setPrice(Double.valueOf(priceField.getText()));
-			advancedSearch.setPublicationYear(Integer.valueOf(publicationDateField.getText()));
-			advancedSearch.setTitle(albumTitleField.getText());
-			advancedSearch.setStockLessThan(Integer.MAX_VALUE);
+		} else if (event.getSource().equals(btnSearch)) {
 			try {
+				advancedSearch = new AdvancedSearch();
+				advancedSearch.setArtist(artistField.getText());
+				advancedSearch.setGenre(genreField.getText());
+				advancedSearch.setPrice(Double.valueOf(priceField.getText()));
+				advancedSearch.setPublicationYear(Integer.valueOf(publicationDateField.getText()));
+				advancedSearch.setTitle(albumTitleField.getText());
+				advancedSearch.setStockLessThan(Integer.MAX_VALUE);
 				searchResultList = logic.advancedSearch(advancedSearch);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			modelAdvancedSearch = new DefaultTableModel(fillData(searchResultList), columnNames);
 			tableAdvancedSearch = new JTable(modelAdvancedSearch);
 			scrollPaneAdvancedSearch.setViewportView(tableAdvancedSearch);
-		} else if (e.getSource().equals(btnBuySelected)) {
+		} else if (event.getSource().equals(btnBuySelected)) {
 			for (Integer i : tableAdvancedSearch.getSelectedRows()) {
 				cart.addVinyl(searchResultList.get(i));
 			}
-		} else if (e.getSource().equals(btnSubmit)) {
+		} else if (event.getSource().equals(btnSubmit)) {
 			client.setAccountNumber(Long.valueOf(bankNumberField.getText()));
 			client.setAddress(addressField.getText());
 			client.setEmail(emailField.getText());
@@ -216,10 +216,10 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			client.setTastes(auxTaste);
 			try {
 				logic.modifyClientData(client);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-		} else if (e.getSource().equals(btnCancel)) {
+		} else if (event.getSource().equals(btnCancel)) {
 			personalInfo.repaint();
 		}
 	}
@@ -286,7 +286,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		cartPanel.add(cartDateField);
 		cartDateField.setColumns(10);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-		cartDateField.setText(cart.getDate().format(formatter));
+		cartDateField.setText(cart.getDATE().format(formatter));
 		cartModel = new DefaultTableModel(fillData(cart.getVinyls()), columnNames);
 		cartTable = new JTable(cartModel);
 		scrollPaneCartTable.setViewportView(cartTable);
@@ -308,8 +308,8 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		boughtVinyls.add(btnGoBackToMenu);
 		try {
 			boughtVinylsList = logic.getBoughtVinyls(client);
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(20, 91, 969, 444);
@@ -514,8 +514,8 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		panelMainMenu.add(scrollPaneSuggestions);
 		try {
 			suggestionsList = logic.getSuggestions(client);
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		modelSuggestions = new DefaultTableModel(fillData(suggestionsList), columnNames);
 		tableSuggestions = new JTable(modelSuggestions);
@@ -544,8 +544,8 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		btnSearchBestSeller.addActionListener(this);
 		try {
 			bestSellers = logic.getBestSellers();
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
 		tableBestSellers = new JTable(modelBestSellers);
@@ -553,20 +553,22 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	}
 	private void fillModelGenres(DefaultListModel<String> model) {
 		try {
-			artists = logic.getArtists();
+			artists = logic.getArtistsAllData();
 			for (Artist art : artists) {
 				model.addElement(art.getName());
 			}
-		} catch (Exception E) {
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	private void fillModelArtists(DefaultListModel<String> model) {
 		try {
-			genres = logic.getGenres();
+			genres = logic.getGenresAllData();
 			for (Genre g : genres) {
 				model.addElement(g.getName());
 			}
-		} catch (Exception E) {
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

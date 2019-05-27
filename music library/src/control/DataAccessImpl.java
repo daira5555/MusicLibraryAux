@@ -505,6 +505,16 @@ public class DataAccessImpl implements DataAccess{
 			disconnect();
 		}
 	}
+	@Override
+	public ArrayList<Artist> getArtistsAllData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<Genre> getGenresAllData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 }

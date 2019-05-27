@@ -204,7 +204,7 @@ public class DataAccessImpl implements DataAccess{
 	public void insertNewVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{
 		try {
 			connect();
-			String sql = "insert into vinyls (title,artiscode,genrecode,price,publicationdate,description,onsale,salepercentage,stock,amountsold,cover) values (?,?,?,?,?,?,?,?,?,0,?)";
+			String sql = "insert into vinyls (title,artistcode,genrecode,price,publicationdate,description,onsale,salepercentage,stock,amountsold,cover) values (?,?,?,?,?,?,?,?,?,0,?)";
 			stmt = con.prepareStatement(sql);
 			stmt.setString(1, vinyl.getTitle());
 			stmt.setInt(2, vinyl.getArtist().getCode());

@@ -177,4 +177,35 @@ public class LogicImpl implements Logic {
 	public void insertGenreTaste(Client client) throws Exception {
 		dataAccess.insertArtistTaste(client);
 	}
+	
+	public ArrayList<Vinyl> getBoughtVinyls(String username) throws Exception{
+		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
+		vinyls = dataAccess.getBoughtVinyls(username);
+		return vinyls;
+	}
+	
+	public ArrayList<Integer> getBoughtVinylsCodes (String username) throws Exception{
+		ArrayList<Integer> vinylCodes = new ArrayList<Integer>();
+		vinylCodes = dataAccess.getBoughtVinylsCodes(username);
+		return vinylCodes;
+	}
+
+	public boolean haveStock(int vinylCode, int amountSold) throws Exception {
+		boolean stock = dataAccess.haveStock(vinylCode, amountSold);
+		return stock;
+	}
+
+	@Override
+	public ArrayList<Artist> getArtistsAllData() throws Exception {
+		ArrayList<Artist> artists = new ArrayList<Artist>();
+		artists = dataAccess.getArtistsAllData();
+		return artists;
+	}
+
+	@Override
+	public ArrayList<Genre> getGenresAllData() throws Exception {
+		ArrayList<Genre> genres = new ArrayList<Genre>();
+		genres = dataAccess.getGenresAllData();
+		return genres;
+	}
 }

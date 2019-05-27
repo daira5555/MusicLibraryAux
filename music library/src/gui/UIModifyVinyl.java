@@ -224,6 +224,8 @@ public class UIModifyVinyl extends JFrame implements ActionListener, WindowListe
 				vToMod.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
 				vToMod.setStock(Integer.valueOf(stockField.getText()));
 				vToMod.setTitle(titleField.getText());
+				
+				logic.updateVinyl(vToMod);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}

@@ -20,6 +20,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -33,6 +34,7 @@ import model.AdvancedSearch;
 import model.DateConverter;
 import model.Vinyl;
 
+import java.awt.Color;
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
@@ -59,13 +61,14 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 	private JButton btnModifyFromSearch;
 	private JButton btnOrderFromSearch;
 	private JButton btnDeleteFromSearch;
-	private final String[] columnNames = { "Cover Art", "Title", "Artist", "Genre", "Price", "On sale:",
+	private final String[] columnNames = { "Cover Art", "Title", "Artist", "Genre", "Price", "On Sale",
 			"Sale percentage:" };
 	private Logic logic = LogicFactory.getLogic();
 	private ArrayList<Vinyl> advancedSearchList;
 	private ArrayList<Vinyl> bestSellersResultList;
 	private AdvancedSearch search = new AdvancedSearch();
 	private JDateChooser bestSellerCalendar = new JDateChooser();
+	private Object[][] data;
 
 	/**
 	 * Create the frame.
@@ -184,10 +187,23 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		
+		for(Vinyl v: bestSellersResultList) {
+		
+		System.out.println(v.getGenre().getName());
+		}
 		modelBestSellers = new DefaultTableModel(fillData(bestSellersResultList), columnNames);
 
 		tableBestSellers = new JTable(modelBestSellers);
+		/*******
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
 		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
+		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
+		
 
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
 		btnSearchBestSellers = new JButton("show best sellers");
@@ -209,6 +225,8 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		btnSearch.addActionListener(this);
 		bestSellerCalendar.setBounds(39, 438, 242, 20);
 		contentPane.add(bestSellerCalendar);
+		btnOrderFromSearch.addActionListener(this);
+		btnOrderVinylFromSearch.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -264,8 +282,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			refreshBestsellers(null);
 		} else if (e.getSource().equals(btnOrderFromSearch) || e.getSource().equals(btnOrderVinylFromSearch)){
 			
-			JFrame frame = new JFrame();
-			JOptionPane.showMessageDialog(frame, "Eggs are not supposed to be green.");
+			JOptionPane.showMessageDialog(this, "100 units have been ordered.");
 			
 		}
 	}
@@ -279,7 +296,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		modelAdvancedSearch = new DefaultTableModel(fillData(advancedSearchList), columnNames);
 		tableAdvancedSearch = new JTable(modelAdvancedSearch);
 		tableAdvancedSearch.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
-
+		tableAdvancedSearch.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
 		scrollPaneAdvancedSearch.setViewportView(tableAdvancedSearch);
 	}
 
@@ -314,20 +331,39 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		}
 	}
 
-	class LabelRenderer implements TableCellRenderer {
+	class LabelRenderer extends DefaultTableCellRenderer {//implements TableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			TableColumn tc = table.getColumn("Cover Art");
-			tc.setMinWidth(100);
-			tc.setMaxWidth(100);
-			table.setRowHeight(100);
-			return (Component) value;
+			
+				TableColumn tc = table.getColumn("Cover Art");
+				tc.setMinWidth(100);
+				tc.setMaxWidth(100);
+				table.setRowHeight(100);
+				 table.repaint();
+			return (Component)value;
+		}
+	}
+	class LabelRenderer2 extends DefaultTableCellRenderer {//implements TableCellRenderer {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {				
+			
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);	
+			
+			if (data[row][5] == Boolean.TRUE) {
+				c.setBackground(Color.orange);
+				
+			}
+            else c.setBackground(table.getBackground());
+			
+			
+			 table.repaint();
+			 return c;//(Component) value;
 		}
 	}
 
 	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
 
-		Object[][] data = new Object[auxVinylList.size()][7];
+		data = new Object[auxVinylList.size()][7];
 		for (int i = 0; i < auxVinylList.size(); i++) {
 
 			JLabel label = new JLabel();
@@ -346,7 +382,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			data[i][4] = auxVinylList.get(i).getPrice();
 			data[i][5] = auxVinylList.get(i).isOnSale();
 			if (auxVinylList.get(i).isOnSale()) {
-				data[i][6] = auxVinylList.get(i).getSalePercentage();
+				data[i][6] = ((auxVinylList.get(i).getSalePercentage())-1)*100;
 			} else {
 				data[i][6] = "Not on Sale";
 			}

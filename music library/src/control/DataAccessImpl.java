@@ -687,7 +687,7 @@ public class DataAccessImpl implements DataAccess{
 				ar.setName(getArtist(rs.getInt("artistcode")));
 				v.setArtist(ar);
 				ge.setCode(rs.getInt("genrecode"));
-				ge.setName(getArtist(rs.getInt("genrecode")));
+				ge.setName(getGenre(rs.getInt("genrecode")));
 				v.setGenre(ge);
 				v.setPrice(rs.getDouble("price"));
 				v.setPublicationDate(rs.getDate("publicationdate").toLocalDate());
@@ -730,7 +730,7 @@ public class DataAccessImpl implements DataAccess{
 					ar.setName(getArtist(rs.getInt("artistcode")));
 					v.setArtist(ar);
 					ge.setCode(rs.getInt("genrecode"));
-					ge.setName(getArtist(rs.getInt("genrecode")));
+					ge.setName(getGenre(rs.getInt("genrecode")));
 					v.setGenre(ge);
 					v.setPrice(rs.getDouble("price"));
 					v.setPublicationDate(rs.getDate("publicationdate").toLocalDate());

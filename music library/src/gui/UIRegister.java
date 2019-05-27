@@ -16,7 +16,6 @@ import model.Artist;
 import model.Client;
 import model.Genre;
 import model.Taste;
-
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import java.awt.Font;
@@ -25,7 +24,9 @@ import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
@@ -205,26 +206,27 @@ public class UIRegister extends JDialog implements ActionListener {
 			
 			
 			
-			list.setModel(model);
-		
-			list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			
-			
 			
 			{
 				list = new JList<String>();
 				scrollPane.setViewportView(list);
 				
+				list.setModel(model);
+				
+				list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+				
 
 			}
 		}
 		
+
+
 		
 		
 		
 		
 		
-		JLabel lblArtists = new JLabel("Artists you like:");
+		JLabel lblArtists = new JLabel("Genres you like:");
 		lblArtists.setBounds(42, 422, 97, 14);
 		contentPanel.add(lblArtists);
 		
@@ -236,7 +238,7 @@ public class UIRegister extends JDialog implements ActionListener {
 		separator_3.setBounds(42, 516, 266, 2);
 		contentPanel.add(separator_3);
 		
-		JLabel lblGenresYouLike = new JLabel("Genres you like:");
+		JLabel lblGenresYouLike = new JLabel("Artists you like:");
 		lblGenresYouLike.setBounds(42, 529, 97, 14);
 		contentPanel.add(lblGenresYouLike);
 		
@@ -306,9 +308,12 @@ public class UIRegister extends JDialog implements ActionListener {
 		
 		
 		
-		
-		
 	}
+
+		
+		
+		
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e){
@@ -323,19 +328,20 @@ public class UIRegister extends JDialog implements ActionListener {
 				client.setEmail(emailField.getText());
 				client.setAddress(addressField.getText());
 				client.setPhoneNumber(Integer.parseInt(phoneNumberField.getText()));
-				client.setAccountNumber(Integer.parseInt(bankNumberField.getText()));
+				client.setAccountNumber(Long.parseLong(bankNumberField.getText()));
+
 				
 				//ArrayList<String> artists = new ArrayList<String>();
 				ArrayList<Artist> artists = new ArrayList<Artist>();
 				List<String> a;
-				a = list.getSelectedValuesList();
+				a = list_1.getSelectedValuesList();
 				for (String string : a) {
 					artists.add(logic.getArtist(string));
 				}
 				
 				ArrayList<Genre> genres = new ArrayList<Genre>();
 				List<String> b;
-				b = list_1.getSelectedValuesList();
+				b = list.getSelectedValuesList();
 				for (String string : b) {
 					genres.add(logic.getGenre(string));
 				}
@@ -345,6 +351,7 @@ public class UIRegister extends JDialog implements ActionListener {
 				taste.setGenres(genres);
 				client.setTastes(taste);
 				
+
 				
 				logic.registerClient(client);
 			} catch (Exception ex) {

@@ -2,88 +2,87 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 
-import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import java.awt.EventQueue;
+import com.toedter.calendar.JDateChooser;
 
 import control.Logic;
 import control.LogicFactory;
 import model.AdvancedSearch;
+import model.DateConverter;
 import model.Vinyl;
 
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
 public class UIMenuAdmin extends JFrame implements ActionListener {
-
 	private JPanel contentPane;
 	private JTextField artistField;
 	private JTextField albumTitleField;
 	private JTextField genreField;
 	private JTextField publicationDateField;
 	private JTextField priceField;
-	private JButton btnDelete;
-	private JButton btnModify;
-	@SuppressWarnings("unused")
-	private JTable table_below;
-	private JTable table_upper;
+	private JTable tableBestSellers;
+	private JTable tableAdvancedSearch;
 	private JTextField stockField;
-	private JButton btnOrderVinyl;
-	private JButton btnNewVinyl;
-	private JRadioButton rdbtnThisWeek;
-	private JRadioButton rdbtnThisMonth;
-	private JRadioButton rdbtnThisYear;
-	private JRadioButton rdbtnFromTheBegining;
-	private JScrollPane scrollPane_1;
+	private JScrollPane scrollPaneBestSellers;
+	private DefaultTableModel modelBestSellers;
+	private DefaultTableModel modelAdvancedSearch;
+	private JScrollPane scrollPaneAdvancedSearch;
 	private JButton btnSearch;
-	private JButton btnBestSellers;
-	private Object[][] data1;
-	private Object[][] data;
-	private JButton btnModify_1;
-	private JButton btnOrder;
-	private JButton btnDelete_1;
-	String[] columnNames;
+	private JButton btnSearchBestSellers;
+	private JButton btnOrderVinylFromSearch;
+	private JButton btnNewVinyl;
+	private JButton btnDeleteFromBestSellers;
+	private JButton btnModifyFromBestSellers;
+	private JButton btnModifyFromSearch;
+	private JButton btnOrderFromSearch;
+	private JButton btnDeleteFromSearch;
+	private final String[] columnNames = { "Cover Art", "Title", "Artist", "Genre", "Price", "On sale:",
+			"Sale percentage:" };
+	private Logic logic = LogicFactory.getLogic();
+	private ArrayList<Vinyl> advancedSearchList;
+	private ArrayList<Vinyl> bestSellersResultList;
+	private AdvancedSearch search = new AdvancedSearch();
+	private JDateChooser bestSellerCalendar = new JDateChooser();
 
 	/**
-	 * Launch the application. BORRAR AL ACABAR
+	 * Create the frame.
 	 */
 	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
 				try {
 					UIMenuAdmin frame = new UIMenuAdmin();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-			
-	
+			}
+		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public UIMenuAdmin() {
 		setTitle("Main Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -93,369 +92,266 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
 		JLabel lblByArtist = new JLabel("By artist:");
 		lblByArtist.setBounds(41, 42, 75, 14);
 		contentPane.add(lblByArtist);
-
 		JLabel lblByAlbumTitle = new JLabel("By album title:");
 		lblByAlbumTitle.setBounds(41, 67, 107, 14);
 		contentPane.add(lblByAlbumTitle);
-
 		JLabel lblByGenre = new JLabel("By genre:");
 		lblByGenre.setBounds(415, 42, 58, 14);
 		contentPane.add(lblByGenre);
-
 		JLabel lblByPublicationDate = new JLabel("By publication year:");
 		lblByPublicationDate.setBounds(415, 67, 116, 14);
 		contentPane.add(lblByPublicationDate);
-
 		JLabel lblByPrice = new JLabel("By price: ");
 		lblByPrice.setBounds(679, 42, 58, 14);
 		contentPane.add(lblByPrice);
-
 		artistField = new JTextField();
 		artistField.setBounds(98, 39, 309, 20);
 		contentPane.add(artistField);
 		artistField.setColumns(10);
-
 		albumTitleField = new JTextField();
 		albumTitleField.setBounds(133, 64, 277, 20);
 		contentPane.add(albumTitleField);
 		albumTitleField.setColumns(10);
-
 		genreField = new JTextField();
 		genreField.setBounds(481, 39, 186, 20);
 		contentPane.add(genreField);
 		genreField.setColumns(10);
-
 		publicationDateField = new JTextField();
 		publicationDateField.setBounds(531, 64, 136, 20);
 		contentPane.add(publicationDateField);
 		publicationDateField.setColumns(10);
-
 		priceField = new JTextField();
 		priceField.setBounds(747, 39, 102, 20);
 		contentPane.add(priceField);
 		priceField.setColumns(10);
-
 		JSeparator separator = new JSeparator();
 		separator.setBounds(41, 330, 1056, 2);
 		contentPane.add(separator);
-
-		btnDelete = new JButton("Delete");
-		btnDelete.setBackground(new Color(255, 218, 185));
-		btnDelete.setBounds(1007, 591, 116, 42);
-		contentPane.add(btnDelete);
-
-		btnModify = new JButton("Modify");
-		btnModify.setBackground(new Color(255, 218, 185));
-		btnModify.setBounds(675, 591, 123, 42);
-		contentPane.add(btnModify);
-		btnModify.addActionListener(this);
-		String[] columnNames = { "image", "Title", "Genre", "Price", "On sale:", "Sale percentage:", "codigo" };
-
-		
-		
-		
+		btnDeleteFromBestSellers = new JButton("Delete");
+		btnDeleteFromBestSellers.setBackground(new Color(255, 218, 185));
+		btnDeleteFromBestSellers.setBounds(981, 591, 116, 42);
+		contentPane.add(btnDeleteFromBestSellers);
+		btnModifyFromBestSellers = new JButton("Modify");
+		btnModifyFromBestSellers.setBackground(new Color(255, 218, 185));
+		btnModifyFromBestSellers.setBounds(663, 591, 123, 42);
+		contentPane.add(btnModifyFromBestSellers);
+		btnModifyFromBestSellers.addActionListener(this);
 		JLabel label = new JLabel();
-		
 		Image imagen = new ImageIcon("././koala.jpg").getImage();
-		ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
-		
-			label.setIcon(imagen2);
-			label.setHorizontalAlignment(JLabel.CENTER);
-			label.setVerticalAlignment(JLabel.CENTER);
-			
-		Object[][] data = {
-				{ label, "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Boolean(false),
-					new Integer(20), new Integer(1) },
-			{ label, "London Calling", "The Clash", "New wave", new Boolean(true), new Integer(20) , new Integer(2)},
-			{ label, "Shilling the Rubes", "David Bowie", "New wave", new Boolean(false),
-					new Integer(20), new Integer(3) },
-			{ label, "Back in Black", "AC/DC", "Hard rock", new Boolean(true), new Integer(20), new Integer(4) },
-			{ label, "Nevermind", "Nirvana", "Grunge", new Boolean(false), new Integer(20),new Integer(4) } };
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(41, 92, 1056, 202);
-		contentPane.add(scrollPane);
-
-		JTable table_upper = new JTable(data, columnNames);
-		scrollPane.setViewportView(table_upper);
-
+		ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+		label.setIcon(imagen2);
+		label.setHorizontalAlignment(JLabel.CENTER);
+		label.setVerticalAlignment(JLabel.CENTER);
+		scrollPaneAdvancedSearch = new JScrollPane();
+		scrollPaneAdvancedSearch.setBounds(41, 92, 1056, 202);
+		contentPane.add(scrollPaneAdvancedSearch);
 		JLabel lblStockLessThan = new JLabel("Stock less than:");
 		lblStockLessThan.setBounds(679, 67, 107, 14);
 		contentPane.add(lblStockLessThan);
-
 		stockField = new JTextField();
 		stockField.setBounds(775, 64, 74, 20);
 		contentPane.add(stockField);
 		stockField.setColumns(10);
-
-		btnOrderVinyl = new JButton("Order vinyl");
-		btnOrderVinyl.setBackground(new Color(255, 218, 185));
-		btnOrderVinyl.setBounds(352, 591, 137, 42);
-		contentPane.add(btnOrderVinyl);
-
+		btnOrderVinylFromSearch = new JButton("Order vinyl");
+		btnOrderVinylFromSearch.setBackground(new Color(255, 218, 185));
+		btnOrderVinylFromSearch.setBounds(336, 591, 137, 42);
+		contentPane.add(btnOrderVinylFromSearch);
 		btnNewVinyl = new JButton("New Vinyl");
 		btnNewVinyl.setBackground(new Color(255, 218, 185));
-		btnNewVinyl.setBounds(41, 591, 116, 42);
+		btnNewVinyl.setBounds(50, 591, 116, 42);
 		contentPane.add(btnNewVinyl);
-
 		btnSearch = new JButton("Search");
 		btnSearch.setBackground(new Color(222, 184, 135));
 		btnSearch.setBounds(859, 38, 238, 42);
 		contentPane.add(btnSearch);
-
 		JLabel lblBestSellers = new JLabel("Best sellers:");
 		lblBestSellers.setForeground(new Color(188, 143, 143));
 		lblBestSellers.setFont(new Font("Arial", Font.BOLD, 15));
 		lblBestSellers.setBounds(62, 330, 134, 27);
 		contentPane.add(lblBestSellers);
+		ImageIcon imagen3 = new ImageIcon(imagen.getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+		label.setIcon(imagen3);
+		label.setHorizontalAlignment(JLabel.CENTER);
+		label.setVerticalAlignment(JLabel.CENTER);
+		scrollPaneBestSellers = new JScrollPane();
+		scrollPaneBestSellers.setBounds(352, 354, 771, 226);
+		contentPane.add(scrollPaneBestSellers);
+		try {
+			bestSellersResultList = logic.getBestSellers();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		modelBestSellers = new DefaultTableModel(fillData(bestSellersResultList), columnNames);
 
-		rdbtnThisWeek = new JRadioButton("This week");
-		rdbtnThisWeek.setBackground(new Color(250, 235, 215));
-		rdbtnThisWeek.setBounds(41, 364, 109, 23);
-		contentPane.add(rdbtnThisWeek);
+		tableBestSellers = new JTable(modelBestSellers);
+		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 
-		rdbtnThisMonth = new JRadioButton("This month");
-		rdbtnThisMonth.setBackground(new Color(250, 235, 215));
-		rdbtnThisMonth.setBounds(41, 401, 109, 23);
-		contentPane.add(rdbtnThisMonth);
-
-		rdbtnThisYear = new JRadioButton("This year");
-		rdbtnThisYear.setBackground(new Color(250, 235, 215));
-		rdbtnThisYear.setBounds(39, 438, 109, 23);
-		contentPane.add(rdbtnThisYear);
-
-		rdbtnFromTheBegining = new JRadioButton("From the begining of the times");
-		rdbtnFromTheBegining.setBackground(new Color(250, 235, 215));
-		rdbtnFromTheBegining.setBounds(39, 476, 221, 23);
-		contentPane.add(rdbtnFromTheBegining);
-		
-		
-		ButtonGroup bestS = new ButtonGroup();
-		bestS.add(rdbtnThisWeek);
-		bestS.add(rdbtnThisMonth);
-		bestS.add(rdbtnThisYear);
-		bestS.add(rdbtnFromTheBegining);
-		
-		
-
-		String[] columnNames1 = { "image", "fefeg", "Genre", "Price", "On sale:", "Sale percentage:", "codigo" };
-
-		
-		JLabel label2 = new JLabel();
-		
-		Image imagen21 = new ImageIcon("././koala.jpg").getImage();
-		ImageIcon imagen3 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
-		
-			label.setIcon(imagen3);
-			label.setHorizontalAlignment(JLabel.CENTER);
-			label.setVerticalAlignment(JLabel.CENTER);
-
-		Object[][] data1 = {
-				{ label, "The Dark Side of the Moon'", "Pink Floyd", "Rock psicodélico", new Boolean(false),
-						new Integer(20), new Integer(1) },
-				{ label, "London Calling", "The Clash", "New wave", new Boolean(true), new Integer(20) , new Integer(2)},
-				{ label, "Shilling the Rubes", "David Bowie", "New wave", new Boolean(false),
-						new Integer(20), new Integer(3) },
-				{ label, "Back in Black", "AC/DC", "Hard rock", new Boolean(true), new Integer(20), new Integer(4) },
-				{ label, "Nevermind", "Nirvana", "Grunge", new Boolean(false), new Integer(20),new Integer(4) } };
-		
-		
-		scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(352, 354, 771, 226);
-		contentPane.add(scrollPane_1);
-
-		table_below = new JTable(data1, columnNames1);
-		table_below.getColumn("image").setCellRenderer(new LabelRenderer());
-		scrollPane_1.setViewportView(table_below);
-		
-		btnBestSellers = new JButton("show best sellers");
-		btnBestSellers.setBounds(41, 553, 153, 27);
-		contentPane.add(btnBestSellers);
-		
-		btnModify_1 = new JButton("Modify");
-		btnModify_1.setBounds(558, 296, 89, 23);
-		contentPane.add(btnModify_1);
-		
-		btnOrder = new JButton("Order");
-		btnOrder.setBounds(380, 296, 89, 23);
-		contentPane.add(btnOrder);
-		
-		btnDelete_1 = new JButton("Delete");
-		btnDelete_1.setBounds(730, 296, 89, 23);
-		contentPane.add(btnDelete_1);
-		
-		btnDelete.addActionListener(this);
-		btnDelete_1.addActionListener(this);
-		btnModify_1.addActionListener(this);
-		btnBestSellers.addActionListener(this);
+		scrollPaneBestSellers.setViewportView(tableBestSellers);
+		btnSearchBestSellers = new JButton("show best sellers");
+		btnSearchBestSellers.setBounds(41, 506, 153, 27);
+		contentPane.add(btnSearchBestSellers);
+		btnModifyFromSearch = new JButton("Modify");
+		btnModifyFromSearch.setBounds(558, 296, 89, 23);
+		contentPane.add(btnModifyFromSearch);
+		btnOrderFromSearch = new JButton("Order");
+		btnOrderFromSearch.setBounds(380, 296, 89, 23);
+		contentPane.add(btnOrderFromSearch);
+		btnDeleteFromSearch = new JButton("Delete");
+		btnDeleteFromSearch.setBounds(730, 296, 89, 23);
+		contentPane.add(btnDeleteFromSearch);
+		btnDeleteFromBestSellers.addActionListener(this);
+		btnDeleteFromSearch.addActionListener(this);
+		btnModifyFromSearch.addActionListener(this);
+		btnSearchBestSellers.addActionListener(this);
 		btnSearch.addActionListener(this);
-		
+		bestSellerCalendar.setBounds(39, 438, 242, 20);
+		contentPane.add(bestSellerCalendar);
 	}
 
 	public void actionPerformed(ActionEvent e) {
-
 		if (e.getSource().equals(btnSearch)) {
-			ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
-			Logic logic = LogicFactory.getLogic();
-
-			AdvancedSearch search = new AdvancedSearch();
 			search.setArtist(artistField.getText());
 			search.setGenre(genreField.getText());
+
 			if (priceField.getText().isEmpty()) {
+
 				search.setPrice(0);
-			}else {
+			} else {
 				search.setPrice(Double.parseDouble(priceField.getText()));
 			}
-			
+
 			if (publicationDateField.getText().isEmpty()) {
+
 				search.setPublicationYear(0);
-			}else {
+			} else {
 				search.setPublicationYear(Integer.parseInt(publicationDateField.getText()));
 			}
-			
+
 			if (stockField.getText().isEmpty()) {
+
 				search.setStockLessThan(0);
-			}else {
+			} else {
 				search.setStockLessThan(Integer.parseInt(stockField.getText()));
 			}
-			
-			
+
 			search.setTitle(albumTitleField.getText());
+			refreshAdvancedSearch();
+
+		} else if (e.getSource().equals(btnSearchBestSellers)) {
+			refreshBestsellers(bestSellerCalendar.getDate());
+
+		} else if (e.getSource().equals(btnModifyFromBestSellers)) {
+
+			UIModifyVinyl toModify = new UIModifyVinyl(
+					bestSellersResultList.get(tableBestSellers.getSelectedRow()).getVinylCode());
+
+			toModify.setVisible(true);
+		} else if (e.getSource().equals(btnDeleteFromBestSellers)) {
+			deleteVinyl(bestSellersResultList.get(tableBestSellers.getSelectedRow()).getVinylCode());
+			refreshBestsellers(null);
+			refreshAdvancedSearch();
+
+		} else if (e.getSource().equals(btnModifyFromSearch)) {
+			UIModifyVinyl mod = new UIModifyVinyl(advancedSearchList.get(tableAdvancedSearch.getSelectedRow()).getVinylCode());
+			mod.setVisible(true);
 			
+		} else if (e.getSource().equals(btnDeleteFromSearch)) {
+			deleteVinyl(advancedSearchList.get(tableAdvancedSearch.getSelectedRow()).getVinylCode());
+			refreshAdvancedSearch();
+			refreshBestsellers(null);
+		} else if (e.getSource().equals(btnOrderFromSearch) || e.getSource().equals(btnOrderVinylFromSearch)){
 			
+			JFrame frame = new JFrame();
+			JOptionPane.showMessageDialog(frame, "Eggs are not supposed to be green.");
+			
+		}
+	}
+
+	private void refreshAdvancedSearch() {
+		try {
+			advancedSearchList = logic.advancedSearch(search);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		modelAdvancedSearch = new DefaultTableModel(fillData(advancedSearchList), columnNames);
+		tableAdvancedSearch = new JTable(modelAdvancedSearch);
+		tableAdvancedSearch.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
+
+		scrollPaneAdvancedSearch.setViewportView(tableAdvancedSearch);
+	}
+
+	private void refreshBestsellers(Date date) {
+		if (date != null) {
 			try {
-				vinyls= logic.advancedSearch(search);
+				bestSellersResultList = logic
+						.getBestSellersDate(DateConverter.convertToLocalDateViaInstant(date));
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			for (Vinyl vinyl : vinyls) {
-				System.out.println(vinyl.getTitle()+" "+vinyl.getArtist().getName()+" "+vinyl.getPrice());
+		} else {
+			try {
+				bestSellersResultList = logic.getBestSellers();
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
-			
-			
-			table_upper=tableRedone(vinyls);
-			
-
-		} else if (e.getSource().equals(btnBestSellers)) {
-			ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
-			
-			Logic logic = LogicFactory.getLogic();
-			if(rdbtnThisWeek.isSelected()) {
-		
-			}else {
-				try {
-					vinyls=logic.getBestSellersDate(LocalDate.now());
-				} catch (Exception e1) {
-				}
-				tableRedone(vinyls);
-			}
-			
-
-		}else if(e.getSource().equals(btnModify)) {
-		int index= table_below.getSelectedRow();
-		TableModel model = table_below.getModel();
-		int vinylMod= (Integer.parseInt(model.getValueAt(index, 6).toString()));
-		UIModifyVinyl mod = new UIModifyVinyl(vinylMod);
-		this.dispose();
-		mod.setVisible(true);
-		}else if(e.getSource().equals(btnDelete)) {
-		
-		
-		
-		int index= table_below.getSelectedRow();
-		TableModel model = table_below.getModel();
-		int vinylDel= (Integer.parseInt(model.getValueAt(index, 6).toString()));
-		deleteVinyl(vinylDel);
-		
-		}else if(e.getSource().equals(btnModify_1)) {
-			
-			int index= table_upper.getSelectedRow();
-			TableModel model = table_upper.getModel();
-			int vinylMod= (Integer.parseInt(model.getValueAt(index, 6).toString()));
-			UIModifyVinyl mod = new UIModifyVinyl(vinylMod);
-			mod.setVisible(true);
-			this.dispose();
-			
-			
-		}else if(e.getSource().equals(btnDelete_1)) {
-
-			int index= table_upper.getSelectedRow();
-			TableModel model = table_upper.getModel();
-			int vinylDel= (Integer.parseInt(model.getValueAt(index, 6).toString()));
-			deleteVinyl(vinylDel);
 		}
+		modelBestSellers = new DefaultTableModel(fillData(bestSellersResultList), columnNames);
+		tableBestSellers = new JTable(modelBestSellers);
+		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 
+		scrollPaneBestSellers.setViewportView(tableBestSellers);
 	}
 
-	/**
-	 * deletes the vinyl given a vinyl code
-	 * @param vinylDel
-	 */
 	private void deleteVinyl(int vinylDel) {
 		Logic logic = LogicFactory.getLogic();
 		try {
 			logic.deleteVinyl(vinylDel);
 		} catch (Exception e) {
-			
 			e.printStackTrace();
 		}
-		
-		
-		
 	}
-/**
- * redoes the table by giving new data
- * @param vinyls
- */
-	public JTable tableRedone(ArrayList<Vinyl> vinyls) {
-		String[] columnNames = { "image", "Title", "Genre", "Price", "On sale:", "Sale percentage:", "codigo" };
-			Object[][] data3 = new Object[vinyls.size()][7];
-		
-			
-				for( int f = 0; f < vinyls.size(); f++ ) {
-					
-					JLabel label = new JLabel();
 
-					Image imagen = new ImageIcon(vinyls.get(f).getCover()).getImage();
-					ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
-
-					label.setIcon(imagen2);
-					label.setHorizontalAlignment(JLabel.CENTER);
-					label.setVerticalAlignment(JLabel.CENTER);
-				
-				
-			data3[f][0] =label;
-			data3[f][1]=vinyls.get(f).getTitle();
-			data3[f][2]=vinyls.get(f).getArtist().getName();
-			data3[f][3]=vinyls.get(f).getGenre().getName();
-			data3[f][4]=vinyls.get(f).getPrice();
-			data3[f][5]=vinyls.get(f).isOnSale();
-			data3[f][6]=vinyls.get(f).getSalePercentage();
-			
-		}
-				
-				JTable tabla = new JTable(data3, columnNames);
-return tabla;
-		
-		
-		
-		
-	}
-	
 	class LabelRenderer implements TableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			TableColumn tc = table.getColumn("image");
+			TableColumn tc = table.getColumn("Cover Art");
 			tc.setMinWidth(100);
 			tc.setMaxWidth(100);
 			table.setRowHeight(100);
-
 			return (Component) value;
 		}
+	}
 
+	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
+
+		Object[][] data = new Object[auxVinylList.size()][7];
+		for (int i = 0; i < auxVinylList.size(); i++) {
+
+			JLabel label = new JLabel();
+
+			Image imagen = new ImageIcon(auxVinylList.get(i).getCover()).getImage();
+			ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
+
+			label.setIcon(imagen2);
+			label.setHorizontalAlignment(JLabel.CENTER);
+			label.setVerticalAlignment(JLabel.CENTER);
+			// "Cover Art", "Title", "Genre", "Price", "On sale:", "Sale percentage:"
+			data[i][0] = label;
+			data[i][1] = auxVinylList.get(i).getTitle();
+			data[i][2] = auxVinylList.get(i).getArtist().getName();
+			data[i][3] = auxVinylList.get(i).getGenre().getName();
+			data[i][4] = auxVinylList.get(i).getPrice();
+			data[i][5] = auxVinylList.get(i).isOnSale();
+			if (auxVinylList.get(i).isOnSale()) {
+				data[i][6] = auxVinylList.get(i).getSalePercentage();
+			} else {
+				data[i][6] = "Not on Sale";
+			}
+
+		}
+		return data;
 	}
 }

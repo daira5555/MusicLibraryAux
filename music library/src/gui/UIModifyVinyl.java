@@ -1,19 +1,20 @@
 package gui;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.time.LocalDate;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.FileChooserUI;
 
-import org.jdesktop.swingx.JXDatePicker;
+import com.toedter.calendar.JDateChooser;
 
 import control.Logic;
 import control.LogicFactory;
-import model.Genre;
 import model.Vinyl;
 
 import javax.swing.JLabel;
@@ -25,7 +26,8 @@ import javax.swing.JFileChooser;
 
 import java.awt.Color;
 @SuppressWarnings("serial")
-public class UIModifyVinyl extends JFrame implements ActionListener {
+public class UIModifyVinyl extends JFrame implements ActionListener, WindowListener{
+	
 	private JPanel contentPane;
 	private JTextField titleField;
 	private JTextField artistField;
@@ -38,32 +40,29 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JTextField salePercentageField;
 	private JButton btnSubmitChanges;
 	private JButton btnCancel;
-	private Vinyl vToMod = new Vinyl();
+	private int vinylCode;
+	private Vinyl vToMod = null;
 	private Logic logic = LogicFactory.getLogic();
-	private JXDatePicker picker;
 	private JLabel lblStock;
 	private JTextField stockField;
+	private JDateChooser dateChooser;
+	private JFileChooser fileChooser = new JFileChooser("././imagenes");
+	private String ruta;
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					UIModifyVinyl frame = new UIModifyVinyl(4);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 	/**
 	 * Create the frame.
-	 * @param vinylMod 
+	 * 
+	 * @param vinylMod
 	 */
 	public UIModifyVinyl(int vinylMod) {
-		// vToMod = logic.getVynil(vinylCode);
+		addWindowListener(this);
+		try {
+			vToMod = logic.getVinyl(vinylCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		setTitle("Modify vinyl");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 468);
@@ -98,20 +97,16 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(rdbtnNo);
 		bg.add(rdbtnYes);
-		
-		
-		vToMod=getVinyl(vinylMod);
+		vToMod = getVinyl(vinylMod);
 		System.out.println(vToMod.getTitle());
 		if (vToMod.isOnSale()) {
 			rdbtnYes.setSelected(true);
 		} else {
 			rdbtnNo.setSelected(true);
 		}
-		
 		titleField = new JTextField();
 		titleField.setBounds(147, 25, 205, 20);
 		contentPane.add(titleField);
-		
 		titleField.setColumns(10);
 		titleField.setText(vToMod.getTitle());
 		artistField = new JTextField();
@@ -169,51 +164,54 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		JLabel label_1 = new JLabel("%");
 		label_1.setBounds(335, 257, 17, 14);
 		contentPane.add(label_1);
-		picker = new JXDatePicker();
-		picker.setBounds(147, 312, 205, 22);
-		contentPane.add(picker);
+		dateChooser = new JDateChooser();
+		dateChooser.setBounds(147, 312, 205, 22);
+		contentPane.add(dateChooser);
 		JLabel lblPublicationDate = new JLabel("Publication date:");
 		lblPublicationDate.setBounds(45, 315, 92, 14);
 		contentPane.add(lblPublicationDate);
-		
 		lblStock = new JLabel("Stock:");
 		lblStock.setBounds(45, 349, 46, 14);
 		contentPane.add(lblStock);
-		
 		stockField = new JTextField();
 		stockField.setBounds(147, 346, 205, 20);
 		contentPane.add(stockField);
 		stockField.setColumns(10);
+		stockField.setText(String.valueOf(vToMod.getStock()));
 	}
-	
-	/**
-	 * gets the vinyl by the code given
-	 * @param vinylCode
-	 * @return Vinyl
-	 */
 	private Vinyl getVinyl(int vinylCode) {
-		Vinyl v= new Vinyl();
+		Vinyl v = new Vinyl();
 		Logic logic = LogicFactory.getLogic();
 		try {
-			v= logic.getVinyl(vinylCode);
+			v = logic.getVinyl(vinylCode);
 		} catch (Exception e) {
-			
 			e.printStackTrace();
 		}
-		
 		return v;
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnCancel)) {
 			this.dispose();
+			UIMenuAdmin menu = new UIMenuAdmin();
 		} else if (e.getSource().equals(btnSelect)) {
-			JFileChooser fileChooser = new JFileChooser("C:/");
-			fileChooser.showOpenDialog(this);
+			JFileChooser chooser = new JFileChooser("././imagenes/");
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Images", "jpg","png","jpeg");
+			chooser.setFileFilter(imgFilter);
+			chooser.showOpenDialog(this);
+			File result = chooser.getSelectedFile();
+			String path= null;
+			path = result.getPath();
+			int index = path.lastIndexOf("\\");
+			String name = path.substring(index+1);
+			name="././imagenes/" + name;
+			System.out.println(name);
+			vToMod.setCover(name);
+			
 		} else if (e.getSource().equals(btnSubmitChanges)) {
 			try {
 				vToMod.setArtist(logic.getArtist(artistField.getText()));
-				// vToMod.setCover(cover);
 				vToMod.setDescription(descriptionField.getText());
 				vToMod.setGenre(logic.getGenre(genreField.getText()));
 				if (rdbtnYes.isSelected()) {
@@ -230,5 +228,41 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 				e2.printStackTrace();
 			}
 		}
+	}
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowClosed(WindowEvent e) {
+		UIMenuAdmin menu = new UIMenuAdmin();
+		menu.setVisible(true);
+	}
+	@Override
+	public void windowClosing(WindowEvent e) {
+		UIMenuAdmin menu = new UIMenuAdmin();
+		menu.setVisible(true);
+		
+	}
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

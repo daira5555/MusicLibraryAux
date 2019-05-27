@@ -1,7 +1,13 @@
+    
 package control;
 
 public class LogicFactory {
+	private static Logic iLogic;
+
 	public static Logic getLogic() {
-		return new LogicImpl();
+		if (iLogic == null) {
+			iLogic = new LogicImpl();
+		}
+		return iLogic;
 	}
 }

@@ -1,9 +1,10 @@
 package gui;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -12,18 +13,26 @@ import java.util.Calendar;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.swingx.JXDatePicker;
 
+import com.toedter.calendar.JDateChooser;
+
 import control.Logic;
 import control.LogicFactory;
+import model.DateConverter;
 import model.Vinyl;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+
 import java.awt.Color;
 
 @SuppressWarnings("serial")
@@ -31,17 +40,16 @@ public class UINewVinyl extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField titleField;
-	private JTextField artistField;
-	private JTextField genreField;
 	private JTextField priceField;
 	private JTextField descriptionField;
 	private JRadioButton rdbtnNo;
 	private JRadioButton rdbtnYes;
 	private JTextField saleField;
-	private JButton button;
+	private JButton btnSelect;
 	private JButton btnSubmitChanges;
 	private JButton btnCancel;
-	private JXDatePicker picker;
+	private JDateChooser calendarPublication = new JDateChooser();
+	private Vinyl v = new Vinyl();
 
 	/**
 	 * Launch the application.
@@ -115,16 +123,6 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		contentPane.add(titleField);
 		titleField.setColumns(10);
 
-		artistField = new JTextField();
-		artistField.setBounds(144, 77, 178, 20);
-		contentPane.add(artistField);
-		artistField.setColumns(10);
-
-		genreField = new JTextField();
-		genreField.setBounds(144, 119, 178, 20);
-		contentPane.add(genreField);
-		genreField.setColumns(10);
-
 		priceField = new JTextField();
 		priceField.setBounds(144, 166, 178, 20);
 		contentPane.add(priceField);
@@ -160,20 +158,20 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		label_1.setBounds(50, 343, 46, 14);
 		contentPane.add(label_1);
 
-		button = new JButton("Select");
-		button.setBackground(new Color(255, 218, 185));
-		button.setBounds(156, 340, 89, 23);
-		contentPane.add(button);
+		btnSelect = new JButton("Select");
+		btnSelect.setBackground(new Color(255, 218, 185));
+		btnSelect.setBounds(156, 340, 89, 23);
+		contentPane.add(btnSelect);
+		btnSelect.addActionListener(this);
 
 		JLabel lblPublicationDate = new JLabel("Publication date:");
 		lblPublicationDate.setBounds(50, 288, 153, 14);
 		contentPane.add(lblPublicationDate);
 
-		picker = new JXDatePicker();
-		picker.setBounds(154, 285, 165, 22);
-		contentPane.add(picker);
-		picker.setDate(Calendar.getInstance().getTime());
-		picker.setFormats(new SimpleDateFormat("dd/MM/yyyy"));
+		
+		calendarPublication.setBounds(154, 285, 165, 22);
+		contentPane.add(calendarPublication);
+		calendarPublication.setDate(Calendar.getInstance().getTime());
 
 	}
 
@@ -184,7 +182,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 			try {
 				Logic logic = LogicFactory.getLogic();
 
-				Vinyl v = new Vinyl();
+				
 
 				v.setTitle(titleField.getText());
 				v.setArtist(logic.getArtist(artistField.getText()));
@@ -193,12 +191,8 @@ public class UINewVinyl extends JFrame implements ActionListener {
 				v.setPrice(Double.parseDouble(priceField.getText()));
 				v.setSalePercentage(Double.parseDouble(saleField.getText()));
 				v.setAmountSold(0);
-
-				String aux = picker.getDate().toString();
-				System.out.println(aux);
-				DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				LocalDate date = LocalDate.parse(aux, format);
-				// v.setPublicationDate(date);
+				
+				v.setPublicationDate(DateConverter.convertToLocalDateViaInstant(calendarPublication.getDate()));
 
 				if (rdbtnYes.isSelected()) {
 					v.setOnSale(true);
@@ -208,15 +202,38 @@ public class UINewVinyl extends JFrame implements ActionListener {
 
 				logic.insertNewVinyl(v);
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
+
 				e1.printStackTrace();
 			}
+			
+			
 
 		} else if (e.getSource().equals(btnCancel)) {
-				this.dispose();
-				UIMenuAdmin admin = new UIMenuAdmin();
-				admin.setVisible(true);
+			this.dispose();
+			UIMenuAdmin admin = new UIMenuAdmin();
+			admin.setVisible(true);
 
+		} else if(e.getSource().equals(btnSelect)) {
+			try {
+				JFileChooser chooser = new JFileChooser("././imagenes/");
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Images", "jpg","png","jpeg");
+				chooser.setFileFilter(imgFilter);
+				chooser.showOpenDialog(this);
+				File result = chooser.getSelectedFile();
+				String path= null;
+				path = result.getPath();
+				int index = path.lastIndexOf("\\");
+				String name = path.substring(index+1);
+				name="././imagenes/" + name;
+				System.out.println(name);
+				v.setCover(name);
+			} catch (NullPointerException e1) {
+				JOptionPane.showMessageDialog(null, "Error you must enter an image", "Error", JOptionPane.ERROR_MESSAGE);
+				
+				e1.printStackTrace();
+			}
+			
 		}
 
 	}

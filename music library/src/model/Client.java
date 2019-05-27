@@ -6,8 +6,7 @@ public class Client extends User {
 	private long accountNumber;
 	private Taste tastes;
 
-	public Client(String username, String password, String name, String surname, String email, int phoneNumber,
-			String address, long accountNumber) {
+	public Client(String username, String password, String name, String surname, String email, int phoneNumber, String address, long accountNumber, Taste tastes) {
 		super(username, password, name, surname, email, phoneNumber);
 		this.address = address;
 		this.accountNumber = accountNumber;

@@ -194,4 +194,18 @@ public class LogicImpl implements Logic {
 		boolean stock = dataAccess.haveStock(vinylCode, amountSold);
 		return stock;
 	}
+
+	@Override
+	public ArrayList<Artist> getArtistsAllData() throws Exception {
+		ArrayList<Artist> artists = new ArrayList<Artist>();
+		artists = dataAccess.getArtistsAllData();
+		return artists;
+	}
+
+	@Override
+	public ArrayList<Genre> getGenresAllData() throws Exception {
+		ArrayList<Genre> genres = new ArrayList<Genre>();
+		genres = dataAccess.getGenresAllData();
+		return genres;
+	}
 }

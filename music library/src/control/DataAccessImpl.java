@@ -1159,4 +1159,44 @@ public class DataAccessImpl implements DataAccess{
 		}
 		return vinyls;
 	}
+	
+	public ArrayList<Artist> getArtistsAllData() throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Artist> artists = new ArrayList<Artist>();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select * from artists";
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Artist temp = new Artist();
+				temp.setCode(rs.getInt("artistcode"));
+				temp.setName(rs.getString("name"));
+				artists.add(temp);
+			}
+		} finally {
+			disconnect();
+		}
+		return artists;
+	}
+	
+	public ArrayList<Genre> getGenresAllData() throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Genre> genres = new ArrayList<Genre>();
+		ResultSet rs = null;
+		try {
+			connect();
+			String sql = "select * from genres";
+			stmt = con.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Genre temp = new Genre();
+				temp.setCode(rs.getInt("genrecode"));
+				temp.setName(rs.getString("name"));
+				genres.add(temp);
+			}
+		} finally {
+			disconnect();
+		}
+		return genres;
+	}
 }

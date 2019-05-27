@@ -84,4 +84,8 @@ public interface DataAccess {
 	public ArrayList<Integer> getBoughtVinylsCodes (String username) throws Exception;
 	
 	public boolean haveStock (int vinylCode, int amountSold) throws Exception;
+	
+	public ArrayList<Artist> getArtistsAllData() throws Exception;
+	
+	public ArrayList<Genre> getGenresAllData() throws Exception;
 }

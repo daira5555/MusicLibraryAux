@@ -10,6 +10,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class UINewVinyl extends JFrame {
@@ -23,6 +25,8 @@ public class UINewVinyl extends JFrame {
 	private JRadioButton rdbtnNo;
 	private JRadioButton rdbtnYes;
 	private JTextField textField;
+	private JButton btnNewGenre;
+	private JButton btnNewArtist;
 
 	/**
 	 * Launch the application.
@@ -139,5 +143,17 @@ public class UINewVinyl extends JFrame {
 		button.setBackground(new Color(255, 218, 185));
 		button.setBounds(156, 340, 89, 23);
 		contentPane.add(button);
+		
+		btnNewArtist = new JButton("New Artist");
+		btnNewArtist.setBounds(332, 76, 118, 23);
+		contentPane.add(btnNewArtist);
+		
+		btnNewGenre = new JButton("New Genre");
+		btnNewGenre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnNewGenre.setBounds(332, 118, 118, 23);
+		contentPane.add(btnNewGenre);
 	}
 }

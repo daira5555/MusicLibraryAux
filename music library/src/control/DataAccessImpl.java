@@ -1127,7 +1127,7 @@ public class DataAccessImpl implements DataAccess{
 				stmt = con.prepareStatement(sql);
 				stmt.setInt(1, vinyl);
 				rs = stmt.executeQuery();
-				if (rs.next()) {
+				while (rs.next()) {
 					Vinyl temp = new Vinyl();
 					temp.setVinylCode(rs.getInt("vinylcode"));
 					temp.setTitle(rs.getString("title"));

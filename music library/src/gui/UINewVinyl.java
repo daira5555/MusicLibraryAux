@@ -247,8 +247,10 @@ public class UINewVinyl extends JFrame implements ActionListener {
 				v.setAmountSold(0);
 				
 				v.setPublicationDate(DateConverter.convertToLocalDateViaInstant(calendarPublication.getDate()));
+				
+				
 				if (v.getCover() == null) {
-					v.setCover("no cover");
+					v.setCover("././Images/noCover.jpg");
 				}
 
 				if (rdbtnYes.isSelected()) {
@@ -256,7 +258,6 @@ public class UINewVinyl extends JFrame implements ActionListener {
 				} else {
 					v.setOnSale(false);
 				}
-
 				logic.insertNewVinyl(v);
 			} catch (Exception e1) {
 
@@ -265,8 +266,6 @@ public class UINewVinyl extends JFrame implements ActionListener {
 
 		} else if (e.getSource().equals(btnCancel)) {
 			this.dispose();
-			UIMenuAdmin admin = new UIMenuAdmin();
-			admin.setVisible(true);
 
 		} else if (e.getSource().equals(btnSelectImage)) {
 			JFileChooser chooser = new JFileChooser("././imagenes/");

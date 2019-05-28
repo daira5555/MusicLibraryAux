@@ -189,8 +189,16 @@ public class UIClientMenu extends JFrame implements ActionListener {
 				advancedSearch = new AdvancedSearch();
 				advancedSearch.setArtist(artistField.getText());
 				advancedSearch.setGenre(genreField.getText());
-				advancedSearch.setPrice(Double.valueOf(priceField.getText()));
-				advancedSearch.setPublicationYear(Integer.valueOf(publicationDateField.getText()));
+				if (priceField.getText().isEmpty()) {
+					advancedSearch.setPrice(0);
+				}else {
+					advancedSearch.setPrice(Double.valueOf(priceField.getText()));
+				}
+				if (publicationDateField.getText().isEmpty()) {
+					advancedSearch.setPublicationYear(0);
+				}else {
+					advancedSearch.setPublicationYear(Integer.valueOf(publicationDateField.getText()));
+				}
 				advancedSearch.setTitle(albumTitleField.getText());
 				advancedSearch.setStockLessThan(Integer.MAX_VALUE);
 				searchResultList = logic.advancedSearch(advancedSearch);
@@ -227,6 +235,8 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			}
 		} else if (event.getSource().equals(btnCancel)) {
 			personalInfo.repaint();
+		} else if (event.getSource().equals(btnGoToCart)) {
+			seeCart();
 		}
 	}
 	/**
@@ -284,8 +294,13 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		cartPriceField.setEditable(false);
 		cartPriceField.setBounds(144, 533, 86, 20);
 		cartPanel.add(cartPriceField);
+		Double fullPrice = 0.0;
+		for (Vinyl vinyl : cart.getVinyls()) {
+			fullPrice += vinyl.getPriceWithSale();
+		}
+		cart.setFullPrice(fullPrice);
 		cartPriceField.setText(String.valueOf(cart.getFullPrice()));
-		cartPriceField.setColumns(10);
+		//cartPriceField.setColumns(10);
 		cartDateField = new JTextField();
 		cartDateField.setEditable(false);
 		cartDateField.setBounds(144, 558, 86, 20);
@@ -450,22 +465,24 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		btnBuySelected.setBackground(new Color(255, 218, 185));
 		btnBuySelected.setBounds(493, 616, 116, 42);
 		advanced.add(btnBuySelected);
+		btnBuySelected.addActionListener(this);
 		btnGoToCart = new JButton("Go to cart");
 		btnGoToCart.setBackground(new Color(255, 218, 185));
 		btnGoToCart.setBounds(332, 616, 123, 42);
 		advanced.add(btnGoToCart);
-		btnReturnToMenu = new JButton("Return to menu");
-		btnReturnToMenu.setBackground(new Color(255, 218, 185));
-		btnReturnToMenu.setBounds(652, 616, 137, 42);
-		advanced.add(btnReturnToMenu);
-		btnSearch = new JButton("Return to menu");
+		btnGoToCart.addActionListener(this);
+//		btnReturnToMenu = new JButton("Return to menu");
+//		btnReturnToMenu.setBackground(new Color(255, 218, 185));
+//		btnReturnToMenu.setBounds(652, 616, 137, 42);
+//		advanced.add(btnReturnToMenu);
+		btnSearch = new JButton("Search");
 		btnSearch.setBackground(new Color(255, 218, 185));
-		btnSearch.setBounds(700, 700, 137, 42);
+		btnSearch.setBounds(652, 616, 137, 42);
 		advanced.add(btnSearch);
 		btnSearch.addActionListener(this);
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(84, 240, 930, 344);
-		advanced.add(scrollPane);
+		scrollPaneAdvancedSearch = new JScrollPane();
+		scrollPaneAdvancedSearch.setBounds(84, 240, 930, 344);
+		advanced.add(scrollPaneAdvancedSearch);
 	}
 	private void mainMenu() {
 		JPanel panelMainMenu = new JPanel();

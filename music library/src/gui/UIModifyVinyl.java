@@ -212,7 +212,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 			try {
 				File coverArtSrc = fileChooser.getSelectedFile();
 				File coverArtDest = new File("././Images/" + coverArtSrc.getName());
-				Files.copy(coverArtSrc.toPath(), coverArtDest.toPath());
+				//Files.copy(coverArtSrc.toPath(), coverArtDest.toPath());
 				vToMod.setArtist(logic.getArtist(artistField.getText()));
 				vToMod.setCover(coverArtDest.toPath().toString());
 				vToMod.setDescription(descriptionField.getText());
@@ -230,6 +230,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 				vToMod.setTitle(titleField.getText());
 				logic.updateVinyl(vToMod);
 			} catch (Exception e) {
+				e.printStackTrace();
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}

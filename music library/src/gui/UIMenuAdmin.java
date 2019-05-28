@@ -166,6 +166,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		btnNewVinyl.setBackground(new Color(255, 218, 185));
 		btnNewVinyl.setBounds(50, 591, 116, 42);
 		contentPane.add(btnNewVinyl);
+		btnNewVinyl.addActionListener(this);
 		btnSearch = new JButton("Search");
 		btnSearch.setBackground(new Color(222, 184, 135));
 		btnSearch.setBounds(859, 38, 238, 42);
@@ -265,7 +266,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 
 			UIModifyVinyl toModify = new UIModifyVinyl(
 					bestSellersResultList.get(tableBestSellers.getSelectedRow()).getVinylCode());
-
+			toModify.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			toModify.setVisible(true);
 		} else if (e.getSource().equals(btnDeleteFromBestSellers)) {
 			deleteVinyl(bestSellersResultList.get(tableBestSellers.getSelectedRow()).getVinylCode());
@@ -274,6 +275,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 
 		} else if (e.getSource().equals(btnModifyFromSearch)) {
 			UIModifyVinyl mod = new UIModifyVinyl(advancedSearchList.get(tableAdvancedSearch.getSelectedRow()).getVinylCode());
+			mod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			mod.setVisible(true);
 			
 		} else if (e.getSource().equals(btnDeleteFromSearch)) {
@@ -284,6 +286,10 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			
 			JOptionPane.showMessageDialog(this, "100 units have been ordered.");
 			
+		}else if (e.getSource().equals(btnNewVinyl)) {
+			UINewVinyl newVinyl = new UINewVinyl();
+			newVinyl.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			newVinyl.setVisible(true);
 		}
 	}
 

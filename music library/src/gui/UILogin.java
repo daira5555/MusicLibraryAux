@@ -141,7 +141,6 @@ public class UILogin extends JFrame implements ActionListener {
 			UIRegister singUp = new UIRegister();
 			singUp.setVisible(true);
 		}
->>>>>>> refs/remotes/origin/carlos
 		
 	}
 }

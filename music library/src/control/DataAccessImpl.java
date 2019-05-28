@@ -69,12 +69,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method is to check the type of the user
 	 * @param username The username of the user you want to check
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 * 
 	 */
 	public void userType (String username) throws ClassNotFoundException, SQLException, IOException{
@@ -116,12 +113,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method inserts into the database the new client genre taste to the taste_genre table in the database
 	 * @param client The Client class with all the information about the client
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	
 	public void insertGenreTaste (Client client) throws ClassNotFoundException, SQLException, IOException{
@@ -143,12 +137,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method is to register a new client into the database
 	 * @param client The Client class with all the information about the client
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	
 	public void registerClient(Client client) throws ClassNotFoundException, SQLException, IOException{
@@ -177,12 +168,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method is to modify the data of the client (this doesn't apply to the username)
 	 * @param client The Client class with all the information about the client
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	
 	public void modifyClientData (Client client) throws ClassNotFoundException, SQLException, IOException{
@@ -208,12 +196,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method is to insert a new vinyl into the database (is meant to be used only by administrators)
 	 * @param vinyl The Vinyl class with all the information about the vinyl
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	
 	public void insertNewVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{
@@ -408,12 +393,9 @@ public class DataAccessImpl implements DataAccess{
 	}
 	/**
 	 * This method returns an ArrayList of Strings with the name of all the artists
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public ArrayList<String> getArtists() throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<String> artists = new ArrayList<String>();
@@ -433,12 +415,9 @@ public class DataAccessImpl implements DataAccess{
 	}
 	/**
 	 * This method returns an ArrayList of Strings with the name of all the artists
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public ArrayList<String> getGenres() throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<String> genres = new ArrayList<String>();
@@ -459,13 +438,10 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method returns the artist name
 	 * @param artistCode Is the code of the artist
-<<<<<<< HEAD
 	 * @return 
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public String getArtist(int artistCode) throws ClassNotFoundException, SQLException, IOException{
 		String artistName = null;
@@ -487,12 +463,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method returns the genre name
 	 * @param genreCode Is the code of the genre
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public String getGenre(int genreCode) throws ClassNotFoundException, SQLException, IOException{
 		String genreName = null;
@@ -514,12 +487,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method returns a Vinyl object 
 	 * @param vinylCode This code correspond to the vinyl we want to search
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public Vinyl getVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
 		Vinyl vin = new Vinyl();
@@ -558,12 +528,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method is to update the information of the vinyl in the database
 	 * @param vinyl this object contains all the information about the vinyl
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public void updateVinyl(Vinyl vinyl) throws ClassNotFoundException, SQLException, IOException{
 		try {
@@ -589,12 +556,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method returns a object of type Artist
 	 * @param name the name of the artist we want to search
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public Artist getArtist(String name) throws ClassNotFoundException, SQLException, IOException{
 		Artist temp = new Artist();
@@ -617,12 +581,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method returns a object of type Genre
 	 * @param name The name of the genre we want to search
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public Genre getGenre(String name) throws ClassNotFoundException, SQLException, IOException{
 		ResultSet rs = null;
@@ -645,12 +606,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method insert an artist into the database
 	 * @param name The name of the artist we want to insert
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public void insertArtist(String name) throws ClassNotFoundException, SQLException, IOException{
 		try {
@@ -666,12 +624,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method inserts a genre into the database
 	 * @param name the name of the genre we want to insert
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public void insertGenre(String name) throws ClassNotFoundException, SQLException, IOException{
 		try {
@@ -687,12 +642,9 @@ public class DataAccessImpl implements DataAccess{
 	/**
 	 * This method deletes from the database a vinyl
 	 * @param vinylCode the code of the vinyl we want to delete
-<<<<<<< HEAD
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 * @throws IOException
-=======
->>>>>>> refs/remotes/origin/daira
 	 */
 	public void deleteVinyl(int vinylCode) throws ClassNotFoundException, SQLException, IOException{
 		try {
@@ -707,14 +659,10 @@ public class DataAccessImpl implements DataAccess{
 	}
 	/**
 	 * This method returns an ArrayList of Vinyl
-<<<<<<< HEAD
 	 * @param date The date from you want to look the best sellers
 	 * @throws ClassNotFoundException
 	 * @throws SQLException if is a SQL Exception
 	 * @throws IOException
-=======
-	 * @param date The date f
->>>>>>> refs/remotes/origin/daira
 	 */
 	public ArrayList<Vinyl> getBestSellersDate (LocalDate date) throws ClassNotFoundException, SQLException, IOException{
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();

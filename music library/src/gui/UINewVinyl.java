@@ -8,10 +8,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-<<<<<<< HEAD
 import java.util.ArrayList;
-=======
->>>>>>> refs/remotes/origin/daira
 import java.util.Calendar;
 
 import javax.swing.JFrame;
@@ -32,13 +29,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-<<<<<<< HEAD
+
 import javax.swing.ListSelectionModel;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-=======
-import javax.swing.ButtonGroup;
->>>>>>> refs/remotes/origin/daira
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -57,7 +52,6 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	private JRadioButton rdbtnNo;
 	private JRadioButton rdbtnYes;
 	private JTextField saleField;
-<<<<<<< HEAD
 	private JButton btnSelectImage;
 	private JButton btnSubmitChanges;
 	private JButton btnCancel;
@@ -72,14 +66,8 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	private DefaultListModel<String> model = new DefaultListModel<String>();
 	private DefaultListModel<String> model2 = new DefaultListModel<String>();
 	private Logic logic = LogicFactory.getLogic();
-=======
 	private JButton btnSelect;
-	private JButton btnSubmitChanges;
-	private JButton btnCancel;
-	private JDateChooser calendarPublication = new JDateChooser();
-	private Vinyl v = new Vinyl();
 
->>>>>>> refs/remotes/origin/daira
 	/**
 	 * Launch the application.
 	 */
@@ -102,11 +90,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	public UINewVinyl() {
 		setTitle("Insert new vinyl");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-<<<<<<< HEAD
 		setBounds(100, 100, 516, 500);
-=======
-		setBounds(100, 100, 373, 468);
->>>>>>> refs/remotes/origin/daira
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 245, 238));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -177,33 +161,27 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		btnCancel.setBackground(new Color(255, 239, 213));
 		btnCancel.setBounds(233, 384, 89, 23);
 		contentPane.add(btnCancel);
-<<<<<<< HEAD
+
 		btnCancel.addActionListener(this);
-=======
->>>>>>> refs/remotes/origin/daira
 
 		JLabel label = new JLabel("Sale percentage:");
-<<<<<<< HEAD
+
 		label.setBounds(50, 328, 138, 14);
-=======
-		label.setBounds(50, 318, 138, 14);
->>>>>>> refs/remotes/origin/daira
+
 		contentPane.add(label);
 
 		saleField = new JTextField();
 		saleField.setColumns(10);
-<<<<<<< HEAD
+
 		saleField.setBounds(156, 325, 165, 20);
-=======
-		saleField.setBounds(156, 315, 165, 20);
->>>>>>> refs/remotes/origin/daira
+
 		contentPane.add(saleField);
 
 		JLabel label_1 = new JLabel("Image:");
 		label_1.setBounds(50, 353, 46, 14);
 		contentPane.add(label_1);
 
-<<<<<<< HEAD
+
 		btnSelectImage = new JButton("Select");
 		btnSelectImage.setBackground(new Color(255, 218, 185));
 		btnSelectImage.setBounds(156, 350, 89, 23);
@@ -234,20 +212,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 
 		artistsList = new JList();
 		artistsSP.setViewportView(artistsList);
-=======
-		btnSelect = new JButton("Select");
-		btnSelect.setBackground(new Color(255, 218, 185));
-		btnSelect.setBounds(156, 340, 89, 23);
-		contentPane.add(btnSelect);
-		btnSelect.addActionListener(this);
 
-		JLabel lblPublicationDate = new JLabel("Publication date:");
-		lblPublicationDate.setBounds(50, 288, 153, 14);
-		contentPane.add(lblPublicationDate);
-
->>>>>>> refs/remotes/origin/daira
-		
-<<<<<<< HEAD
 		fillArtistsList();
 		
 
@@ -382,75 +347,6 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-=======
-		calendarPublication.setBounds(154, 285, 165, 22);
-		contentPane.add(calendarPublication);
-		calendarPublication.setDate(Calendar.getInstance().getTime());
-
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		if (e.getSource().equals(btnSubmitChanges)) {
-			try {
-				Logic logic = LogicFactory.getLogic();
-
-				
-
-				v.setTitle(titleField.getText());
-				v.setArtist(logic.getArtist(artistField.getText()));
-				v.setDescription(descriptionField.getText());
-				v.setGenre(logic.getGenre(genreField.getText()));
-				v.setPrice(Double.parseDouble(priceField.getText()));
-				v.setSalePercentage(Double.parseDouble(saleField.getText()));
-				v.setAmountSold(0);
-				
-				v.setPublicationDate(DateConverter.convertToLocalDateViaInstant(calendarPublication.getDate()));
-
-				if (rdbtnYes.isSelected()) {
-					v.setOnSale(true);
-				} else {
-					v.setOnSale(false);
-				}
-
-				logic.insertNewVinyl(v);
-			} catch (Exception e1) {
-
-				e1.printStackTrace();
-			}
-			
-			
-
-		} else if (e.getSource().equals(btnCancel)) {
-			this.dispose();
-			UIMenuAdmin admin = new UIMenuAdmin();
-			admin.setVisible(true);
-
-		} else if(e.getSource().equals(btnSelect)) {
-			try {
-				JFileChooser chooser = new JFileChooser("././imagenes/");
-				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Images", "jpg","png","jpeg");
-				chooser.setFileFilter(imgFilter);
-				chooser.showOpenDialog(this);
-				File result = chooser.getSelectedFile();
-				String path= null;
-				path = result.getPath();
-				int index = path.lastIndexOf("\\");
-				String name = path.substring(index+1);
-				name="././imagenes/" + name;
-				System.out.println(name);
-				v.setCover(name);
-			} catch (NullPointerException e1) {
-				JOptionPane.showMessageDialog(null, "Error you must enter an image", "Error", JOptionPane.ERROR_MESSAGE);
-				
-				e1.printStackTrace();
-			}
-			
-		}
-
->>>>>>> refs/remotes/origin/daira
 	}
 }
 

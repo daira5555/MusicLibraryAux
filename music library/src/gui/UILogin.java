@@ -18,6 +18,8 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
 public class UILogin extends JFrame implements ActionListener {
@@ -59,12 +61,12 @@ public class UILogin extends JFrame implements ActionListener {
 		
 		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setFont(new Font("Arial", Font.BOLD, 13));
-		lblUsername.setBounds(297, 28, 77, 14);
+		lblUsername.setBounds(309, 59, 77, 14);
 		contentPane.add(lblUsername);
 		
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setFont(new Font("Arial", Font.BOLD, 13));
-		lblPassword.setBounds(297, 147, 67, 14);
+		lblPassword.setBounds(307, 147, 67, 14);
 		contentPane.add(lblPassword);
 		
 		btnLogIn = new JButton("Log in ");
@@ -72,7 +74,6 @@ public class UILogin extends JFrame implements ActionListener {
 		btnLogIn.setFont(new Font("Arial", Font.BOLD, 11));
 		btnLogIn.setBounds(297, 279, 89, 23);
 		contentPane.add(btnLogIn);
-		btnLogIn.addActionListener(this);
 		
 		btnSignUp = new JButton("Sign up");
 		btnSignUp.setBackground(new Color(255, 228, 181));
@@ -83,7 +84,6 @@ public class UILogin extends JFrame implements ActionListener {
 		});
 		btnSignUp.setBounds(297, 245, 89, 23);
 		contentPane.add(btnSignUp);
-		btnSignUp.addActionListener(this);
 		
 		usernameField = new JTextField();
 		usernameField.setBounds(189, 84, 302, 23);
@@ -93,13 +93,16 @@ public class UILogin extends JFrame implements ActionListener {
 		passwordField = new JPasswordField();
 		passwordField.setBounds(189, 172, 302, 23);
 		contentPane.add(passwordField);
+		
+	
+		
+		
+		
+		
 	}
-	/**
-	 * Control the events of the buttons
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
 
+	public void actionPerformed(ActionEvent e) {
+	
 		if (e.getSource().equals(btnLogIn)) {
 			Logic logic = LogicFactory.getLogic();
 			String username = usernameField.getText();
@@ -109,7 +112,7 @@ public class UILogin extends JFrame implements ActionListener {
 					if (logic.getUserType(username) == 'C') {
 						if(passwordField.getText().equals(pass)) {
 							this.dispose();
-							UIClientMenu clientMenu = new UIClientMenu();
+							UIClientMenu clientMenu = new UIClientMenu(logic.getClient(username));
 							clientMenu.setVisible(true);
 						}else {
 							String message = "Login failed, incorrect password";
@@ -130,6 +133,7 @@ public class UILogin extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			} catch (Exception e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}else if (e.getSource().equals(btnSignUp)) {
@@ -137,6 +141,7 @@ public class UILogin extends JFrame implements ActionListener {
 			UIRegister singUp = new UIRegister();
 			singUp.setVisible(true);
 		}
+>>>>>>> refs/remotes/origin/carlos
 		
 	}
 }

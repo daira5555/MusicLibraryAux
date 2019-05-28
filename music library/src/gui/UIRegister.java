@@ -219,6 +219,8 @@ public class UIRegister extends JDialog implements ActionListener {
 			}
 		}
 		
+
+
 		
 		
 		

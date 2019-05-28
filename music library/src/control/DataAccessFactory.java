@@ -9,4 +9,8 @@ public class DataAccessFactory {
 		}
 		return iDataAccess;
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> refs/remotes/origin/daira
 }

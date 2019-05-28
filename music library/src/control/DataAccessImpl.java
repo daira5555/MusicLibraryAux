@@ -661,7 +661,7 @@ public class DataAccessImpl implements DataAccess{
 	 * This method returns an ArrayList of Vinyl
 	 * @param date The date from you want to look the best sellers
 	 * @throws ClassNotFoundException
-	 * @throws SQLException
+	 * @throws SQLException if is a SQL Exception
 	 * @throws IOException
 	 */
 	public ArrayList<Vinyl> getBestSellersDate (LocalDate date) throws ClassNotFoundException, SQLException, IOException{

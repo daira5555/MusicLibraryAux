@@ -240,7 +240,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			data[i][4] = auxVinylList.get(i).getPrice();
 			data[i][5] = auxVinylList.get(i).isOnSale();
 			if (auxVinylList.get(i).isOnSale()) {
-				data[i][6] = auxVinylList.get(i).getSalePercentage();
+				data[i][6] = ((auxVinylList.get(i).getSalePercentage())-1)*100;
 			} else {
 				data[i][6] = "Not on Sale";
 			}

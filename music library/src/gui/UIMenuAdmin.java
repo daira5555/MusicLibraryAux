@@ -264,7 +264,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			data[4][i] = auxVinylList.get(i).getPrice();
 			data[5][i] = auxVinylList.get(i).isOnSale();
 			if (auxVinylList.get(i).isOnSale()) {
-				data[6][i] = auxVinylList.get(i).getSalePercentage();
+				data[6][i] = ((auxVinylList.get(i).getSalePercentage())-1)*100;
 			} else {
 				data[6][i] = "Not on Sale";
 			}

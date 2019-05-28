@@ -1,10 +1,8 @@
 package model;
-
 import java.util.ArrayList;
-
 public class Taste {
-	private ArrayList <Artist> artists;
-	private ArrayList <Genre> genres;
+	private ArrayList<Artist> artists;
+	private ArrayList<Genre> genres;
 	public Taste(ArrayList<Artist> artists, ArrayList<Genre> genres) {
 		super();
 		this.artists = artists;
@@ -25,8 +23,10 @@ public class Taste {
 	public void setGenres(ArrayList<Genre> genres) {
 		this.genres = genres;
 	}
-	
-	
-	
-
+	public void addArtist(Artist artistToAdd) {
+		artists.add(artistToAdd);
+	}
+	public void addGenre(Genre genreToAdd) {
+		genres.add(genreToAdd);
+	}
 }

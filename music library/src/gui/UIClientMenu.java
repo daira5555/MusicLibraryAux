@@ -9,13 +9,18 @@ import com.toedter.calendar.JDateChooser;
 import control.Logic;
 import control.LogicFactory;
 import model.AdvancedSearch;
+import model.Artist;
 import model.Client;
 import model.CloseTabButton;
+import model.Genre;
 import model.Purchase;
+import model.Taste;
 import model.Vinyl;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -23,6 +28,8 @@ import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
@@ -55,9 +62,10 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private JButton btnSearch;
 	private JTextField nameField;
 	private JTextField surnameField;
-	private JTextField numberField;
+	private JTextField phoneNumberField;
 	private JTextField emailField;
 	private JTextField bankNumberField;
+	private JTextField addressField;
 	private JButton btnCancel;
 	private JButton btnSubmit;
 	private JPasswordField passwordField;
@@ -88,9 +96,25 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private ArrayList<Vinyl> searchResultList;
 	private ArrayList<Vinyl> boughtVinylsList;
 	private AdvancedSearch advancedSearch;
+	private JList<String> listOfGenres;
+	private JList<String> listOfArtists;
+	private JPanel personalInfo;
+	private ArrayList<Artist> artists;
+	private ArrayList<Genre> genres;
 	/**
 	 * Create the frame.
 	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					UIClientMenu frame = new UIClientMenu(new Client());
+					frame.setVisible(true);
+				} catch (Exception e) {
+				}
+			}
+		});
+	}
 	public UIClientMenu(Client clientLogged) {
 		setTitle("Client Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,15 +130,16 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		this.client = clientLogged;
 		mainMenu();
 	}
+	@SuppressWarnings("deprecation")
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(buttonAdvancedSearch)) {
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource().equals(buttonAdvancedSearch)) {
 			advancedSearch();
-		} else if (e.getSource().equals(buttonModInfo)) {
+		} else if (event.getSource().equals(buttonModInfo)) {
 			modifyPersonalInfo();
-		} else if (e.getSource().equals(buttonBoughtVinyls)) {
+		} else if (event.getSource().equals(buttonBoughtVinyls)) {
 			boughtVinyls();
-		} else if (e.getSource().equals(buttonAddCart)) {
+		} else if (event.getSource().equals(buttonAddCart)) {
 			try {
 				for (Integer i : tableBestSellers.getSelectedRows()) {
 					cart.addVinyl(bestSellers.get(i));
@@ -122,57 +147,80 @@ public class UIClientMenu extends JFrame implements ActionListener {
 				for (Integer i : tableSuggestions.getSelectedRows()) {
 					cart.addVinyl(suggestionsList.get(i));
 				}
-			} catch (Exception e2) {
-				e2.getStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-		} else if (e.getSource().equals(btnSeeCart)) {
+		} else if (event.getSource().equals(btnSeeCart)) {
 			seeCart();
-		} else if (e.getSource().equals(btnSearchBestSeller)) {
+		} else if (event.getSource().equals(btnSearchBestSeller)) {
 			try {
 				searchResultList = logic.getBestSellersDate(bestSellerCalendar.getDate());
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
 			tableBestSellers = new JTable(modelBestSellers);
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
-		} else if (e.getSource().equals(btnFromTheBeginningOfTime)) {
+		} else if (event.getSource().equals(btnFromTheBeginningOfTime)) {
 			try {
 				searchResultList = logic.getBestSellers();
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
 			tableBestSellers = new JTable(modelBestSellers);
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
-		} else if (e.getSource().equals(btnConfirm)) {
+		} else if (event.getSource().equals(btnConfirm)) {
 			try {
 				logic.writePurchase(cart);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-		} else if (e.getSource().equals(btnClearCart)) {
+		} else if (event.getSource().equals(btnClearCart)) {
 			cart.getVinyls().clear();
-		} else if (e.getSource().equals(btnSearch)) {
-			advancedSearch = new AdvancedSearch();
-			advancedSearch.setArtist(artistField.getText());
-			advancedSearch.setGenre(genreField.getText());
-			advancedSearch.setPrice(Double.valueOf(priceField.getText()));
-			advancedSearch.setPublicationYear(Integer.valueOf(publicationDateField.getText()));
-			advancedSearch.setTitle(albumTitleField.getText());
-			advancedSearch.setStockLessThan(Integer.MAX_VALUE);
+		} else if (event.getSource().equals(btnSearch)) {
 			try {
+				advancedSearch = new AdvancedSearch();
+				advancedSearch.setArtist(artistField.getText());
+				advancedSearch.setGenre(genreField.getText());
+				advancedSearch.setPrice(Double.valueOf(priceField.getText()));
+				advancedSearch.setPublicationYear(Integer.valueOf(publicationDateField.getText()));
+				advancedSearch.setTitle(albumTitleField.getText());
+				advancedSearch.setStockLessThan(Integer.MAX_VALUE);
 				searchResultList = logic.advancedSearch(advancedSearch);
-			} catch (Exception e1) {
-				e1.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			modelAdvancedSearch = new DefaultTableModel(fillData(searchResultList), columnNames);
 			tableAdvancedSearch = new JTable(modelAdvancedSearch);
 			scrollPaneAdvancedSearch.setViewportView(tableAdvancedSearch);
-		} else if (e.getSource().equals(btnBuySelected)) {
+		} else if (event.getSource().equals(btnBuySelected)) {
 			for (Integer i : tableAdvancedSearch.getSelectedRows()) {
 				cart.addVinyl(searchResultList.get(i));
 			}
+		} else if (event.getSource().equals(btnSubmit)) {
+			client.setAccountNumber(Long.valueOf(bankNumberField.getText()));
+			client.setAddress(addressField.getText());
+			client.setEmail(emailField.getText());
+			client.setName(nameField.getText());
+			client.setPassword(passwordField.getText());
+			client.setPhoneNumber(Integer.valueOf(phoneNumberField.getText()));
+			client.setSurname(surnameField.getText());
+			Taste auxTaste = new Taste();
+			for (Integer i : listOfArtists.getSelectedIndices()) {
+				auxTaste.addArtist(artists.get(i));
+			}
+			for (Integer i : listOfGenres.getSelectedIndices()) {
+				auxTaste.addGenre(genres.get(i));
+			}
+			client.setTastes(auxTaste);
+			try {
+				logic.modifyClientData(client);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		} else if (event.getSource().equals(btnCancel)) {
+			personalInfo.repaint();
 		}
 	}
 	/**
@@ -183,18 +231,18 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	 *            sold Vinyls given by the Data Base
 	 */
 	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
-		Object[][] data = new Object[7][auxVinylList.size()];
+		Object[][] data = new Object[auxVinylList.size()][7];
 		for (int i = 0; i < auxVinylList.size(); i++) {
-			data[0][i] = "Placeholder";
-			data[1][i] = auxVinylList.get(i).getTitle();
-			data[2][i] = auxVinylList.get(i).getArtist().getName();
-			data[3][i] = auxVinylList.get(i).getGenre().getName();
-			data[4][i] = auxVinylList.get(i).getPrice();
-			data[5][i] = auxVinylList.get(i).isOnSale();
+			data[i][0] = "Placeholder";
+			data[i][1] = auxVinylList.get(i).getTitle();
+			data[i][2] = auxVinylList.get(i).getArtist().getName();
+			data[i][3] = auxVinylList.get(i).getGenre().getName();
+			data[i][4] = auxVinylList.get(i).getPrice();
+			data[i][5] = auxVinylList.get(i).isOnSale();
 			if (auxVinylList.get(i).isOnSale()) {
-				data[6][i] = auxVinylList.get(i).getSalePercentage();
+				data[i][6] = ((auxVinylList.get(i).getSalePercentage())-1)*100;
 			} else {
-				data[6][i] = "Not on Sale";
+				data[i][6] = "Not on Sale";
 			}
 		}
 		return data;
@@ -238,7 +286,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		cartPanel.add(cartDateField);
 		cartDateField.setColumns(10);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-		cartDateField.setText(cart.getDate().format(formatter));
+		cartDateField.setText(cart.getDATE().format(formatter));
 		cartModel = new DefaultTableModel(fillData(cart.getVinyls()), columnNames);
 		cartTable = new JTable(cartModel);
 		scrollPaneCartTable.setViewportView(cartTable);
@@ -260,8 +308,8 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		boughtVinyls.add(btnGoBackToMenu);
 		try {
 			boughtVinylsList = logic.getBoughtVinyls(client);
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(20, 91, 969, 444);
@@ -270,7 +318,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		scrollPane.setViewportView(tableBoughtVinyls);
 	}
 	private void modifyPersonalInfo() {
-		JPanel personalInfo = new JPanel();
+		personalInfo = new JPanel();
 		personalInfo.setBackground(new Color(250, 235, 215));
 		personalInfo.setBorder(new EmptyBorder(5, 5, 5, 5));
 		personalInfo.setLayout(null);
@@ -297,22 +345,35 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		nameField.setBounds(189, 37, 133, 20);
 		personalInfo.add(nameField);
 		nameField.setColumns(10);
+		nameField.setText(client.getName());
+		addressField = new JTextField();
+		addressField.setBounds(189, 37, 133, 20);
+		personalInfo.add(addressField);
+		addressField.setColumns(10);
+		addressField.setText(client.getAddress());
 		surnameField = new JTextField();
 		surnameField.setBounds(189, 79, 133, 20);
 		personalInfo.add(surnameField);
 		surnameField.setColumns(10);
-		numberField = new JTextField();
-		numberField.setBounds(188, 122, 134, 20);
-		personalInfo.add(numberField);
-		numberField.setColumns(10);
+		surnameField.setText(client.getSurname());
+		phoneNumberField = new JTextField();
+		phoneNumberField.setBounds(188, 122, 134, 20);
+		personalInfo.add(phoneNumberField);
+		phoneNumberField.setColumns(10);
+		phoneNumberField.setText(String.valueOf(client.getPhoneNumber()));
 		emailField = new JTextField();
 		emailField.setBounds(188, 159, 134, 20);
 		personalInfo.add(emailField);
 		emailField.setColumns(10);
+		emailField.setText(client.getEmail());
 		bankNumberField = new JTextField();
 		bankNumberField.setBounds(188, 198, 134, 20);
 		personalInfo.add(bankNumberField);
 		bankNumberField.setColumns(10);
+		bankNumberField.setText(String.valueOf(client.getAccountNumber()));
+		passwordField = new JPasswordField();
+		passwordField.setBounds(189, 240, 133, 20);
+		personalInfo.add(passwordField);
 		btnSubmit = new JButton("Save changes");
 		btnSubmit.setBackground(new Color(255, 228, 196));
 		btnSubmit.setBounds(28, 307, 115, 33);
@@ -321,9 +382,16 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		btnCancel.setBackground(new Color(255, 228, 196));
 		btnCancel.setBounds(188, 307, 115, 33);
 		personalInfo.add(btnCancel);
-		passwordField = new JPasswordField();
-		passwordField.setBounds(189, 240, 133, 20);
-		personalInfo.add(passwordField);
+		btnSubmit.addActionListener(this);
+		btnCancel.addActionListener(this);
+		listOfGenres = new JList<String>();
+		DefaultListModel<String> modelGenre = new DefaultListModel<String>();
+		fillModelGenres(modelGenre);
+		listOfGenres.setModel(modelGenre);
+		listOfArtists = new JList<String>();
+		DefaultListModel<String> modelArtists = new DefaultListModel<String>();
+		fillModelArtists(modelArtists);
+		listOfArtists.setModel(modelArtists);
 	}
 	private void advancedSearch() {
 		JPanel advanced = new JPanel();
@@ -445,9 +513,9 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		scrollPaneSuggestions.setBounds(302, 55, 605, 193);
 		panelMainMenu.add(scrollPaneSuggestions);
 		try {
-			suggestionsList = logic.getSuggestions(client.getUsername());
-		} catch (Exception e1) {
-			e1.printStackTrace();
+			suggestionsList = logic.getSuggestions(client);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		modelSuggestions = new DefaultTableModel(fillData(suggestionsList), columnNames);
 		tableSuggestions = new JTable(modelSuggestions);
@@ -476,11 +544,31 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		btnSearchBestSeller.addActionListener(this);
 		try {
 			bestSellers = logic.getBestSellers();
-		} catch (Exception e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
 		tableBestSellers = new JTable(modelBestSellers);
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
+	}
+	private void fillModelGenres(DefaultListModel<String> model) {
+		try {
+			artists = logic.getArtistsAllData();
+			for (Artist art : artists) {
+				model.addElement(art.getName());
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	private void fillModelArtists(DefaultListModel<String> model) {
+		try {
+			genres = logic.getGenresAllData();
+			for (Genre g : genres) {
+				model.addElement(g.getName());
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

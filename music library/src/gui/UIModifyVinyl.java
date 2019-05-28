@@ -1,15 +1,16 @@
 package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.plaf.FileChooserUI;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -18,6 +19,7 @@ import control.LogicFactory;
 import model.Vinyl;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.ButtonGroup;
@@ -26,8 +28,7 @@ import javax.swing.JFileChooser;
 
 import java.awt.Color;
 @SuppressWarnings("serial")
-public class UIModifyVinyl extends JFrame implements ActionListener, WindowListener{
-	
+public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JTextField titleField;
 	private JTextField artistField;
@@ -46,18 +47,28 @@ public class UIModifyVinyl extends JFrame implements ActionListener, WindowListe
 	private JLabel lblStock;
 	private JTextField stockField;
 	private JDateChooser dateChooser;
-	private JFileChooser fileChooser = new JFileChooser("././imagenes");
-	private String ruta;
+	private JFileChooser fileChooser;
 	/**
 	 * Launch the application.
 	 */
+	// public static void main(String[] args) {
+	// EventQueue.invokeLater(new Runnable() {
+	// public void run() {
+	// try {
+	// UIModifyVinyl frame = new UIModifyVinyl(4);
+	// frame.setVisible(true);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// });
+	// }
 	/**
 	 * Create the frame.
 	 * 
 	 * @param vinylMod
 	 */
 	public UIModifyVinyl(int vinylMod) {
-		addWindowListener(this);
 		try {
 			vToMod = logic.getVinyl(vinylCode);
 		} catch (Exception e) {
@@ -190,81 +201,36 @@ public class UIModifyVinyl extends JFrame implements ActionListener, WindowListe
 		return v;
 	}
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(btnCancel)) {
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource().equals(btnCancel)) {
 			this.dispose();
-			UIMenuAdmin menu = new UIMenuAdmin();
-		} else if (e.getSource().equals(btnSelect)) {
-			JFileChooser chooser = new JFileChooser("././imagenes/");
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Images", "jpg","png","jpeg");
-			chooser.setFileFilter(imgFilter);
-			chooser.showOpenDialog(this);
-			File result = chooser.getSelectedFile();
-			String path= null;
-			path = result.getPath();
-			int index = path.lastIndexOf("\\");
-			String name = path.substring(index+1);
-			name="././imagenes/" + name;
-			System.out.println(name);
-			vToMod.setCover(name);
-			
-		} else if (e.getSource().equals(btnSubmitChanges)) {
+		} else if (event.getSource().equals(btnSelect)) {
+			fileChooser = new JFileChooser("C:/");
+			fileChooser.showOpenDialog(this);
+		} else if (event.getSource().equals(btnSubmitChanges)) {
 			try {
+				File coverArtSrc = fileChooser.getSelectedFile();
+				File coverArtDest = new File("././Images/" + coverArtSrc.getName());
+				Files.copy(coverArtSrc.toPath(), coverArtDest.toPath());
 				vToMod.setArtist(logic.getArtist(artistField.getText()));
+				vToMod.setCover(coverArtDest.toPath().toString());
 				vToMod.setDescription(descriptionField.getText());
 				vToMod.setGenre(logic.getGenre(genreField.getText()));
 				if (rdbtnYes.isSelected()) {
 					vToMod.setOnSale(true);
+					vToMod.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
 				} else {
 					vToMod.setOnSale(false);
+					vToMod.setSalePercentage(1);
 				}
 				vToMod.setPrice((Double.valueOf(priceField.getText())));
-				// vToMod.setPublicationDate();
-				vToMod.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
+				vToMod.setPublicationDate(DateConverter.converttoLocalDateViaInstant(dateChooser.getDate()));
 				vToMod.setStock(Integer.valueOf(stockField.getText()));
 				vToMod.setTitle(titleField.getText());
-				
 				logic.updateVinyl(vToMod);
-			} catch (Exception e2) {
-				e2.printStackTrace();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
-	}
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowClosed(WindowEvent e) {
-		UIMenuAdmin menu = new UIMenuAdmin();
-		menu.setVisible(true);
-	}
-	@Override
-	public void windowClosing(WindowEvent e) {
-		UIMenuAdmin menu = new UIMenuAdmin();
-		menu.setVisible(true);
-		
-	}
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

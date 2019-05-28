@@ -955,7 +955,7 @@ public class DataAccessImpl implements DataAccess{
 				stmt = con.prepareStatement(sql);
 				stmt.setString(1, purchase.getBuyer());
 				stmt.setInt(2, key);
-				stmt.setTimestamp(3, Timestamp.valueOf(purchase.getDate()));
+				stmt.setTimestamp(3, Timestamp.valueOf(purchase.getDATE()));
 				stmt.setInt(4, amount);
 				stmt.setDouble(5, totalPrice);
 				stmt.executeUpdate();

@@ -208,12 +208,5 @@ public class LogicImpl implements Logic {
 		genres = dataAccess.getGenresAllData();
 		return genres;
 	}
-	public ArrayList<Artist> getArtistsAllData() throws Exception {
-		ArrayList<Artist> ar = dataAccess.getArtistsAllData();
-		return ar;
-	}
-	public ArrayList<Genre> getGenresAllData() throws Exception {
-		ArrayList<Genre> ar = dataAccess.getGenresAllData();
-		return ar;
-	}
+	
 }

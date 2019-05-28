@@ -1,9 +1,10 @@
 package model;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 public class Purchase {
-	private final LocalDate DATE = LocalDate.now();
+	private final LocalDateTime DATE = LocalDateTime.now();
 	private double fullPrice;
 	private int amount;
 	private String buyer;
@@ -46,7 +47,7 @@ public class Purchase {
 	public void setWithPrice(HashMap<Integer, Double> withPrice) {
 		this.withPrice = withPrice;
 	}
-	public LocalDate getDATE() {
+	public LocalDateTime getDATE() {
 		return DATE;
 	}
 	public Purchase(double fullPrice, int amount, String buyer, ArrayList<Vinyl> vinyls, HashMap<Integer, Integer> withAmount, HashMap<Integer, Double> withPrice) {

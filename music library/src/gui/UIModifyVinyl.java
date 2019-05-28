@@ -16,6 +16,7 @@ import com.toedter.calendar.JDateChooser;
 
 import control.Logic;
 import control.LogicFactory;
+import model.DateConverter;
 import model.Vinyl;
 
 import javax.swing.JLabel;
@@ -224,7 +225,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 					vToMod.setSalePercentage(1);
 				}
 				vToMod.setPrice((Double.valueOf(priceField.getText())));
-				vToMod.setPublicationDate(DateConverter.converttoLocalDateViaInstant(dateChooser.getDate()));
+				vToMod.setPublicationDate(DateConverter.convertToLocalDateViaInstant(dateChooser.getDate()));
 				vToMod.setStock(Integer.valueOf(stockField.getText()));
 				vToMod.setTitle(titleField.getText());
 				logic.updateVinyl(vToMod);

@@ -12,6 +12,7 @@ import model.AdvancedSearch;
 import model.Artist;
 import model.Client;
 import model.CloseTabButton;
+import model.DateConverter;
 import model.Genre;
 import model.Purchase;
 import model.Taste;
@@ -154,7 +155,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			seeCart();
 		} else if (event.getSource().equals(btnSearchBestSeller)) {
 			try {
-				searchResultList = logic.getBestSellersDate(bestSellerCalendar.getDate());
+				searchResultList = logic.getBestSellersDate(DateConverter.convertToLocalDateViaInstant(bestSellerCalendar.getDate()));
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
@@ -307,7 +308,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		btnGoBackToMenu.setBounds(451, 577, 134, 37);
 		boughtVinyls.add(btnGoBackToMenu);
 		try {
-			boughtVinylsList = logic.getBoughtVinyls(client);
+			boughtVinylsList = logic.getBoughtVinyls(client.getUsername());
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
@@ -513,7 +514,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		scrollPaneSuggestions.setBounds(302, 55, 605, 193);
 		panelMainMenu.add(scrollPaneSuggestions);
 		try {
-			suggestionsList = logic.getSuggestions(client);
+			suggestionsList = logic.getSuggestions(client.getUsername());
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}

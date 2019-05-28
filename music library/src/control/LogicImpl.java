@@ -208,5 +208,19 @@ public class LogicImpl implements Logic {
 		genres = dataAccess.getGenresAllData();
 		return genres;
 	}
+
+	@Override
+	public ArrayList<Genre> getGenresTaste(String username) throws Exception {
+		ArrayList<Genre> genres = new ArrayList<Genre>();
+		genres = dataAccess.getGenresTaste(username);
+		return genres;
+	}
+
+	@Override
+	public ArrayList<Artist> getArtistsTaste(String username) throws Exception {
+		ArrayList<Artist> artists = new ArrayList<Artist>();
+		artists = dataAccess.getArtistsTaste(username);
+		return artists;
+	}
 	
 }

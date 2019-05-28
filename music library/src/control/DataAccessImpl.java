@@ -20,6 +20,7 @@ import model.Artist;
 import model.Client;
 import model.Genre;
 import model.Purchase;
+import model.Taste;
 import model.Vinyl;
 
 public class DataAccessImpl implements DataAccess{
@@ -883,6 +884,14 @@ public class DataAccessImpl implements DataAccess{
 				client.setPhoneNumber(rs.getInt("phonenumber"));
 				client.setAddress(rs.getString("address"));
 				client.setAccountNumber(rs.getLong("accountnumber"));
+				Taste temp = new Taste();
+				ArrayList<Artist> artists = new ArrayList<Artist>();
+				artists = getArtistsTaste(username);
+				ArrayList<Genre> genres = new ArrayList<Genre>();
+				genres = getGenresTaste(username);
+				temp.setArtists(artists);
+				temp.setGenres(genres);
+				client.setTastes(temp);
 			}
 		} finally {
 			disconnect();
@@ -1194,6 +1203,58 @@ public class DataAccessImpl implements DataAccess{
 				temp.setName(rs.getString("name"));
 				genres.add(temp);
 			}
+		} finally {
+			disconnect();
+		}
+		return genres;
+	}
+	
+	public ArrayList<Artist> getArtistsTaste (String username) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Artist> artists = new ArrayList<Artist>();
+		ArrayList<Integer> artistscodes = new ArrayList<Integer>();
+		artistscodes = getArtistTaste(username);
+		ResultSet rs = null;
+		try {
+			for (Integer integer : artistscodes) {
+				connect();
+				String sql = "select * from artists where artistcode = ?";
+				stmt = con.prepareStatement(sql);
+				stmt.setInt(1, integer);
+				rs = stmt.executeQuery();
+				if (rs.next()) {
+					Artist temp = new Artist();
+					temp.setCode(integer);
+					temp.setName(rs.getString("name"));
+					artists.add(temp);
+				}
+			}
+			
+		} finally {
+			disconnect();
+		}
+		return artists;
+	}
+	
+	public ArrayList<Genre> getGenresTaste (String username) throws ClassNotFoundException, SQLException, IOException{
+		ArrayList<Genre> genres = new ArrayList<Genre>();
+		ArrayList<Integer> genrescodes = new ArrayList<Integer>();
+		genrescodes = getGenreTaste(username);
+		ResultSet rs = null;
+		try {
+			for (Integer integer : genrescodes) {
+				connect();
+				String sql = "select * from genres where genrecode = ?";
+				stmt = con.prepareStatement(sql);
+				stmt.setInt(1, integer);
+				rs = stmt.executeQuery();
+				if (rs.next()) {
+					Genre temp = new Genre();
+					temp.setCode(integer);
+					temp.setName(rs.getString("name"));
+					genres.add(temp);
+				}
+			}
+			
 		} finally {
 			disconnect();
 		}

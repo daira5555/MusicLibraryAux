@@ -74,14 +74,12 @@ public class UILogin extends JFrame implements ActionListener {
 		btnLogIn.setFont(new Font("Arial", Font.BOLD, 11));
 		btnLogIn.setBounds(297, 279, 89, 23);
 		contentPane.add(btnLogIn);
+		btnLogIn.addActionListener(this);
 		
 		btnSignUp = new JButton("Sign up");
 		btnSignUp.setBackground(new Color(255, 228, 181));
 		btnSignUp.setFont(new Font("Arial", Font.BOLD, 11));
-		btnSignUp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		btnSignUp.addActionListener(this);
 		btnSignUp.setBounds(297, 245, 89, 23);
 		contentPane.add(btnSignUp);
 		

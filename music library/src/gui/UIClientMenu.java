@@ -105,17 +105,18 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIClientMenu frame = new UIClientMenu(new Client());
-					frame.setVisible(true);
-				} catch (Exception e) {
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					UIClientMenu frame = new UIClientMenu(new Client());
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	public UIClientMenu(Client clientLogged) {
 		setTitle("Client Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -145,10 +146,14 @@ public class UIClientMenu extends JFrame implements ActionListener {
 				for (Integer i : tableBestSellers.getSelectedRows()) {
 					cart.addVinyl(bestSellers.get(i));
 				}
-				for (Integer i : tableSuggestions.getSelectedRows()) {
-					cart.addVinyl(suggestionsList.get(i));
+				if (tableSuggestions != null) {
+					for (Integer i : tableSuggestions.getSelectedRows()) {
+						cart.addVinyl(suggestionsList.get(i));
+					}
 				}
+				
 			} catch (Exception e) {
+				e.printStackTrace();
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (event.getSource().equals(btnSeeCart)) {
@@ -288,6 +293,9 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		cartDateField.setColumns(10);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 		cartDateField.setText(cart.getDATE().format(formatter));
+		// TODO
+		scrollPaneCartTable = new JScrollPane();
+		scrollPaneCartTable.setBounds(48, 100, 864, 206);
 		cartModel = new DefaultTableModel(fillData(cart.getVinyls()), columnNames);
 		cartTable = new JTable(cartModel);
 		scrollPaneCartTable.setViewportView(cartTable);
@@ -372,7 +380,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		personalInfo.add(bankNumberField);
 		bankNumberField.setColumns(10);
 		bankNumberField.setText(String.valueOf(client.getAccountNumber()));
-		passwordField = new JPasswordField();
+		passwordField = new JPasswordField(client.getPassword());
 		passwordField.setBounds(189, 240, 133, 20);
 		personalInfo.add(passwordField);
 		btnSubmit = new JButton("Save changes");
@@ -514,13 +522,13 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		scrollPaneSuggestions.setBounds(302, 55, 605, 193);
 		panelMainMenu.add(scrollPaneSuggestions);
 		try {
-			suggestionsList = logic.getSuggestions(client.getUsername());
+			//suggestionsList = logic.getSuggestions(client.getUsername());
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		modelSuggestions = new DefaultTableModel(fillData(suggestionsList), columnNames);
-		tableSuggestions = new JTable(modelSuggestions);
-		scrollPaneSuggestions.setViewportView(tableSuggestions);
+		//modelSuggestions = new DefaultTableModel(fillData(suggestionsList), columnNames);
+		//tableSuggestions = new JTable(modelSuggestions);
+		//scrollPaneSuggestions.setViewportView(tableSuggestions);
 		scrollPaneBestSellers = new JScrollPane();
 		scrollPaneBestSellers.setBounds(48, 364, 864, 206);
 		panelMainMenu.add(scrollPaneBestSellers);

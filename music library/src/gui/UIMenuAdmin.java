@@ -270,7 +270,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		} else if (e.getSource().equals(btnDeleteFromBestSellers)) {
 			deleteVinyl(bestSellersResultList.get(tableBestSellers.getSelectedRow()).getVinylCode());
 			refreshBestsellers(null);
-			refreshAdvancedSearch();
+		
 
 		} else if (e.getSource().equals(btnModifyFromSearch)) {
 			UIModifyVinyl mod = new UIModifyVinyl(advancedSearchList.get(tableAdvancedSearch.getSelectedRow()).getVinylCode());
@@ -279,7 +279,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		} else if (e.getSource().equals(btnDeleteFromSearch)) {
 			deleteVinyl(advancedSearchList.get(tableAdvancedSearch.getSelectedRow()).getVinylCode());
 			refreshAdvancedSearch();
-			refreshBestsellers(null);
+		
 		} else if (e.getSource().equals(btnOrderFromSearch) || e.getSource().equals(btnOrderVinylFromSearch)){
 			
 			JOptionPane.showMessageDialog(this, "100 units have been ordered.");

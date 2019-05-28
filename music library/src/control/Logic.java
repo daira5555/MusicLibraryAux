@@ -52,4 +52,6 @@ public interface Logic {
 	public boolean haveStock (int vinylCode, int amountSold) throws Exception;
 	public ArrayList<Artist> getArtistsAllData() throws Exception;
 	public ArrayList<Genre> getGenresAllData() throws Exception;
+	public ArrayList<Genre> getGenresTaste (String username) throws Exception;
+	public ArrayList<Artist> getArtistsTaste (String username) throws Exception;
 }

@@ -73,18 +73,12 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIMenuAdmin frame = new UIMenuAdmin();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	/*
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { UIMenuAdmin frame = new UIMenuAdmin();
+	 * frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); } } });
+	 * }
+	 */
 
 	public UIMenuAdmin() {
 		setTitle("Main Menu");
@@ -188,15 +182,13 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		
-		
+
 		modelBestSellers = new DefaultTableModel(fillData(bestSellersResultList), columnNames);
 
 		tableBestSellers = new JTable(modelBestSellers);
 
 		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
-		
 
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
 		btnSearchBestSellers = new JButton("show best sellers");
@@ -222,6 +214,10 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		btnOrderVinylFromSearch.addActionListener(this);
 	}
 
+	/**
+	 * This method is to set the functionality to the buttons that have
+	 * ActionListener implemented
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnSearch)) {
 			search.setArtist(artistField.getText());
@@ -263,28 +259,31 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		} else if (e.getSource().equals(btnDeleteFromBestSellers)) {
 			deleteVinyl(bestSellersResultList.get(tableBestSellers.getSelectedRow()).getVinylCode());
 			refreshBestsellers(null);
-		
 
 		} else if (e.getSource().equals(btnModifyFromSearch)) {
-			UIModifyVinyl mod = new UIModifyVinyl(advancedSearchList.get(tableAdvancedSearch.getSelectedRow()).getVinylCode());
+			UIModifyVinyl mod = new UIModifyVinyl(
+					advancedSearchList.get(tableAdvancedSearch.getSelectedRow()).getVinylCode());
 			mod.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			mod.setVisible(true);
-			
+
 		} else if (e.getSource().equals(btnDeleteFromSearch)) {
 			deleteVinyl(advancedSearchList.get(tableAdvancedSearch.getSelectedRow()).getVinylCode());
 			refreshAdvancedSearch();
-		
-		} else if (e.getSource().equals(btnOrderFromSearch) || e.getSource().equals(btnOrderVinylFromSearch)){
-			
+
+		} else if (e.getSource().equals(btnOrderFromSearch) || e.getSource().equals(btnOrderVinylFromSearch)) {
+
 			JOptionPane.showMessageDialog(this, "100 units have been ordered.");
-			
-		}else if (e.getSource().equals(btnNewVinyl)) {
+
+		} else if (e.getSource().equals(btnNewVinyl)) {
 			UINewVinyl newVinyl = new UINewVinyl();
 			newVinyl.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 			newVinyl.setVisible(true);
 		}
 	}
 
+	/**
+	 * This method refresh the advanced search's table to show the new search
+	 */
 	private void refreshAdvancedSearch() {
 		try {
 			advancedSearchList = logic.advancedSearch(search);
@@ -298,11 +297,16 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		scrollPaneAdvancedSearch.setViewportView(tableAdvancedSearch);
 	}
 
+	/**
+	 * This method refresh the best sellers' table to show the new search
+	 * 
+	 * @param date This date is from java.util.Date and will be parsed to a
+	 *             LocalDate inside the method
+	 */
 	private void refreshBestsellers(Date date) {
 		if (date != null) {
 			try {
-				bestSellersResultList = logic
-						.getBestSellersDate(DateConverter.convertToLocalDateViaInstant(date));
+				bestSellersResultList = logic.getBestSellersDate(DateConverter.convertToLocalDateViaInstant(date));
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -320,6 +324,11 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
 	}
 
+	/**
+	 * This method deletes a vinyl from the database
+	 * 
+	 * @param vinylDel the vinyl's code from the vinyl we want to delete
+	 */
 	private void deleteVinyl(int vinylDel) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -329,36 +338,50 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		}
 	}
 
-	class LabelRenderer extends DefaultTableCellRenderer {//implements TableCellRenderer {
+	/**
+	 * This method allows the JTables to be able to display the covers properly
+	 */
+	class LabelRenderer extends DefaultTableCellRenderer {// implements TableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			
-				TableColumn tc = table.getColumn("Cover Art");
-				tc.setMinWidth(100);
-				tc.setMaxWidth(100);
-				table.setRowHeight(100);
-				 table.repaint();
-			return (Component)value;
-		}
-	}
-	class LabelRenderer2 extends DefaultTableCellRenderer {//implements TableCellRenderer {
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {				
-			
-			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);	
-			
-			if (data[row][5] == Boolean.TRUE) {
-				c.setBackground(Color.orange);
-				
-			}
-            else c.setBackground(table.getBackground());
-			
-			
-			 table.repaint();
-			 return c;//(Component) value;
+
+			TableColumn tc = table.getColumn("Cover Art");
+			tc.setMinWidth(100);
+			tc.setMaxWidth(100);
+			table.setRowHeight(100);
+			table.repaint();
+			return (Component) value;
 		}
 	}
 
+	/**
+	 * This method paints the cell of the price if the vinyl have a discount
+	 *
+	 */
+	class LabelRenderer2 extends DefaultTableCellRenderer {// implements TableCellRenderer {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			if (data[row][5] == Boolean.TRUE) {
+				c.setBackground(Color.orange);
+
+			} else
+				c.setBackground(table.getBackground());
+
+			table.repaint();
+			return c;// (Component) value;
+		}
+	}
+
+	/**
+	 * This method fills the data of the all vinyls we need. Later will be displayed
+	 * in a JTable
+	 * 
+	 * @param auxVinylList The ArrayList of vinyls that the method is going to use
+	 *                     to fill the data
+	 */
 	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
 
 		data = new Object[auxVinylList.size()][7];
@@ -380,7 +403,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			data[i][4] = auxVinylList.get(i).getPrice();
 			data[i][5] = auxVinylList.get(i).isOnSale();
 			if (auxVinylList.get(i).isOnSale()) {
-				data[i][6] = ((auxVinylList.get(i).getSalePercentage())-1)*100;
+				data[i][6] = ((auxVinylList.get(i).getSalePercentage()) - 1) * 100;
 			} else {
 				data[i][6] = "Not on Sale";
 			}

@@ -71,21 +71,12 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	private JFileChooser fileChooser;
 	private JDateChooser dateChooser;
 
-	/**
-	 * Launch the application.
+	/*
+	 * public static void main(String[] args) { EventQueue.invokeLater(new
+	 * Runnable() { public void run() { try { UINewVinyl frame = new UINewVinyl();
+	 * frame.setVisible(true); } catch (Exception e) { e.printStackTrace(); } } });
+	 * }
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UINewVinyl frame = new UINewVinyl();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -184,7 +175,6 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		label_1.setBounds(50, 353, 46, 14);
 		contentPane.add(label_1);
 
-
 		btnSelectImage = new JButton("Select");
 		btnSelectImage.setBackground(new Color(255, 218, 185));
 		btnSelectImage.setBounds(156, 350, 89, 23);
@@ -217,7 +207,6 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		artistsSP.setViewportView(artistsList);
 
 		fillArtistsList();
-		
 
 		genresSP = new JScrollPane();
 		genresSP.setBounds(144, 118, 178, 47);
@@ -225,11 +214,14 @@ public class UINewVinyl extends JFrame implements ActionListener {
 
 		genresList = new JList();
 		genresSP.setViewportView(genresList);
-		
+
 		fillGenresList();
-		
+
 	}
 
+	/**
+	 * This method will fill the genres list
+	 */
 	private void fillGenresList() {
 		model2 = new DefaultListModel<String>();
 		displayGenres(model2);
@@ -237,6 +229,9 @@ public class UINewVinyl extends JFrame implements ActionListener {
 		genresList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 
+	/**
+	 * This method will fill the artists list
+	 */
 	private void fillArtistsList() {
 		model = new DefaultListModel<String>();
 		displayArtists(model);
@@ -245,11 +240,14 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	}
 
 	@Override
+	/**
+	 * This method will allow to the buttons to have it's own code
+	 */
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource().equals(btnSubmitChanges)) {
 			try {
-				
+
 				File coverArtSrc = fileChooser.getSelectedFile();
 				File coverArtDest = new File("././Images/" + coverArtSrc.getName());
 				Files.copy(coverArtSrc.toPath(), coverArtDest.toPath());
@@ -284,34 +282,42 @@ public class UINewVinyl extends JFrame implements ActionListener {
 			fileChooser.setFileFilter(imgFilter);
 			fileChooser.showOpenDialog(this);
 
-		}else if(e.getSource().equals(btnNewArtist)) {
+		} else if (e.getSource().equals(btnNewArtist)) {
 			String newArtist = JOptionPane.showInputDialog("Insert new Artist: ");
-			//System.out.println(newArtist);
+			// System.out.println(newArtist);
 			if (newArtist != null) {
 				try {
 					logic.insertArtist(newArtist);
 					fillArtistsList();
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "Error. Maybe the artist arleady exists","Error", JOptionPane.ERROR_MESSAGE);
-					//e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error. Maybe the artist arleady exists", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					// e1.printStackTrace();
 				}
 			}
-			
-		}else if(e.getSource().equals(btnNewGenre)) {
+
+		} else if (e.getSource().equals(btnNewGenre)) {
 			String newGenre = JOptionPane.showInputDialog("Insert new Genre: ");
 			if (newGenre != null) {
 				try {
 					logic.insertGenre(newGenre);
 					fillGenresList();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Error. Maybe the genre arleady exists","Error", JOptionPane.ERROR_MESSAGE);
-					//e2.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error. Maybe the genre arleady exists", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					// e2.printStackTrace();
 				}
 			}
-			
+
 		}
 
 	}
+
+	/**
+	 * This method will display the genres list
+	 * 
+	 * @param model DefaultListModel of type String
+	 */
 	private void displayGenres(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -319,11 +325,16 @@ public class UINewVinyl extends JFrame implements ActionListener {
 			for (String g : names) {
 				model.addElement(g);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * This method will display the artists list
+	 * 
+	 * @param model DefaultListModel of type String
+	 */
 	private void displayArtists(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -331,10 +342,8 @@ public class UINewVinyl extends JFrame implements ActionListener {
 			for (String art : names) {
 				model.addElement(art);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 }
-
-

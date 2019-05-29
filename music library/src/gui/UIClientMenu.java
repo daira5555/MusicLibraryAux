@@ -1,4 +1,5 @@
 package gui;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -44,6 +45,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+
 public class UIClientMenu extends JFrame implements ActionListener {
 	/**
 	 * 
@@ -99,7 +101,8 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private DefaultTableModel modelBestSellers;
 	private DefaultTableModel modelAdvancedSearch;
 	private DefaultTableModel cartModel;
-	private final String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On Sale", "Sale percentage:"};
+	private final String[] columnNames = { "Cover Art", "Album Title", "Artist", "Genre", "Price", "On Sale",
+			"Sale percentage:" };
 	private ArrayList<Vinyl> bestSellers;
 	private ArrayList<Vinyl> suggestionsList;
 	private ArrayList<Vinyl> searchResultList;
@@ -111,10 +114,11 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private ArrayList<Artist> artists;
 	private ArrayList<Genre> genres;
 	private JPanel cartPanel;
-	//private Object[][] data;
+	// private Object[][] data;
 	/**
 	 * Create the frame.
 	 */
+
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
 //			public void run() {
@@ -127,6 +131,11 @@ public class UIClientMenu extends JFrame implements ActionListener {
 //			}
 //		});
 //	}
+	/**
+	 * The main window of the client
+	 * 
+	 * @param clientLogged client Class with all the information about the client
+	 */
 	public UIClientMenu(Client clientLogged) {
 		setTitle("Client Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -142,8 +151,12 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		this.client = clientLogged;
 		mainMenu();
 	}
+
 	@SuppressWarnings("deprecation")
 	@Override
+	/**
+	 * The conditions of the buttons of ActionListener events
+	 */
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource().equals(buttonAdvancedSearch)) {
 			advancedSearch();
@@ -161,7 +174,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 						cart.addVinyl(suggestionsList.get(i));
 					}
 				}
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -170,13 +183,16 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			seeCart();
 		} else if (event.getSource().equals(btnSearchBestSeller)) {
 			try {
-				searchResultList = logic.getBestSellersDate(DateConverter.convertToLocalDateViaInstant(bestSellerCalendar.getDate()));
+				searchResultList = logic
+						.getBestSellersDate(DateConverter.convertToLocalDateViaInstant(bestSellerCalendar.getDate()));
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-			/*modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
-			tableBestSellers = new JTable(modelBestSellers);*/
-			
+			/*
+			 * modelBestSellers = new DefaultTableModel(fillData(searchResultList),
+			 * columnNames); tableBestSellers = new JTable(modelBestSellers);
+			 */
+
 			Object[][] data = fillData(searchResultList);
 			modelBestSellers = new DefaultTableModel(data, columnNames);
 
@@ -184,7 +200,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 
 			tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 			tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
-			
+
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
 		} else if (event.getSource().equals(btnFromTheBeginningOfTime)) {
 			try {
@@ -192,9 +208,11 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-			/*modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
-			tableBestSellers = new JTable(modelBestSellers);*/
-			
+			/*
+			 * modelBestSellers = new DefaultTableModel(fillData(searchResultList),
+			 * columnNames); tableBestSellers = new JTable(modelBestSellers);
+			 */
+
 			Object[][] data = fillData(searchResultList);
 			modelBestSellers = new DefaultTableModel(data, columnNames);
 
@@ -202,7 +220,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 
 			tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 			tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
-			
+
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
 		} else if (event.getSource().equals(btnConfirm)) {
 			try {
@@ -223,12 +241,12 @@ public class UIClientMenu extends JFrame implements ActionListener {
 				advancedSearch.setGenre(genreField.getText());
 				if (priceField.getText().isEmpty()) {
 					advancedSearch.setPrice(0);
-				}else {
+				} else {
 					advancedSearch.setPrice(Double.valueOf(priceField.getText()));
 				}
 				if (publicationDateField.getText().isEmpty()) {
 					advancedSearch.setPublicationYear(0);
-				}else {
+				} else {
 					advancedSearch.setPublicationYear(Integer.valueOf(publicationDateField.getText()));
 				}
 				advancedSearch.setTitle(albumTitleField.getText());
@@ -244,7 +262,6 @@ public class UIClientMenu extends JFrame implements ActionListener {
 
 			tableAdvancedSearch.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 			tableAdvancedSearch.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
-			//TODO
 			scrollPaneAdvancedSearch.setViewportView(tableAdvancedSearch);
 		} else if (event.getSource().equals(btnBuySelected)) {
 			for (Integer i : tableAdvancedSearch.getSelectedRows()) {
@@ -277,15 +294,15 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			seeCart();
 		}
 	}
+
 	/**
 	 * private void fillBestSellerList(ArrayList<Vinyl> bestSellers)
 	 * 
-	 * @param bestSellers
-	 *            Fills the list of best sellers based on the ArrayList of best
-	 *            sold Vinyls given by the Data Base
+	 * @param bestSellers Fills the list of best sellers based on the ArrayList of
+	 *                    best sold Vinyls given by the Data Base
 	 */
 	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
-		
+
 		Object[][] data = new Object[auxVinylList.size()][7];
 		for (int i = 0; i < auxVinylList.size(); i++) {
 			JLabel label = new JLabel();
@@ -296,7 +313,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			label.setIcon(imagen2);
 			label.setHorizontalAlignment(JLabel.CENTER);
 			label.setVerticalAlignment(JLabel.CENTER);
-			
+
 			data[i][0] = label;
 			data[i][1] = auxVinylList.get(i).getTitle();
 			data[i][2] = auxVinylList.get(i).getArtist().getName();
@@ -304,13 +321,17 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			data[i][4] = auxVinylList.get(i).getPrice();
 			data[i][5] = auxVinylList.get(i).isOnSale();
 			if (auxVinylList.get(i).isOnSale()) {
-				data[i][6] = ((auxVinylList.get(i).getSalePercentage())-1)*100;
+				data[i][6] = ((auxVinylList.get(i).getSalePercentage()) - 1) * 100;
 			} else {
 				data[i][6] = "Not on Sale";
 			}
 		}
 		return data;
 	}
+
+	/**
+	 * This method is to display a new tab with the panel of the cart
+	 */
 	private void seeCart() {
 		cartPanel = new JPanel();
 		cartPanel.setBackground(new Color(255, 239, 213));
@@ -355,25 +376,27 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		cartDateField.setColumns(10);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 		cartDateField.setText(cart.getDATE().format(formatter));
-		// TODO
+
 		scrollPaneCartTable = new JScrollPane();
 		scrollPaneCartTable.setBounds(48, 100, 864, 206);
 		cartPanel.add(scrollPaneCartTable);
-		
+
 		Object[][] data = fillData(cart.getVinyls());
-		
+
 		cartModel = new DefaultTableModel(data, columnNames);
 
 		cartTable = new JTable(cartModel);
 
 		cartTable.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 		cartTable.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
-		
+
 		scrollPaneCartTable.setViewportView(cartTable);
-		
-		
-		
+
 	}
+
+	/**
+	 * This method inserts a new tab with the table of the bought vinyls by the user
+	 */
 	private void boughtVinyls() {
 		JPanel boughtVinyls = new JPanel();
 		boughtVinyls.setBackground(new Color(250, 235, 215));
@@ -396,7 +419,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(20, 91, 969, 444);
 		boughtVinyls.add(scrollPane);
-		//tableBoughtVinyls = new JTable(fillData(boughtVinylsList), columnNames);
+		// tableBoughtVinyls = new JTable(fillData(boughtVinylsList), columnNames);
 		Object[][] data = fillData(boughtVinylsList);
 		DefaultTableModel modelBoughtVinyls = new DefaultTableModel(data, columnNames);
 
@@ -406,6 +429,11 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		tableBoughtVinyls.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
 		scrollPane.setViewportView(tableBoughtVinyls);
 	}
+
+	/**
+	 * This method opens a new tab to modify the personal info of the client (except
+	 * the username)
+	 */
 	private void modifyPersonalInfo() {
 		personalInfo = new JPanel();
 		personalInfo.setBackground(new Color(250, 235, 215));
@@ -482,6 +510,11 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		fillModelArtists(modelArtists);
 		listOfArtists.setModel(modelArtists);
 	}
+
+	/**
+	 * This method creates a new tab, the user will be able to search vinyls in this
+	 * new tab
+	 */
 	private void advancedSearch() {
 		JPanel advanced = new JPanel();
 		advanced.setBackground(new Color(250, 235, 215));
@@ -545,6 +578,10 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		scrollPaneAdvancedSearch.setBounds(84, 240, 930, 344);
 		advanced.add(scrollPaneAdvancedSearch);
 	}
+
+	/**
+	 * This method displays the tab of the main menu (this tab isn't closable)
+	 */
 	private void mainMenu() {
 		JPanel panelMainMenu = new JPanel();
 		panelMainMenu.setLayout(null);
@@ -604,9 +641,10 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		//modelSuggestions = new DefaultTableModel(fillData(suggestionsList), columnNames);
-		//tableSuggestions = new JTable(modelSuggestions);
-		
+		// modelSuggestions = new DefaultTableModel(fillData(suggestionsList),
+		// columnNames);
+		// tableSuggestions = new JTable(modelSuggestions);
+
 		Object[][] data = fillData(suggestionsList);
 		modelSuggestions = new DefaultTableModel(data, columnNames);
 
@@ -614,7 +652,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 
 		tableSuggestions.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 		tableSuggestions.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
-		
+
 		scrollPaneSuggestions.setViewportView(tableSuggestions);
 		scrollPaneBestSellers = new JScrollPane();
 		scrollPaneBestSellers.setBounds(48, 364, 864, 206);
@@ -651,9 +689,15 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data2));
 		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
-		
+
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
 	}
+
+	/**
+	 * This method fills the model of the genres
+	 * 
+	 * @param model a DefaultListModel of String model
+	 */
 	private void fillModelGenres(DefaultListModel<String> model) {
 		try {
 			artists = logic.getArtistsAllData();
@@ -664,6 +708,12 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+
+	/**
+	 * This method fills the model of the artists
+	 * 
+	 * @param model a DefaultListModel of String model
+	 */
 	private void fillModelArtists(DefaultListModel<String> model) {
 		try {
 			genres = logic.getGenresAllData();
@@ -674,40 +724,48 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
-	class LabelRenderer extends DefaultTableCellRenderer {//implements TableCellRenderer {
+
+	/**
+	 * This class is to set the cover as image in the tables
+	 */
+	class LabelRenderer extends DefaultTableCellRenderer {// implements TableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			
-				TableColumn tc = table.getColumn("Cover Art");
-				tc.setMinWidth(100);
-				tc.setMaxWidth(100);
-				table.setRowHeight(100);
-				 table.repaint();
-			return (Component)value;
+
+			TableColumn tc = table.getColumn("Cover Art");
+			tc.setMinWidth(100);
+			tc.setMaxWidth(100);
+			table.setRowHeight(100);
+			table.repaint();
+			return (Component) value;
 		}
 	}
-	class LabelRenderer2 extends DefaultTableCellRenderer {//implements TableCellRenderer {
-		
+
+	/**
+	 * This class is to set the table's price cell background orange if the vinyl
+	 * have a discount
+	 */
+	class LabelRenderer2 extends DefaultTableCellRenderer {// implements TableCellRenderer {
+
 		private Object[][] data;
+
 		public LabelRenderer2(Object[][] data) {
 			this.data = data;
 		}
-		
+
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {				
-			
-			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);	
-			
+				int row, int column) {
+
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
 			if (data[row][5] == Boolean.TRUE) {
 				c.setBackground(Color.orange);
-				
-			}
-            else c.setBackground(table.getBackground());
-			
-			
-			 table.repaint();
-			 return c;//(Component) value;
+
+			} else
+				c.setBackground(table.getBackground());
+
+			table.repaint();
+			return c;// (Component) value;
 		}
 	}
 }

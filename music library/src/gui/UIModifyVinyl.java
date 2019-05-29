@@ -1,4 +1,5 @@
 package gui;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -34,6 +35,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
 import java.awt.Color;
+
 @SuppressWarnings("serial")
 public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JPanel contentPane;
@@ -61,6 +63,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	private DefaultListModel<String> model2 = new DefaultListModel<String>();
 	private JButton btnNewGenre;
 	private JButton btnNewArtist;
+
 	/**
 	 * Launch the application.
 	 */
@@ -79,7 +82,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 * 
-	 * @param vinylMod
+	 * @param vinylMod This parameter is the code of the vinyl we want to modify
 	 */
 	public UIModifyVinyl(int vinylMod) {
 		try {
@@ -193,9 +196,9 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		contentPane.add(stockField);
 		stockField.setColumns(10);
 		stockField.setText(String.valueOf(vToMod.getStock()));
-		
-		//Atists and genres
-		
+
+		// Atists and genres
+
 		btnNewArtist = new JButton("New Artist");
 		btnNewArtist.setBounds(355, 76, 122, 23);
 		contentPane.add(btnNewArtist);
@@ -222,12 +225,19 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 
 		genresList = new JList();
 		genresSP.setViewportView(genresList);
-		
+
 		fillGenresList();
-		
+
 		genresList.setSelectedValue(vToMod.getGenre().getName(), true);
-		
+
 	}
+
+	/**
+	 * This method is to get the vinyl from the logic
+	 * 
+	 * @param vinylCode the vinyl code that the window receives
+	 * @return This method return an object of type Vinyl
+	 */
 	private Vinyl getVinyl(int vinylCode) {
 		Vinyl v = new Vinyl();
 		Logic logic = LogicFactory.getLogic();
@@ -238,7 +248,11 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		}
 		return v;
 	}
-	
+
+	/**
+	 * This method fills the list of genres that the administrator can select to
+	 * change the value
+	 */
 	private void fillGenresList() {
 		model2 = new DefaultListModel<String>();
 		displayGenres(model2);
@@ -246,13 +260,22 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		genresList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 
+	/**
+	 * This method fills the list of artists that the administrator can select to
+	 * change the value
+	 */
 	private void fillArtistsList() {
 		model = new DefaultListModel<String>();
 		displayArtists(model);
 		artistsList.setModel(model);
 		artistsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
-	
+
+	/**
+	 * This method will display the genres in the list of genres
+	 * 
+	 * @param model DefaultListModel of type String
+	 */
 	private void displayGenres(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -260,11 +283,16 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 			for (String g : names) {
 				model.addElement(g);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/**
+	 * This method will display the genres in the list of artists
+	 * 
+	 * @param model DefaultListModel of type String
+	 */
 	private void displayArtists(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -272,12 +300,15 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 			for (String art : names) {
 				model.addElement(art);
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
+	/**
+	 * This method will allow to the buttons to do something
+	 */
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource().equals(btnCancel)) {
 			this.dispose();
@@ -313,31 +344,33 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-		}else if(event.getSource().equals(btnNewArtist)) {
+		} else if (event.getSource().equals(btnNewArtist)) {
 			String newArtist = JOptionPane.showInputDialog("Insert new Artist: ");
-			//System.out.println(newArtist);
+			// System.out.println(newArtist);
 			if (newArtist != null) {
 				try {
 					logic.insertArtist(newArtist);
 					fillArtistsList();
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "Error. Maybe the artist arleady exists","Error", JOptionPane.ERROR_MESSAGE);
-					//e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error. Maybe the artist arleady exists", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					// e1.printStackTrace();
 				}
 			}
-			
-		}else if(event.getSource().equals(btnNewGenre)) {
+
+		} else if (event.getSource().equals(btnNewGenre)) {
 			String newGenre = JOptionPane.showInputDialog("Insert new Genre: ");
 			if (newGenre != null) {
 				try {
 					logic.insertGenre(newGenre);
 					fillGenresList();
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Error. Maybe the genre arleady exists","Error", JOptionPane.ERROR_MESSAGE);
-					//e2.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error. Maybe the genre arleady exists", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					// e2.printStackTrace();
 				}
 			}
-			
+
 		}
 	}
 }

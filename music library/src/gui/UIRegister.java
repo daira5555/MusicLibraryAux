@@ -9,7 +9,6 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-
 import control.Logic;
 import control.LogicFactory;
 import model.Artist;
@@ -48,21 +47,8 @@ public class UIRegister extends JDialog implements ActionListener {
 	private JButton okButton;
 	private JButton cancelButton;
 	private JPasswordField passwordField;
-	private JList <String> list;
+	private JList<String> list;
 	private JList list_1;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			UIRegister dialog = new UIRegister();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
@@ -90,23 +76,23 @@ public class UIRegister extends JDialog implements ActionListener {
 			lblAddress.setBounds(42, 133, 59, 14);
 			contentPanel.add(lblAddress);
 		}
-		
+
 		JSeparator separator = new JSeparator();
 		separator.setBounds(42, 120, 266, 2);
 		contentPanel.add(separator);
-		
+
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(42, 173, 266, 2);
 		contentPanel.add(separator_1);
-		
+
 		JLabel lblPhoneNumber = new JLabel("Phone number:");
 		lblPhoneNumber.setBounds(42, 186, 97, 14);
 		contentPanel.add(lblPhoneNumber);
-		
+
 		JLabel lblEmail = new JLabel("e-mail:");
 		lblEmail.setBounds(42, 222, 59, 14);
 		contentPanel.add(lblEmail);
-		
+
 		JLabel lblBankAccount = new JLabel("Bank account number:");
 		lblBankAccount.setBounds(42, 259, 149, 14);
 		contentPanel.add(lblBankAccount);
@@ -197,69 +183,50 @@ public class UIRegister extends JDialog implements ActionListener {
 			JScrollPane scrollPane = new JScrollPane();
 			scrollPane.setBounds(42, 447, 266, 58);
 			contentPanel.add(scrollPane);
-			
-			
+
 			DefaultListModel<String> model = new DefaultListModel<String>();
-			
-			
+
 			displayArtists(model);
-			
-			
-			
-			
+
 			{
 				list = new JList<String>();
 				scrollPane.setViewportView(list);
-				
+
 				list.setModel(model);
-				
+
 				list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-				
 
 			}
 		}
-		
 
-
-		
-		
-		
-		
-		
 		JLabel lblArtists = new JLabel("Genres you like:");
 		lblArtists.setBounds(42, 422, 97, 14);
 		contentPanel.add(lblArtists);
-		
+
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setBounds(43, 409, 265, 2);
 		contentPanel.add(separator_2);
-		
+
 		JSeparator separator_3 = new JSeparator();
 		separator_3.setBounds(42, 516, 266, 2);
 		contentPanel.add(separator_3);
-		
+
 		JLabel lblGenresYouLike = new JLabel("Artists you like:");
 		lblGenresYouLike.setBounds(42, 529, 97, 14);
 		contentPanel.add(lblGenresYouLike);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(42, 554, 266, 58);
 		contentPanel.add(scrollPane);
-		
+
 		list_1 = new JList();
 		scrollPane.setViewportView(list_1);
-		
-		
+
 		DefaultListModel<String> model2 = new DefaultListModel<String>();
-		
+
 		displayGenres(model2);
 		list_1.setModel(model2);
-	
-		
-		
-		
-		
-		
+
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -280,6 +247,11 @@ public class UIRegister extends JDialog implements ActionListener {
 		}
 	}
 
+	/**
+	 * This method will display the genres list
+	 * 
+	 * @param model DefaultListModel of type String
+	 */
 	private void displayGenres(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -287,14 +259,17 @@ public class UIRegister extends JDialog implements ActionListener {
 			for (String art : names) {
 				model.addElement(art);
 			}
-		}catch(Exception E) {
-			
+		} catch (Exception E) {
+
 		}
-		
-		
-		
+
 	}
 
+	/**
+	 * This method will display the artists list
+	 * 
+	 * @param model DefaultListModel of type String
+	 */
 	private void displayArtists(DefaultListModel<String> model) {
 		Logic logic = LogicFactory.getLogic();
 		try {
@@ -302,22 +277,18 @@ public class UIRegister extends JDialog implements ActionListener {
 			for (String g : names) {
 				model.addElement(g);
 			}
-		}catch(Exception E) {
-			
+		} catch (Exception E) {
+
 		}
-		
-		
-		
+
 	}
 
-		
-		
-		
-	
-
 	@Override
-	public void actionPerformed(ActionEvent e){
-		if(e.getSource().equals(okButton)){
+	/**
+	 * This method is to codify the buttons of the window
+	 */
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(okButton)) {
 			Logic logic = LogicFactory.getLogic();
 			try {
 				Client client = new Client();
@@ -330,38 +301,35 @@ public class UIRegister extends JDialog implements ActionListener {
 				client.setPhoneNumber(Integer.parseInt(phoneNumberField.getText()));
 				client.setAccountNumber(Long.parseLong(bankNumberField.getText()));
 
-				
-				//ArrayList<String> artists = new ArrayList<String>();
+				// ArrayList<String> artists = new ArrayList<String>();
 				ArrayList<Artist> artists = new ArrayList<Artist>();
 				List<String> a;
 				a = list_1.getSelectedValuesList();
 				for (String string : a) {
 					artists.add(logic.getArtist(string));
 				}
-				
+
 				ArrayList<Genre> genres = new ArrayList<Genre>();
 				List<String> b;
 				b = list.getSelectedValuesList();
 				for (String string : b) {
 					genres.add(logic.getGenre(string));
 				}
-				
+
 				Taste taste = new Taste();
 				taste.setArtists(artists);
 				taste.setGenres(genres);
 				client.setTastes(taste);
-				
 
-				
 				logic.registerClient(client);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-		}else if (e.getSource().equals(cancelButton)) {
+		} else if (e.getSource().equals(cancelButton)) {
 			this.dispose();
-			UILogin login= new UILogin();
+			UILogin login = new UILogin();
 			login.setVisible(true);
 		}
-		
+
 	}
 }

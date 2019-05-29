@@ -3,10 +3,7 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.nio.file.Files;
 import java.util.ArrayList;
 
@@ -57,7 +54,9 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JFileChooser fileChooser;
 	private JScrollPane artistsSP;
 	private JScrollPane genresSP;
+	@SuppressWarnings("rawtypes")
 	private JList artistsList;
+	@SuppressWarnings("rawtypes")
 	private JList genresList;
 	private DefaultListModel<String> model = new DefaultListModel<String>();
 	private DefaultListModel<String> model2 = new DefaultListModel<String>();
@@ -84,6 +83,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	 * 
 	 * @param vinylMod This parameter is the code of the vinyl we want to modify
 	 */
+	@SuppressWarnings("rawtypes")
 	public UIModifyVinyl(int vinylMod) {
 		try {
 			vToMod = logic.getVinyl(vinylCode);
@@ -253,6 +253,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	 * This method fills the list of genres that the administrator can select to
 	 * change the value
 	 */
+	@SuppressWarnings("unchecked")
 	private void fillGenresList() {
 		model2 = new DefaultListModel<String>();
 		displayGenres(model2);
@@ -264,6 +265,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	 * This method fills the list of artists that the administrator can select to
 	 * change the value
 	 */
+	@SuppressWarnings("unchecked")
 	private void fillArtistsList() {
 		model = new DefaultListModel<String>();
 		displayArtists(model);

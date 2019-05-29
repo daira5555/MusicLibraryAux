@@ -12,8 +12,6 @@ import com.toedter.calendar.JDateChooser;
 
 import control.Logic;
 import control.LogicFactory;
-import gui.UIMenuAdmin.LabelRenderer;
-import gui.UIMenuAdmin.LabelRenderer2;
 import model.AdvancedSearch;
 import model.Artist;
 import model.Client;
@@ -26,7 +24,6 @@ import model.Vinyl;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -69,7 +66,6 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private JTextField priceField;
 	private JButton btnBuySelected;
 	private JButton btnGoToCart;
-	private JButton btnReturnToMenu;
 	private JButton btnSearch;
 	private JTextField nameField;
 	private JTextField surnameField;
@@ -99,6 +95,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private Client client;
 	private DefaultTableModel modelSuggestions;
 	private DefaultTableModel modelBestSellers;
+	@SuppressWarnings("unused")
 	private DefaultTableModel modelAdvancedSearch;
 	private DefaultTableModel cartModel;
 	private final String[] columnNames = { "Cover Art", "Album Title", "Artist", "Genre", "Price", "On Sale",
@@ -301,6 +298,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	 * @param bestSellers Fills the list of best sellers based on the ArrayList of
 	 *                    best sold Vinyls given by the Data Base
 	 */
+	@SuppressWarnings("static-access")
 	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
 
 		Object[][] data = new Object[auxVinylList.size()][7];
@@ -728,6 +726,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	/**
 	 * This class is to set the cover as image in the tables
 	 */
+	@SuppressWarnings("serial")
 	class LabelRenderer extends DefaultTableCellRenderer {// implements TableCellRenderer {
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
@@ -745,6 +744,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	 * This class is to set the table's price cell background orange if the vinyl
 	 * have a discount
 	 */
+	@SuppressWarnings("serial")
 	class LabelRenderer2 extends DefaultTableCellRenderer {// implements TableCellRenderer {
 
 		private Object[][] data;

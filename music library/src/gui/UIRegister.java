@@ -23,9 +23,6 @@ import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
@@ -34,6 +31,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
+@SuppressWarnings("serial")
 public class UIRegister extends JDialog implements ActionListener {
 
 	private final JPanel contentPanel = new JPanel();
@@ -48,11 +46,13 @@ public class UIRegister extends JDialog implements ActionListener {
 	private JButton cancelButton;
 	private JPasswordField passwordField;
 	private JList<String> list;
+	@SuppressWarnings("rawtypes")
 	private JList list_1;
 
 	/**
 	 * Create the dialog.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public UIRegister() {
 		setTitle("Sign up");
 		setBounds(100, 100, 393, 710);
@@ -283,6 +283,7 @@ public class UIRegister extends JDialog implements ActionListener {
 
 	}
 
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	@Override
 	/**
 	 * This method is to codify the buttons of the window

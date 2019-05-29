@@ -1,14 +1,9 @@
 package gui;
 
-import java.awt.EventQueue;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -16,8 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import org.jdesktop.swingx.JXDatePicker;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -36,7 +29,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
 import java.awt.Color;
@@ -62,11 +54,14 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	private JButton btnNewArtist;
 	private JScrollPane artistsSP;
 	private JScrollPane genresSP;
+	@SuppressWarnings("rawtypes")
 	private JList artistsList;
+	@SuppressWarnings("rawtypes")
 	private JList genresList;
 	private DefaultListModel<String> model = new DefaultListModel<String>();
 	private DefaultListModel<String> model2 = new DefaultListModel<String>();
 	private Logic logic = LogicFactory.getLogic();
+	@SuppressWarnings("unused")
 	private JButton btnSelect;
 	private JFileChooser fileChooser;
 	private JDateChooser dateChooser;
@@ -81,6 +76,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings("rawtypes")
 	public UINewVinyl() {
 		setTitle("Insert new vinyl");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -222,6 +218,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	/**
 	 * This method will fill the genres list
 	 */
+	@SuppressWarnings("unchecked")
 	private void fillGenresList() {
 		model2 = new DefaultListModel<String>();
 		displayGenres(model2);
@@ -232,6 +229,7 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	/**
 	 * This method will fill the artists list
 	 */
+	@SuppressWarnings("unchecked")
 	private void fillArtistsList() {
 		model = new DefaultListModel<String>();
 		displayArtists(model);

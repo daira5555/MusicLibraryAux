@@ -18,8 +18,6 @@ import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
 public class UILogin extends JFrame implements ActionListener {
@@ -97,6 +95,7 @@ public class UILogin extends JFrame implements ActionListener {
 	/**
 	 * This method is to implement code to the buttons that have an ActionListener
 	 */
+	@SuppressWarnings("deprecation")
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource().equals(btnLogIn)) {

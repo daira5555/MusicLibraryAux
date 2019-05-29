@@ -11,7 +11,6 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,10 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
-import java.awt.EventQueue;
 import com.toedter.calendar.JDateChooser;
 
 import control.Logic;
@@ -34,7 +30,6 @@ import model.AdvancedSearch;
 import model.DateConverter;
 import model.Vinyl;
 
-import java.awt.Color;
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
@@ -382,6 +377,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 	 * @param auxVinylList The ArrayList of vinyls that the method is going to use
 	 *                     to fill the data
 	 */
+	@SuppressWarnings("static-access")
 	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
 
 		data = new Object[auxVinylList.size()][7];

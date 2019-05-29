@@ -12,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-//algo
 @SuppressWarnings("serial")
 public class CloseTabButton extends JTabbedPane {
 	public CloseTabButton() {
@@ -38,6 +37,7 @@ public class CloseTabButton extends JTabbedPane {
 
 	/* Button */
 	public class CloseButtonTab extends JPanel {
+		@SuppressWarnings("unused")
 		private Component tab;
 
 		public CloseButtonTab(final Component tab, String title, Icon icon) {
@@ -74,6 +74,7 @@ public class CloseTabButton extends JTabbedPane {
 			}
 		}
 
+		@SuppressWarnings("unused")
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			if (e.getSource() instanceof JButton) {
@@ -81,6 +82,7 @@ public class CloseTabButton extends JTabbedPane {
 			}
 		}
 
+		@SuppressWarnings("unused")
 		@Override
 		public void mouseExited(MouseEvent e) {
 			if (e.getSource() instanceof JButton) {

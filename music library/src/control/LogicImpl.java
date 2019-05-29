@@ -13,11 +13,11 @@ import model.Vinyl;
 public class LogicImpl implements Logic {
 
 	private DataAccess dataAccess = DataAccessFactory.getDataAccess();
-	
+
 	public void registerClient(Client client) throws Exception {
 		dataAccess.registerClient(client);
 	}
-	
+
 	public void userType(String username) throws Exception {
 		dataAccess.userType(username);
 
@@ -26,7 +26,7 @@ public class LogicImpl implements Logic {
 	public void modifyClientData(Client client) throws Exception {
 		dataAccess.modifyClientData(client);
 	}
-	
+
 	public void insertNewVinyl(Vinyl vinyl) throws Exception {
 		dataAccess.insertNewVinyl(vinyl);
 	}
@@ -49,28 +49,28 @@ public class LogicImpl implements Logic {
 		int n = dataAccess.genreExists(name);
 		return n;
 	}
-	
-	public int userExists(String username) throws Exception{
+
+	public int userExists(String username) throws Exception {
 		int n = dataAccess.userExists(username);
 		return n;
 	}
-	
-	public char getUserType(String username) throws Exception{
+
+	public char getUserType(String username) throws Exception {
 		char c = dataAccess.getUserType(username);
 		return c;
 	}
-	
-	public String getPassword (String username) throws Exception{
+
+	public String getPassword(String username) throws Exception {
 		String s = dataAccess.getPassword(username);
 		return s;
 	}
-	
-	public ArrayList<String> getArtists() throws Exception{
+
+	public ArrayList<String> getArtists() throws Exception {
 		ArrayList<String> ar = dataAccess.getArtists();
 		return ar;
 	}
-	
-	public ArrayList<String> getGenres() throws Exception{
+
+	public ArrayList<String> getGenres() throws Exception {
 		ArrayList<String> ar = dataAccess.getGenres();
 		return ar;
 	}
@@ -106,7 +106,7 @@ public class LogicImpl implements Logic {
 		gen = dataAccess.getGenre(name);
 		return gen;
 	}
-	
+
 	public void insertArtist(String name) throws Exception {
 		dataAccess.insertArtist(name);
 	}
@@ -118,8 +118,8 @@ public class LogicImpl implements Logic {
 	public void deleteVinyl(int vinylCode) throws Exception {
 		dataAccess.deleteVinyl(vinylCode);
 	}
-	
-	public ArrayList<Vinyl> getBestSellers() throws Exception{
+
+	public ArrayList<Vinyl> getBestSellers() throws Exception {
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 		vinyls = dataAccess.getBestSellers();
 		return vinyls;
@@ -148,8 +148,8 @@ public class LogicImpl implements Logic {
 		vinyls = dataAccess.getSuggestions(username);
 		return vinyls;
 	}
-	
-	public Client getClient (String username) throws Exception{
+
+	public Client getClient(String username) throws Exception {
 		Client client = new Client();
 		client = dataAccess.getClient(username);
 		return client;
@@ -159,32 +159,31 @@ public class LogicImpl implements Logic {
 		dataAccess.writePurchase(purchase);
 	}
 
-	
 	public void updatePurchasedVinyl(int vinylCode, int amountSold) throws Exception {
 		dataAccess.updatePurchasedVinyl(vinylCode, amountSold);
 	}
-	
-	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws Exception{
+
+	public ArrayList<Vinyl> advancedSearch(AdvancedSearch search) throws Exception {
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 		vinyls = dataAccess.advancedSearch(search);
 		return vinyls;
 	}
 
 	public void insertArtistTaste(Client client) throws Exception {
-		dataAccess.insertArtistTaste(client);	
+		dataAccess.insertArtistTaste(client);
 	}
 
 	public void insertGenreTaste(Client client) throws Exception {
 		dataAccess.insertArtistTaste(client);
 	}
-	
-	public ArrayList<Vinyl> getBoughtVinyls(String username) throws Exception{
+
+	public ArrayList<Vinyl> getBoughtVinyls(String username) throws Exception {
 		ArrayList<Vinyl> vinyls = new ArrayList<Vinyl>();
 		vinyls = dataAccess.getBoughtVinyls(username);
 		return vinyls;
 	}
-	
-	public ArrayList<Integer> getBoughtVinylsCodes (String username) throws Exception{
+
+	public ArrayList<Integer> getBoughtVinylsCodes(String username) throws Exception {
 		ArrayList<Integer> vinylCodes = new ArrayList<Integer>();
 		vinylCodes = dataAccess.getBoughtVinylsCodes(username);
 		return vinylCodes;
@@ -222,5 +221,5 @@ public class LogicImpl implements Logic {
 		artists = dataAccess.getArtistsTaste(username);
 		return artists;
 	}
-	
+
 }

@@ -600,13 +600,22 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		scrollPaneSuggestions.setBounds(302, 55, 605, 193);
 		panelMainMenu.add(scrollPaneSuggestions);
 		try {
-			//suggestionsList = logic.getSuggestions(client.getUsername());
+			suggestionsList = logic.getSuggestions(client.getUsername());
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		//modelSuggestions = new DefaultTableModel(fillData(suggestionsList), columnNames);
 		//tableSuggestions = new JTable(modelSuggestions);
-		//scrollPaneSuggestions.setViewportView(tableSuggestions);
+		
+		Object[][] data = fillData(suggestionsList);
+		modelSuggestions = new DefaultTableModel(data, columnNames);
+
+		tableSuggestions = new JTable(modelSuggestions);
+
+		tableSuggestions.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
+		tableSuggestions.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
+		
+		scrollPaneSuggestions.setViewportView(tableSuggestions);
 		scrollPaneBestSellers = new JScrollPane();
 		scrollPaneBestSellers.setBounds(48, 364, 864, 206);
 		panelMainMenu.add(scrollPaneBestSellers);
@@ -634,13 +643,13 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		Object[][] data = fillData(bestSellers);
-		modelBestSellers = new DefaultTableModel(data, columnNames);
+		Object[][] data2 = fillData(bestSellers);
+		modelBestSellers = new DefaultTableModel(data2, columnNames);
 
 		tableBestSellers = new JTable(modelBestSellers);
 
 		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
-		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
+		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data2));
 		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
 		
 		scrollPaneBestSellers.setViewportView(tableBestSellers);

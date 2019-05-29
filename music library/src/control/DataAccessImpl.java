@@ -814,24 +814,52 @@ public class DataAccessImpl implements DataAccess{
 		
 		ArrayList<Integer> artistsTastes = new ArrayList<Integer>();
 		artistsTastes = getArtistTaste(username);
-		Integer[] dataArtist = artistsTastes.toArray(new Integer[artistsTastes.size()]);
 		
 		
 		ArrayList<Integer> genresTastes = new ArrayList<Integer>();
 		genresTastes = getGenreTaste(username);
-		Integer[] dataGenre = genresTastes.toArray(new Integer[genresTastes.size()]);
+		
 		
 		
 		ResultSet rs = null;
 		try {
 			connect();
-			Array sqlArtists = con.createArrayOf("INTEGER", dataArtist);
-			Array sqlGenres = con.createArrayOf("INTEGER", dataGenre);
-			String sql = "select * from vinyls where artistcode in ? or genrecode in ? "
-					+ "order by amountsold descending";
+			String sql = "select * from vinyls "; 
+			//"where artistcode in ? or genrecode in ? "
+			//		+ "order by amountsold descending";
+			if (artistsTastes.size() != 0) {
+				sql += "where artistcode in (";
+				if (artistsTastes.size() == 1) {
+					sql+=artistsTastes.get(0).intValue()+")";
+				}else {
+					for (int i = 0; i < artistsTastes.size(); i++) {
+						sql += artistsTastes.get(i).intValue();
+						if (i == artistsTastes.size()-1) {
+							sql += ") ";
+						}else {
+							sql += ",";
+						}
+					}
+				}
+			}
+			
+			if (genresTastes.size() != 0) {
+				sql += " or genrecode in (";
+				if (genresTastes.size() == 1) {
+					sql+=genresTastes.get(0).intValue()+")";
+				}else {
+					for (int i = 0; i < genresTastes.size(); i++) {
+						sql += genresTastes.get(i).intValue();
+						if (i == genresTastes.size()-1) {
+							sql += ")";
+						}else {
+							sql += ",";
+						}
+					}
+				}
+			}
+			
 			stmt = con.prepareStatement(sql);
-			stmt.setArray(1, sqlArtists);
-			stmt.setArray(2, sqlGenres);
 			rs = stmt.executeQuery();
 			while(rs.next() && cont<10) {
 				Vinyl temp = new Vinyl();

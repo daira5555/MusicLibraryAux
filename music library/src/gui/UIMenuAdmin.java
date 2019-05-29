@@ -189,19 +189,11 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			e1.printStackTrace();
 		}
 		
-		for(Vinyl v: bestSellersResultList) {
 		
-		System.out.println(v.getGenre().getName());
-		}
 		modelBestSellers = new DefaultTableModel(fillData(bestSellersResultList), columnNames);
 
 		tableBestSellers = new JTable(modelBestSellers);
-		/*******
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
+
 		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
 		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
 		

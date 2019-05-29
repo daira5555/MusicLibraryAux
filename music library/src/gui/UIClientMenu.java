@@ -3,11 +3,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
 import com.toedter.calendar.JDateChooser;
 
 import control.Logic;
 import control.LogicFactory;
+import gui.UIMenuAdmin.LabelRenderer;
+import gui.UIMenuAdmin.LabelRenderer2;
 import model.AdvancedSearch;
 import model.Artist;
 import model.Client;
@@ -19,11 +24,14 @@ import model.Taste;
 import model.Vinyl;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.format.DateTimeFormatter;
@@ -91,7 +99,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private DefaultTableModel modelBestSellers;
 	private DefaultTableModel modelAdvancedSearch;
 	private DefaultTableModel cartModel;
-	private final String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On sale:", "Sale percentage:"};
+	private final String[] columnNames = {"Cover Art", "Album Title", "Artist", "Genre", "Price", "On Sale", "Sale percentage:"};
 	private ArrayList<Vinyl> bestSellers;
 	private ArrayList<Vinyl> suggestionsList;
 	private ArrayList<Vinyl> searchResultList;
@@ -103,6 +111,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private ArrayList<Artist> artists;
 	private ArrayList<Genre> genres;
 	private JPanel cartPanel;
+	private Object[][] data;
 	/**
 	 * Create the frame.
 	 */
@@ -252,9 +261,18 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	 *            sold Vinyls given by the Data Base
 	 */
 	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
-		Object[][] data = new Object[auxVinylList.size()][7];
+		data = new Object[auxVinylList.size()][7];
 		for (int i = 0; i < auxVinylList.size(); i++) {
-			data[i][0] = "Placeholder";
+			JLabel label = new JLabel();
+
+			Image imagen = new ImageIcon(auxVinylList.get(i).getCover()).getImage();
+			ImageIcon imagen2 = new ImageIcon(imagen.getScaledInstance(100, 100, imagen.SCALE_SMOOTH));
+
+			label.setIcon(imagen2);
+			label.setHorizontalAlignment(JLabel.CENTER);
+			label.setVerticalAlignment(JLabel.CENTER);
+			
+			data[i][0] = label;
 			data[i][1] = auxVinylList.get(i).getTitle();
 			data[i][2] = auxVinylList.get(i).getArtist().getName();
 			data[i][3] = auxVinylList.get(i).getGenre().getName();
@@ -315,10 +333,18 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		// TODO
 		scrollPaneCartTable = new JScrollPane();
 		scrollPaneCartTable.setBounds(48, 100, 864, 206);
-		cartModel = new DefaultTableModel(fillData(cart.getVinyls()), columnNames);
-		cartTable = new JTable(cartModel);
-		scrollPaneCartTable.setViewportView(cartTable);
 		cartPanel.add(scrollPaneCartTable);
+		modelBestSellers = new DefaultTableModel(fillData(cart.getVinyls()), columnNames);
+
+		cartTable = new JTable(cartModel);
+
+		cartTable.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
+		cartTable.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
+		
+		scrollPaneCartTable.setViewportView(cartTable);
+		
+		
+		
 	}
 	private void boughtVinyls() {
 		JPanel boughtVinyls = new JPanel();
@@ -574,7 +600,13 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
+
 		tableBestSellers = new JTable(modelBestSellers);
+
+		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
+		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
+		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
+		
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
 	}
 	private void fillModelGenres(DefaultListModel<String> model) {
@@ -595,6 +627,36 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	class LabelRenderer extends DefaultTableCellRenderer {//implements TableCellRenderer {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			
+				TableColumn tc = table.getColumn("Cover Art");
+				tc.setMinWidth(100);
+				tc.setMaxWidth(100);
+				table.setRowHeight(100);
+				 table.repaint();
+			return (Component)value;
+		}
+	}
+	class LabelRenderer2 extends DefaultTableCellRenderer {//implements TableCellRenderer {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {				
+			
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);	
+			
+			if (data[row][5] == Boolean.TRUE) {
+				c.setBackground(Color.orange);
+				
+			}
+            else c.setBackground(table.getBackground());
+			
+			
+			 table.repaint();
+			 return c;//(Component) value;
 		}
 	}
 }

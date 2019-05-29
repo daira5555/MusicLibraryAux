@@ -5,6 +5,7 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -67,6 +68,8 @@ public class UINewVinyl extends JFrame implements ActionListener {
 	private DefaultListModel<String> model2 = new DefaultListModel<String>();
 	private Logic logic = LogicFactory.getLogic();
 	private JButton btnSelect;
+	private JFileChooser fileChooser;
+	private JDateChooser dateChooser;
 
 	/**
 	 * Launch the application.
@@ -246,56 +249,40 @@ public class UINewVinyl extends JFrame implements ActionListener {
 
 		if (e.getSource().equals(btnSubmitChanges)) {
 			try {
-				//Logic logic = LogicFactory.getLogic();
-
-				v.setTitle(titleField.getText());
+				
+				File coverArtSrc = fileChooser.getSelectedFile();
+				File coverArtDest = new File("././Images/" + coverArtSrc.getName());
+				Files.copy(coverArtSrc.toPath(), coverArtDest.toPath());
 				v.setArtist(logic.getArtist(artistsList.getSelectedValue().toString()));
+				v.setCover(coverArtDest.toPath().toString());
 				v.setDescription(descriptionField.getText());
 				v.setGenre(logic.getGenre(genresList.getSelectedValue().toString()));
-				v.setPrice(Double.parseDouble(priceField.getText()));
-				v.setSalePercentage(Double.parseDouble(saleField.getText()));
-				v.setAmountSold(0);
-				
-				v.setPublicationDate(DateConverter.convertToLocalDateViaInstant(calendarPublication.getDate()));
-				
-				
-				if (v.getCover() == null) {
-					v.setCover("././Images/noCover.jpg");
-				}
-
 				if (rdbtnYes.isSelected()) {
 					v.setOnSale(true);
+					v.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
 				} else {
 					v.setOnSale(false);
+					v.setSalePercentage(1);
 				}
+				v.setPrice((Double.valueOf(priceField.getText())));
+				v.setPublicationDate(DateConverter.convertToLocalDateViaInstant(dateChooser.getDate()));
+				v.setStock(1);
+				v.setTitle(titleField.getText());
 				logic.insertNewVinyl(v);
+				this.dispose();
 			} catch (Exception e1) {
-
 				e1.printStackTrace();
+				JOptionPane.showMessageDialog(this, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-
 		} else if (e.getSource().equals(btnCancel)) {
 			this.dispose();
 
 		} else if (e.getSource().equals(btnSelectImage)) {
-			JFileChooser chooser = new JFileChooser("././imagenes/");
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fileChooser = new JFileChooser("C:/");
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Images", "jpg", "png", "jpeg");
-			chooser.setFileFilter(imgFilter);
-			chooser.showOpenDialog(this);
-			File result = chooser.getSelectedFile();
-			if (result != null) {
-				String path = null;
-				path = result.getPath();
-				int index = path.lastIndexOf("\\");
-				String name = path.substring(index + 1);
-				name = "././imagenes/" + name;
-				System.out.println(name);
-				v.setCover(name);
-			}else {
-				JOptionPane.showMessageDialog(null, "Error you must enter an image", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			}
+			fileChooser.setFileFilter(imgFilter);
+			fileChooser.showOpenDialog(this);
 
 		}else if(e.getSource().equals(btnNewArtist)) {
 			String newArtist = JOptionPane.showInputDialog("Insert new Artist: ");

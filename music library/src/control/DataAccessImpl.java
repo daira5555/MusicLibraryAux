@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
@@ -64,8 +65,11 @@ public class DataAccessImpl implements DataAccess{
 	private void disconnect() throws SQLException {
 		if (stmt != null)
 			stmt.close();
-		if (con != null)
+		if (con != null) {
+			
 			con.close();
+			con =null;
+		}
 	}
 	/**
 	 * This method is to check the type of the user
@@ -811,16 +815,18 @@ public class DataAccessImpl implements DataAccess{
 		ArrayList<Integer> artistsTastes = new ArrayList<Integer>();
 		artistsTastes = getArtistTaste(username);
 		Integer[] dataArtist = artistsTastes.toArray(new Integer[artistsTastes.size()]);
-		Array sqlArtists = con.createArrayOf("int", dataArtist);
+		
 		
 		ArrayList<Integer> genresTastes = new ArrayList<Integer>();
 		genresTastes = getGenreTaste(username);
 		Integer[] dataGenre = genresTastes.toArray(new Integer[genresTastes.size()]);
-		Array sqlGenres = con.createArrayOf("int", dataGenre);
+		
 		
 		ResultSet rs = null;
 		try {
 			connect();
+			Array sqlArtists = con.createArrayOf("INTEGER", dataArtist);
+			Array sqlGenres = con.createArrayOf("INTEGER", dataGenre);
 			String sql = "select * from vinyls where artistcode in ? or genrecode in ? "
 					+ "order by amountsold descending";
 			stmt = con.prepareStatement(sql);

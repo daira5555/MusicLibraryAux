@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -180,6 +181,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		dateChooser = new JDateChooser();
 		dateChooser.setBounds(147, 365, 205, 22);
 		contentPane.add(dateChooser);
+		dateChooser.setDate(DateConverter.convertToDateViaInstant(vToMod.getPublicationDate()));
 		JLabel lblPublicationDate = new JLabel("Publication date:");
 		lblPublicationDate.setBounds(45, 368, 92, 14);
 		contentPane.add(lblPublicationDate);
@@ -212,7 +214,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		artistsSP.setViewportView(artistsList);
 
 		fillArtistsList();
-		
+		artistsList.setSelectedValue(vToMod.getArtist().getName(), true);
 
 		genresSP = new JScrollPane();
 		genresSP.setBounds(144, 118, 178, 47);
@@ -222,6 +224,8 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		genresSP.setViewportView(genresList);
 		
 		fillGenresList();
+		
+		genresList.setSelectedValue(vToMod.getGenre().getName(), true);
 		
 	}
 	private Vinyl getVinyl(int vinylCode) {
@@ -279,6 +283,9 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 			this.dispose();
 		} else if (event.getSource().equals(btnSelect)) {
 			fileChooser = new JFileChooser("C:/");
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Images", "jpg", "png", "jpeg");
+			fileChooser.setFileFilter(imgFilter);
 			fileChooser.showOpenDialog(this);
 		} else if (event.getSource().equals(btnSubmitChanges)) {
 			try {
@@ -301,6 +308,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 				vToMod.setStock(Integer.valueOf(stockField.getText()));
 				vToMod.setTitle(titleField.getText());
 				logic.updateVinyl(vToMod);
+				this.dispose();
 			} catch (Exception e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

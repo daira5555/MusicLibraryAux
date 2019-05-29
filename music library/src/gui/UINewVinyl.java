@@ -259,10 +259,10 @@ public class UINewVinyl extends JFrame implements ActionListener {
 				v.setGenre(logic.getGenre(genresList.getSelectedValue().toString()));
 				if (rdbtnYes.isSelected()) {
 					v.setOnSale(true);
-					v.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
+					v.setSalePercentage((Double.valueOf(saleField.getText()) / 100));
 				} else {
 					v.setOnSale(false);
-					v.setSalePercentage(1);
+					v.setSalePercentage(0);
 				}
 				v.setPrice((Double.valueOf(priceField.getText())));
 				v.setPublicationDate(DateConverter.convertToLocalDateViaInstant(dateChooser.getDate()));

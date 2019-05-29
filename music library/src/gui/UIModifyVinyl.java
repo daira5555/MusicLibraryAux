@@ -298,10 +298,10 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 				vToMod.setGenre(logic.getGenre(genresList.getSelectedValue().toString()));
 				if (rdbtnYes.isSelected()) {
 					vToMod.setOnSale(true);
-					vToMod.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
+					vToMod.setSalePercentage((Double.valueOf(salePercentageField.getText()) / 100));
 				} else {
 					vToMod.setOnSale(false);
-					vToMod.setSalePercentage(1);
+					vToMod.setSalePercentage(0);
 				}
 				vToMod.setPrice((Double.valueOf(priceField.getText())));
 				vToMod.setPublicationDate(DateConverter.convertToLocalDateViaInstant(dateChooser.getDate()));

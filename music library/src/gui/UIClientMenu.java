@@ -102,6 +102,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private JPanel personalInfo;
 	private ArrayList<Artist> artists;
 	private ArrayList<Genre> genres;
+	private JPanel cartPanel;
 	/**
 	 * Create the frame.
 	 */
@@ -178,12 +179,16 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
 		} else if (event.getSource().equals(btnConfirm)) {
 			try {
+				cart.setBuyer(client.getUsername());
 				logic.writePurchase(cart);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		} else if (event.getSource().equals(btnClearCart)) {
 			cart.getVinyls().clear();
+			cartModel = new DefaultTableModel(fillData(cart.getVinyls()), columnNames);
+			cartTable = new JTable(cartModel);
+			scrollPaneCartTable.setViewportView(cartTable);
 		} else if (event.getSource().equals(btnSearch)) {
 			try {
 				advancedSearch = new AdvancedSearch();
@@ -200,7 +205,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 					advancedSearch.setPublicationYear(Integer.valueOf(publicationDateField.getText()));
 				}
 				advancedSearch.setTitle(albumTitleField.getText());
-				advancedSearch.setStockLessThan(Integer.MAX_VALUE);
+				advancedSearch.setStockLessThan(0);
 				searchResultList = logic.advancedSearch(advancedSearch);
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -264,7 +269,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		return data;
 	}
 	private void seeCart() {
-		JPanel cartPanel = new JPanel();
+		cartPanel = new JPanel();
 		cartPanel.setBackground(new Color(255, 239, 213));
 		cartPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		cartPanel.setLayout(null);
@@ -300,7 +305,6 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		}
 		cart.setFullPrice(fullPrice);
 		cartPriceField.setText(String.valueOf(cart.getFullPrice()));
-		//cartPriceField.setColumns(10);
 		cartDateField = new JTextField();
 		cartDateField.setEditable(false);
 		cartDateField.setBounds(144, 558, 86, 20);
@@ -432,7 +436,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		JLabel lblByGenre = new JLabel("By genre:");
 		lblByGenre.setBounds(781, 45, 58, 14);
 		advanced.add(lblByGenre);
-		JLabel lblByPublicationDate = new JLabel("By publication date:");
+		JLabel lblByPublicationDate = new JLabel("By publication year:");
 		lblByPublicationDate.setBounds(781, 87, 116, 14);
 		advanced.add(lblByPublicationDate);
 		JLabel lblByPrice = new JLabel("By price: ");
@@ -471,10 +475,6 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		btnGoToCart.setBounds(332, 616, 123, 42);
 		advanced.add(btnGoToCart);
 		btnGoToCart.addActionListener(this);
-//		btnReturnToMenu = new JButton("Return to menu");
-//		btnReturnToMenu.setBackground(new Color(255, 218, 185));
-//		btnReturnToMenu.setBounds(652, 616, 137, 42);
-//		advanced.add(btnReturnToMenu);
 		btnSearch = new JButton("Search");
 		btnSearch.setBackground(new Color(255, 218, 185));
 		btnSearch.setBounds(652, 616, 137, 42);

@@ -105,6 +105,6 @@ public class Vinyl {
 		this.cover = cover;
 	}
 	public Double getPriceWithSale() {
-		return price * salePercentage;
+		return price - (price * salePercentage);
 	}
 }

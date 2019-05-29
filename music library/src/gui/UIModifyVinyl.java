@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,10 +21,14 @@ import model.DateConverter;
 import model.Vinyl;
 
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
@@ -32,8 +37,6 @@ import java.awt.Color;
 public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JTextField titleField;
-	private JTextField artistField;
-	private JTextField genreField;
 	private JTextField priceField;
 	private JRadioButton rdbtnYes;
 	private JRadioButton rdbtnNo;
@@ -49,6 +52,14 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 	private JTextField stockField;
 	private JDateChooser dateChooser;
 	private JFileChooser fileChooser;
+	private JScrollPane artistsSP;
+	private JScrollPane genresSP;
+	private JList artistsList;
+	private JList genresList;
+	private DefaultListModel<String> model = new DefaultListModel<String>();
+	private DefaultListModel<String> model2 = new DefaultListModel<String>();
+	private JButton btnNewGenre;
+	private JButton btnNewArtist;
 	/**
 	 * Launch the application.
 	 */
@@ -77,7 +88,7 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		}
 		setTitle("Modify vinyl");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 400, 468);
+		setBounds(100, 100, 542, 539);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 245, 238));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -93,18 +104,18 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		lblGenre.setBounds(45, 101, 46, 14);
 		contentPane.add(lblGenre);
 		JLabel lblPrice = new JLabel("Price:");
-		lblPrice.setBounds(45, 201, 46, 14);
+		lblPrice.setBounds(45, 254, 46, 14);
 		contentPane.add(lblPrice);
 		JLabel lblOnSale = new JLabel("On sale:");
-		lblOnSale.setBounds(45, 226, 46, 14);
+		lblOnSale.setBounds(45, 279, 46, 14);
 		contentPane.add(lblOnSale);
 		rdbtnYes = new JRadioButton("Yes");
 		rdbtnYes.setBackground(new Color(255, 250, 240));
-		rdbtnYes.setBounds(147, 225, 46, 23);
+		rdbtnYes.setBounds(147, 278, 46, 23);
 		contentPane.add(rdbtnYes);
 		rdbtnNo = new JRadioButton("No");
 		rdbtnNo.setBackground(new Color(255, 250, 240));
-		rdbtnNo.setBounds(284, 225, 68, 23);
+		rdbtnNo.setBounds(284, 278, 68, 23);
 		contentPane.add(rdbtnNo);
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(rdbtnNo);
@@ -121,75 +132,97 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		contentPane.add(titleField);
 		titleField.setColumns(10);
 		titleField.setText(vToMod.getTitle());
-		artistField = new JTextField();
-		artistField.setBounds(147, 61, 205, 20);
-		contentPane.add(artistField);
-		artistField.setColumns(10);
-		artistField.setText(vToMod.getArtist().getName());
-		genreField = new JTextField();
-		genreField.setBounds(147, 98, 205, 20);
-		contentPane.add(genreField);
-		genreField.setColumns(10);
-		genreField.setText(vToMod.getGenre().getName());
 		priceField = new JTextField();
-		priceField.setBounds(147, 198, 178, 20);
+		priceField.setBounds(147, 251, 178, 20);
 		contentPane.add(priceField);
 		priceField.setColumns(10);
 		priceField.setText(String.valueOf(vToMod.getPrice()));
 		JLabel label = new JLabel("\u20AC");
-		label.setBounds(341, 201, 11, 14);
+		label.setBounds(341, 254, 11, 14);
 		contentPane.add(label);
 		JLabel lblNewLabel = new JLabel("Image:");
-		lblNewLabel.setBounds(45, 282, 46, 14);
+		lblNewLabel.setBounds(45, 335, 46, 14);
 		contentPane.add(lblNewLabel);
 		btnSelect = new JButton("Select");
 		btnSelect.setBackground(new Color(255, 218, 185));
-		btnSelect.setBounds(147, 278, 205, 23);
+		btnSelect.setBounds(147, 331, 205, 23);
 		contentPane.add(btnSelect);
 		btnSelect.addActionListener(this);
 		btnSubmitChanges = new JButton("Submit changes");
 		btnSubmitChanges.setBackground(new Color(255, 218, 185));
-		btnSubmitChanges.setBounds(45, 390, 142, 23);
+		btnSubmitChanges.setBounds(45, 443, 142, 23);
 		contentPane.add(btnSubmitChanges);
 		btnSubmitChanges.addActionListener(this);
 		btnCancel = new JButton("Cancel");
 		btnCancel.setBackground(new Color(255, 218, 185));
-		btnCancel.setBounds(263, 390, 89, 23);
+		btnCancel.setBounds(263, 443, 89, 23);
 		contentPane.add(btnCancel);
 		btnCancel.addActionListener(this);
 		JLabel lblDescription = new JLabel("Description:");
-		lblDescription.setBounds(45, 138, 68, 14);
+		lblDescription.setBounds(45, 191, 68, 14);
 		contentPane.add(lblDescription);
 		descriptionField = new JTextField();
-		descriptionField.setBounds(147, 138, 205, 43);
+		descriptionField.setBounds(147, 191, 205, 43);
 		contentPane.add(descriptionField);
 		descriptionField.setColumns(10);
 		descriptionField.setText(vToMod.getDescription());
 		JLabel lblSalePercentage = new JLabel("Sale percentage:");
-		lblSalePercentage.setBounds(45, 257, 138, 14);
+		lblSalePercentage.setBounds(45, 310, 138, 14);
 		contentPane.add(lblSalePercentage);
 		salePercentageField = new JTextField();
-		salePercentageField.setBounds(147, 254, 178, 20);
+		salePercentageField.setBounds(147, 307, 178, 20);
 		contentPane.add(salePercentageField);
 		salePercentageField.setColumns(10);
 		salePercentageField.setText(String.valueOf(vToMod.getSalePercentage()));
 		JLabel label_1 = new JLabel("%");
-		label_1.setBounds(335, 257, 17, 14);
+		label_1.setBounds(335, 310, 17, 14);
 		contentPane.add(label_1);
 		dateChooser = new JDateChooser();
-		dateChooser.setBounds(147, 312, 205, 22);
+		dateChooser.setBounds(147, 365, 205, 22);
 		contentPane.add(dateChooser);
 		JLabel lblPublicationDate = new JLabel("Publication date:");
-		lblPublicationDate.setBounds(45, 315, 92, 14);
+		lblPublicationDate.setBounds(45, 368, 92, 14);
 		contentPane.add(lblPublicationDate);
 		lblStock = new JLabel("Stock:");
-		lblStock.setBounds(45, 349, 46, 14);
+		lblStock.setBounds(45, 402, 46, 14);
 		contentPane.add(lblStock);
 		stockField = new JTextField();
-		stockField.setBounds(147, 346, 205, 20);
+		stockField.setBounds(147, 399, 205, 20);
 		contentPane.add(stockField);
 		stockField.setColumns(10);
 		stockField.setText(String.valueOf(vToMod.getStock()));
+		
+		//Atists and genres
+		
+		btnNewArtist = new JButton("New Artist");
+		btnNewArtist.setBounds(355, 76, 122, 23);
+		contentPane.add(btnNewArtist);
+		btnNewArtist.addActionListener(this);
+
+		btnNewGenre = new JButton("New Genre");
+		btnNewGenre.setBounds(355, 128, 122, 23);
+		contentPane.add(btnNewGenre);
+		btnNewGenre.addActionListener(this);
+
+		artistsSP = new JScrollPane();
+		artistsSP.setBounds(144, 60, 178, 47);
+		contentPane.add(artistsSP);
+
+		artistsList = new JList();
+		artistsSP.setViewportView(artistsList);
+
+		fillArtistsList();
+		
+
+		genresSP = new JScrollPane();
+		genresSP.setBounds(144, 118, 178, 47);
+		contentPane.add(genresSP);
+
+		genresList = new JList();
+		genresSP.setViewportView(genresList);
+		
+		fillGenresList();
+		
 	}
 	private Vinyl getVinyl(int vinylCode) {
 		Vinyl v = new Vinyl();
@@ -201,6 +234,45 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 		}
 		return v;
 	}
+	
+	private void fillGenresList() {
+		model2 = new DefaultListModel<String>();
+		displayGenres(model2);
+		genresList.setModel(model2);
+		genresList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+
+	private void fillArtistsList() {
+		model = new DefaultListModel<String>();
+		displayArtists(model);
+		artistsList.setModel(model);
+		artistsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+	
+	private void displayGenres(DefaultListModel<String> model) {
+		Logic logic = LogicFactory.getLogic();
+		try {
+			ArrayList<String> names = logic.getGenres();
+			for (String g : names) {
+				model.addElement(g);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void displayArtists(DefaultListModel<String> model) {
+		Logic logic = LogicFactory.getLogic();
+		try {
+			ArrayList<String> names = logic.getArtists();
+			for (String art : names) {
+				model.addElement(art);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource().equals(btnCancel)) {
@@ -212,11 +284,11 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 			try {
 				File coverArtSrc = fileChooser.getSelectedFile();
 				File coverArtDest = new File("././Images/" + coverArtSrc.getName());
-				//Files.copy(coverArtSrc.toPath(), coverArtDest.toPath());
-				vToMod.setArtist(logic.getArtist(artistField.getText()));
+				Files.copy(coverArtSrc.toPath(), coverArtDest.toPath());
+				vToMod.setArtist(logic.getArtist(artistsList.getSelectedValue().toString()));
 				vToMod.setCover(coverArtDest.toPath().toString());
 				vToMod.setDescription(descriptionField.getText());
-				vToMod.setGenre(logic.getGenre(genreField.getText()));
+				vToMod.setGenre(logic.getGenre(genresList.getSelectedValue().toString()));
 				if (rdbtnYes.isSelected()) {
 					vToMod.setOnSale(true);
 					vToMod.setSalePercentage((Double.valueOf(priceField.getText()) / 100));
@@ -233,6 +305,31 @@ public class UIModifyVinyl extends JFrame implements ActionListener {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
+		}else if(event.getSource().equals(btnNewArtist)) {
+			String newArtist = JOptionPane.showInputDialog("Insert new Artist: ");
+			//System.out.println(newArtist);
+			if (newArtist != null) {
+				try {
+					logic.insertArtist(newArtist);
+					fillArtistsList();
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Error. Maybe the artist arleady exists","Error", JOptionPane.ERROR_MESSAGE);
+					//e1.printStackTrace();
+				}
+			}
+			
+		}else if(event.getSource().equals(btnNewGenre)) {
+			String newGenre = JOptionPane.showInputDialog("Insert new Genre: ");
+			if (newGenre != null) {
+				try {
+					logic.insertGenre(newGenre);
+					fillGenresList();
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Error. Maybe the genre arleady exists","Error", JOptionPane.ERROR_MESSAGE);
+					//e2.printStackTrace();
+				}
+			}
+			
 		}
 	}
 }

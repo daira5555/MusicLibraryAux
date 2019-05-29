@@ -111,7 +111,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	private ArrayList<Artist> artists;
 	private ArrayList<Genre> genres;
 	private JPanel cartPanel;
-	private Object[][] data;
+	//private Object[][] data;
 	/**
 	 * Create the frame.
 	 */
@@ -174,8 +174,17 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-			modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
+			/*modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
+			tableBestSellers = new JTable(modelBestSellers);*/
+			
+			Object[][] data = fillData(searchResultList);
+			modelBestSellers = new DefaultTableModel(data, columnNames);
+
 			tableBestSellers = new JTable(modelBestSellers);
+
+			tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
+			tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
+			
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
 		} else if (event.getSource().equals(btnFromTheBeginningOfTime)) {
 			try {
@@ -183,8 +192,17 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-			modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
+			/*modelBestSellers = new DefaultTableModel(fillData(searchResultList), columnNames);
+			tableBestSellers = new JTable(modelBestSellers);*/
+			
+			Object[][] data = fillData(searchResultList);
+			modelBestSellers = new DefaultTableModel(data, columnNames);
+
 			tableBestSellers = new JTable(modelBestSellers);
+
+			tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
+			tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
+			
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
 		} else if (event.getSource().equals(btnConfirm)) {
 			try {
@@ -219,8 +237,14 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
-			modelAdvancedSearch = new DefaultTableModel(fillData(searchResultList), columnNames);
-			tableAdvancedSearch = new JTable(modelAdvancedSearch);
+			Object[][] data = fillData(searchResultList);
+			modelAdvancedSearch = new DefaultTableModel(data, columnNames);
+
+			tableAdvancedSearch = new JTable(modelBestSellers);
+
+			tableAdvancedSearch.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
+			tableAdvancedSearch.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
+			//TODO
 			scrollPaneAdvancedSearch.setViewportView(tableAdvancedSearch);
 		} else if (event.getSource().equals(btnBuySelected)) {
 			for (Integer i : tableAdvancedSearch.getSelectedRows()) {
@@ -261,7 +285,8 @@ public class UIClientMenu extends JFrame implements ActionListener {
 	 *            sold Vinyls given by the Data Base
 	 */
 	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
-		data = new Object[auxVinylList.size()][7];
+		
+		Object[][] data = new Object[auxVinylList.size()][7];
 		for (int i = 0; i < auxVinylList.size(); i++) {
 			JLabel label = new JLabel();
 
@@ -334,12 +359,15 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		scrollPaneCartTable = new JScrollPane();
 		scrollPaneCartTable.setBounds(48, 100, 864, 206);
 		cartPanel.add(scrollPaneCartTable);
-		modelBestSellers = new DefaultTableModel(fillData(cart.getVinyls()), columnNames);
+		
+		Object[][] data = fillData(cart.getVinyls());
+		
+		cartModel = new DefaultTableModel(data, columnNames);
 
 		cartTable = new JTable(cartModel);
 
 		cartTable.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
-		cartTable.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
+		cartTable.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
 		
 		scrollPaneCartTable.setViewportView(cartTable);
 		
@@ -368,7 +396,14 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(20, 91, 969, 444);
 		boughtVinyls.add(scrollPane);
-		tableBoughtVinyls = new JTable(fillData(boughtVinylsList), columnNames);
+		//tableBoughtVinyls = new JTable(fillData(boughtVinylsList), columnNames);
+		Object[][] data = fillData(boughtVinylsList);
+		DefaultTableModel modelBoughtVinyls = new DefaultTableModel(data, columnNames);
+
+		tableBoughtVinyls = new JTable(modelBoughtVinyls);
+
+		tableBoughtVinyls.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
+		tableBoughtVinyls.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
 		scrollPane.setViewportView(tableBoughtVinyls);
 	}
 	private void modifyPersonalInfo() {
@@ -599,12 +634,13 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
+		Object[][] data = fillData(bestSellers);
+		modelBestSellers = new DefaultTableModel(data, columnNames);
 
 		tableBestSellers = new JTable(modelBestSellers);
 
 		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
-		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
+		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
 		modelBestSellers = new DefaultTableModel(fillData(bestSellers), columnNames);
 		
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
@@ -643,6 +679,12 @@ public class UIClientMenu extends JFrame implements ActionListener {
 		}
 	}
 	class LabelRenderer2 extends DefaultTableCellRenderer {//implements TableCellRenderer {
+		
+		private Object[][] data;
+		public LabelRenderer2(Object[][] data) {
+			this.data = data;
+		}
+		
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {				
 			

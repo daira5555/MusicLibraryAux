@@ -1,4 +1,5 @@
 package model;
+
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Insets;
@@ -10,26 +11,35 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+
 //algo
 @SuppressWarnings("serial")
 public class CloseTabButton extends JTabbedPane {
 	public CloseTabButton() {
 		super();
 	}
-	/* addTab is for including a close button in every tab we want */
+
+	/**
+	 * addTab is for including a close button in every tab we want
+	 */
 	@Override
 	public void addTab(String title, Icon icon, Component component, String tip) {
 		super.addTab(title, icon, component, tip);
 		int count = this.getTabCount() - 1;
 		setTabComponentAt(count, new CloseButtonTab(component, title, icon));
 	}
-	/* addTabNoExit is for including a tab without a close button */
+
+	/**
+	 * addTabNoExit is for including a tab without a close button
+	 */
 	public void addTabNoExit(String title, Icon icon, Component component, String tip) {
 		super.addTab(title, icon, component, tip);
 	}
+
 	/* Button */
 	public class CloseButtonTab extends JPanel {
 		private Component tab;
+
 		public CloseButtonTab(final Component tab, String title, Icon icon) {
 			this.tab = tab;
 			setOpaque(false);
@@ -46,12 +56,15 @@ public class CloseTabButton extends JTabbedPane {
 			add(button);
 		}
 	}
+
 	/* ClickListener */
 	public class CloseListener implements MouseListener {
 		private Component tab;
+
 		public CloseListener(Component tab) {
 			this.tab = tab;
 		}
+
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getSource() instanceof JButton) {
@@ -60,21 +73,25 @@ public class CloseTabButton extends JTabbedPane {
 				tabbedPane.remove(tab);
 			}
 		}
+
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			if (e.getSource() instanceof JButton) {
 				JButton clickedButton = (JButton) e.getSource();
 			}
 		}
+
 		@Override
 		public void mouseExited(MouseEvent e) {
 			if (e.getSource() instanceof JButton) {
 				JButton clickedButton = (JButton) e.getSource();
 			}
 		}
+
 		@Override
 		public void mousePressed(MouseEvent e) {
 		}
+
 		@Override
 		public void mouseReleased(MouseEvent e) {
 		}

@@ -33,7 +33,7 @@ import model.Vinyl;
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
-public class UIMenuAdmin extends JFrame implements ActionListener {
+public class UIAdminMenu extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JTextField artistField;
 	private JTextField albumTitleField;
@@ -74,7 +74,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 	 * }
 	 */
 
-	public UIMenuAdmin() {
+	public UIAdminMenu() {
 		setTitle("Main Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1149, 707);

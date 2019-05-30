@@ -116,7 +116,7 @@ public class UILogin extends JFrame implements ActionListener {
 					} else if (logic.getUserType(username) == 'A') {
 						if (passwordField.getText().equals(pass)) {
 							this.dispose();
-							UIMenuAdmin adminMenu = new UIMenuAdmin();
+							UIAdminMenu adminMenu = new UIAdminMenu();
 							adminMenu.setVisible(true);
 						} else {
 							String message = "Login failed, incorrect password";

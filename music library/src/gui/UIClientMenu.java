@@ -221,7 +221,7 @@ public class UIClientMenu extends JFrame implements ActionListener {
 			scrollPaneBestSellers.setViewportView(tableBestSellers);
 		} else if (event.getSource().equals(btnConfirm)) {
 			try {
-				int input = JOptionPane.showConfirmDialog(null, "Do you want to submit changes?");
+				int input = JOptionPane.showConfirmDialog(null, "Do you want to buy those vinyls?");
 				if (input == 0) {
 					cart.setBuyer(client.getUsername());
 					logic.writePurchase(cart);

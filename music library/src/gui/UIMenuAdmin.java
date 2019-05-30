@@ -63,7 +63,6 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 	private ArrayList<Vinyl> bestSellersResultList;
 	private AdvancedSearch search = new AdvancedSearch();
 	private JDateChooser bestSellerCalendar = new JDateChooser();
-	private Object[][] data;
 
 	/**
 	 * Create the frame.
@@ -177,13 +176,13 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-
-		modelBestSellers = new DefaultTableModel(fillData(bestSellersResultList), columnNames);
+		Object[][] data2 = fillData(bestSellersResultList);
+		modelBestSellers = new DefaultTableModel(data2, columnNames);
 
 		tableBestSellers = new JTable(modelBestSellers);
 
 		tableBestSellers.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
-		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
+		tableBestSellers.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data2));
 
 		scrollPaneBestSellers.setViewportView(tableBestSellers);
 		btnSearchBestSellers = new JButton("show best sellers");
@@ -285,10 +284,11 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		modelAdvancedSearch = new DefaultTableModel(fillData(advancedSearchList), columnNames);
+		Object[][] data = fillData(advancedSearchList);
+		modelAdvancedSearch = new DefaultTableModel(data, columnNames);
 		tableAdvancedSearch = new JTable(modelAdvancedSearch);
 		tableAdvancedSearch.getColumn("Cover Art").setCellRenderer(new LabelRenderer());
-		tableAdvancedSearch.getColumn("On Sale").setCellRenderer(new LabelRenderer2());
+		tableAdvancedSearch.getColumn("On Sale").setCellRenderer(new LabelRenderer2(data));
 		scrollPaneAdvancedSearch.setViewportView(tableAdvancedSearch);
 	}
 
@@ -354,6 +354,13 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 	 *
 	 */
 	class LabelRenderer2 extends DefaultTableCellRenderer {// implements TableCellRenderer {
+
+		private Object[][] data;
+
+		public LabelRenderer2(Object[][] data) {
+			this.data = data;
+		}
+
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
 
@@ -380,7 +387,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 	@SuppressWarnings("static-access")
 	private Object[][] fillData(ArrayList<Vinyl> auxVinylList) {
 
-		data = new Object[auxVinylList.size()][7];
+		Object[][] data = new Object[auxVinylList.size()][7];
 		for (int i = 0; i < auxVinylList.size(); i++) {
 
 			JLabel label = new JLabel();
@@ -399,7 +406,7 @@ public class UIMenuAdmin extends JFrame implements ActionListener {
 			data[i][4] = auxVinylList.get(i).getPrice();
 			data[i][5] = auxVinylList.get(i).isOnSale();
 			if (auxVinylList.get(i).isOnSale()) {
-				data[i][6] = ((auxVinylList.get(i).getSalePercentage()) - 1) * 100;
+				data[i][6] = ((auxVinylList.get(i).getSalePercentage())) * 100;
 			} else {
 				data[i][6] = "Not on Sale";
 			}

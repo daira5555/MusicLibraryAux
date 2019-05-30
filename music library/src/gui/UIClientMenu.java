@@ -225,10 +225,10 @@ public class UIClientMenu extends JFrame implements ActionListener {
 				if (input == 0) {
 					cart.setBuyer(client.getUsername());
 					logic.writePurchase(cart);
-				}else {
+				} else {
 					System.out.println("No confirmation");
 				}
-				
+
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
